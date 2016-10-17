@@ -1,0 +1,47 @@
+\section{Two Algorithmic Ideas}
+Our algorithm is LP-based.
+
+\subsection{Natural LP Relaxation and Integrality Gap}
+By doing binary search on the value of $\opt$, we may assume we know the value, and furthermore that it is equal to $1$ by scaling. Then let $G$ denote the bipartite graph where the client locations are at one side, the facility locations are on the other side, and there is an edge between client location $j$ and facility location $i$ if and only if the distance $d(i,j) \leq 1$.
+
+Then we can write the following natural LP relaxation which captures the \mckc problem. In the LP, the variable $x_{ijp}$ denotes whether client $j$ is connected to a type-$p$ facility opened at location $i$; and $y_{ip}$ denotes whether there is a type-$p$ facility open at location $i$.
+
+\begin{eqnarray}
+\sum_{i\in F} \sum_{p\in [P]}  x_{ijp} \geq 1 & \forall j\in C  \label{eq:badlp1} \\
+\sum_{j\in C} d_j x_{ijp} \leq c_p y_{ip} & \forall i \in F, \forall p\in [P] \label{eq:badlp2} \\
+x_{ijp} \leq y_{ip} & \forall i\in F, j\in C,\forall p\in [P] \label{eq:badlp3}\\
+\sum_{q \geq p} y_{iq}   \leq \sum_{q\geq p} n_q & \forall p\in [t] \label{eq:badlp4}\\
+\sum_{p} y_{ip} \leq 1 & \forall i \in F \label{eq:badlp5} \\
+x_{ijp}, y_{ip} \geq 0
+\end{eqnarray}
+
+
+But the following instance shows an integrality gap for this LP even for a simple instance where the client locations are all far apart.
+Consider the following instance, where there are $H$ clients located far away from each other (at distance $>> 1$). Around each client location, there are $2$ facility locations at distance $\leq 1$. The demand at each client location is $H$. As for the facilities in the instance, there are $H-1$ facilities of capacity $H$, and $H$ facilities of capacity $1$.
+
+It is easy to see that the above instance is not feasible with $OPT=1$: indeed, there is at least one client location where the optimal solution does not place a facility of capacity $H$ in its neighborhood, and it is not possible to serve the demand of this client using only capacity $1$ facilities, as there are only two locations where we can place facilities in its neighborhood.
+
+On the other hand, there is a feasible solution for the above LP relaxation: fractionally assign $1-\frac1H$ units of capacity-$H$ facility and $1$ unit of capacity-$1$ facility in the neighborhood around each client. It is easy to see that there is a feasible fractional assignment of this kind which means that the LP suffers from an unbounded (w.r.t the guessed objective function value) integrality gap.
+
+This also illustrates a very natural generalization of Knapsack cover to be a special case of the \mckc problem. Our overall algorithm needs to handle this as a special case.
+
+\subsection{Idea 1: Cardinality Constrained Knapsack Covering Problem} \label{sec:idea1}
+We first consider the following very special case of the \mckc problem where the demands are all isolated from one another. Indeed, suppose there are $m$ demand locations. The $j^{th}$ location has a demand of $D_j$, and around it are $f_j$ locations where we can install centers. Moreover, these isolated neighborhoods are very far from each other and there is no interaction. We claim that the problem then exactly resembles \cckp! Indeed, we need to place at most $f_j$ centers around the $j^{th}$ demand location, and moreover, the total capacity of these centers should exceed $D_j$. This example serves as a nice illustration that even when there is no interaction between the demands, the \mckc problem captures an interesting and basic mixed packing/covering problem as a special case. As noted earlier, some natural LP relaxations for \cckp have unbounded integrality gaps. Indeed, it is precisely to solve such instances that we are forced to write a much larger \emph{configuration LP}, which is the defacto technique for overcoming such gap examples.
+
+\subsection{Idea 2: Locally-Roundable Setting} \label{sec:idea2}
+
+We now describe another type of instance, where the natural LP itself suffices --- the so-called \emph{locally-roundable setting}.
+ Indeed, suppose we can find a disjoint collection of facility locations $\calS = \{S_1, S_2, \ldots, S_L\}$ such that (i) the diameter (w.r.t $G$) of each $S_\ell$ is a constant, (ii) the total fractional demand $\sum_{i \in S_\ell} \sum_{j \in C} d_j x_{ijp}$ assigned to each part is much larger (say by a factor of $8$) than the maximum capacity of any \emph{fractionally} opened facility in $S_\ell$ in the optimal LP solution, and (iii) each demand $j \in C$ is assigned to at least an extent of $\frac12$ to the facilities opened in $\cup S_\ell$. Then we can actually locally round the instance very easily, by actually \emph{locally rounding each piece} in the following manner:
+
+Consider a piece $S_{\ell}$. Firstly, by losing a constant factor in the capacity violation, we may assume that the capacities are geometrically increasing, say powers of $2$. So we assume that the capacity of facilities of type $p$ is $2^p$. For each $F_\ell$ and for each facility type $p$, simply open $\floor{\sum_{i \in S_\ell} y_{ip}}$ facilities of type $p$. Firstly, it is easy to see that there are enough locations to open these facilities (by using the fact that the LP solution was feasible). Moreover, note that the total capacity of the rounded centers satisfies
+\begin{eqnarray}
+\nonumber \sum_p \floor{\sum_{i \in S_\ell} y_{ip}} 2^p &\geq& \sum_p \sum_{i \in S_\ell y_{ip}} 2^p - \sum_{p' \leq p_{\max}} 2^{p'}  \\
+\nonumber                                               &\geq&  D - \sum_{p' \leq p_{\max}} 2^{p'} \\
+\nonumber                                               &\geq& D - 2^{p_{\max}} \\
+\nonumber                                               &\geq& 3D/4
+\end{eqnarray}
+
+Here $D$ denotes the total fractional demand assigned to fractional facilities in the piece $S_{\ell}$ in the LP solution, and $p_{\max}$ denotes the class of the highest capacity facility fractionally opened in the LP solution in $S_{\ell}$. The second inequality above follows because the total fractional capacity should exceed the total demand served by facilities in $S_{\ell}$, and the third inequality follows from the assumption that the largest capacity of any open fractional facility is small in comparison to the demand $D$.
+
+Therefore, by performing this rounding across all pieces, we can observe that the integrally open facilities can serve $\frac34 \cdot \frac12$ of each demand (we can connect $\frac34$ of each demand, which was assigned to extent $\frac12$ to the facilities in $\calS$), and we only at most one center at each location. Hence, by violating each capacity by a factor of $\frac83$, we can assign all the demands to the integrally open facilities. Also the distance from each demand to its assigned centers is at most $O(1)$ from the diameter bound.
+

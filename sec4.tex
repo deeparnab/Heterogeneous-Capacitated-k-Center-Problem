@@ -1,0 +1,323 @@
+\section{Overall Algorithm: Putting Ideas 1 and 2 together}
+Of course, we will not be able to get such a clean decomposition into a \cckp instance and a collection of locally roundable pieces. Indeed, as we iteratively identify pieces which are either locally roundable or get added to the \cckp instance, the neighborhood structure of the remaining clients and facilities changes, and what may have been originally a locally roundable neighborhood piece may cease to be one subsequently. Our final algorithm then combine the above two ideas in a dynamic manner: we iteratively decompose the clients and facilities into three parts: the first being clients which are supported in the LP solution by locally-roundable neighborhoods, along with the facilities in these neighborhoods, the second is the clients and facilities which are isolated from each other and hence form the \cckp instance, and a third kind of clients (which we refer to as the deleted clients), which are in the proximity of the clients of the first two kinds, and their total demand can be charged to the demands in the first two kinds.
+In fact, it is only the second kind of clients and facilities which causes the natural LP to have an unbounded integrality gap, and forces us to use a stronger configuration LP.
+
+
+\subsection{Configuration LP}
+
+If $\opt = 1$, the following LP has a feasible solution $(y_{ip}, x_{ijp})$. For the time being, we assume this can be found. The variable $y_{ip}$ is 1 if we open a
+center of capacity $c_p$ at $i$. Similarly, the variable $x_{ijp}$ is 1 if the client at location $j$ is assigned to a center of capacity $c_p$ located at $i$. The constraints~\eqref{eq:mkc1-full}-\eqref{eq:mkc3-full} are self explanatory. Now we describe constraint~\eqref{eq:proj}.
+Let $\Supp$ denote all ordered tuples of the form
+$(n_1', \ldots, n_k')$, where $n_p' \leq n_p$ for $p=1, \ldots, k$. Further, for a such a tuple $S$, let $n(S,p)$ denote $n_p'$.
+For a tuple  $S \in \Supp$, we abuse notation and let $|S|$ denote $\sum_p n(S,p)$.
+ Consider a subset of clients $J$, and the locations $\Gamma(J)$.
+ In any feasible solution, the clients in $J$ must be assigned to facilities opened at locations in $\Gamma(J)$.
+ Suppose we open $n_p'$ facilities of capacity $c_p$ in $\Gamma(J)$ --- let $S$ denote the corresponding tuple
+ in $\Supp$. Clearly, the fact that we can open at most one facility at each location implies that (i) $|S| \leq |\Gamma(J)|$ , and (ii) the total capacity in $S$, i.e.,
+ $\sum_p n(S,p) \cdot c_p$, is at least the total demand in $J$. Let $\calF_J$ denote the set of all tuples
+ in $\Supp$ which satisfy these two properties. For every subset of clients $J$ and $S \in \calF_J$, we have a variable $z_{S,J}$ which is 1 if and only if
+ for all $p$, $1 \leq p \leq k$,
+ we open $n(S,p)$ facilities of capacity $c_p$ in $\Gamma(J)$. Now the constraints in~\eqref{eq:conflpnew} should be clear -- for each $p$, the total number of
+ facilities of size $c_p$ opened in $\Gamma(J)$ must be equal to $\sum_{S \in \calF_j} n(S,p) z_{S,J}$.
+
+
+
+
+\begin{eqnarray}
+\sum_{i\in F} \sum_{p\in [P]}  x_{ijp} \geq 1 & \forall j\in C  \label{eq:mkc1-full} \\
+\sum_{j\in C} d_j x_{ijp} \leq c_p y_{ip} & \forall i \in F, \forall p\in [P] \label{eq:mkc2-full} \\
+x_{ijp} \leq y_{ip} & \forall i\in F, j\in C,\forall p\in [P] \label{eq:mkc3-full}\\
+\sum_{q \geq p} y_{iq}   \leq \sum_{q\geq p} n_q & \forall p\in [t] \label{eq:mkc3-full}\\
+\nonumber \\
+y \in \calP(J) & \forall J\subseteq C \label{eq:proj}
+\end{eqnarray}
+\noindent
+where
+\begin{eqnarray}
+\calP(J) := & \{ y_{ip}: \exists z_{S,J}\in [0,1] \textrm{ for all } S\in \calF_J \textrm{ such that }  \notag \\
+& \forall p\in [P], ~~ \sum_{i\in \Gamma(J)} y_{ip} \geq \sum_{S\in \calF_{J}} z_{S,J}\cdot n(S,p), ~~~~ \textrm{and}~~~~ \sum_{S\in \calF_{J}} z_{S,J} \geq 1 \} \label{eq:conflpnew}
+\end{eqnarray}
+where $\calF_{J} := \{S\in \Supp: |S| \leq |\Gamma(J)|, \sum_{p\in S} c_p \geq D(J)\}$ and $n(S,p)$ is the number of copies of  $p$ in $S$. \bigskip
+
+
+\subsection{Solving the LP: Ellipsoid Method}
+It is not clear how to solve the above LP relaxation. However, we will show that we need constraints~\ref{eq:conflpnew} for a polynomial number of subsets $J$ only.
+
+\subsection{Rounding Algorithm}
+For the purpose of our rounding algorithm, we assume that we are given a feasible solution $(x,y)$ to the above LP relaxation. Our first step is to formalize Ideas 1 and 2 described in~\Cref{sec:idea1,sec:idea2}. Toward that end, we first define the condition which implies that a subset of facilities $S$ can be rounded integrally while (approximately) preserving the total demand they were serving fractionally.
+
+\begin{definition}\label{def:rnding-mkc}
+	A set of facilities $S\subseteq F$ is said to be $(a,b)$-roundable w.r.t feasible solution $(x,y)$ if
+	\begin{itemize}%[noitemsep]
+		\item[(a)] $\diam_G(S) \leq a$
+		\item[(b)] there exists a rounding $Y_{ip} \in \{0,1\}$ for all $i \in S, p$ such that
+		\begin{enumerate}
+			\item $\sum_{q \geq p} \sum_{i\in S} Y_{iq} ~\leq~\floor{\sum_{q \geq p}\sum_{i\in S} y_{iq}}$ for all $p$, and
+			\item $\sum_{j\in C} d_j \sum_{i\in S,p\in [P]} x_{ijp} \leq b\cdot \sum_{i\in S} \sum_{p\in [t]} c_p Y_{ip}$
+		\end{enumerate}
+	\end{itemize}
+\end{definition}
+The idea behind the above definition should be clear -- suppose $S$ is a set of facilities and consider a subset of demands $J$ which are being assigned (fractionally) by
+the solution $(x,y)$ to $S$. If $S$ is $(a,b)$-roundable wrt $(x,y)$, then we can open facilities in $S$ integrally and reassign the demands in $J$ to these integral
+facilities. By doing so, we shall increase the connection cost of demands in $J$ by an additive factor of $a$, and the we may violate the capacities of the integrally open
+facilities by at most a factor $b$. Note that the rounding in each such piece locally preserves the bounds on the number of centers the integral solution opens as compared to the fractional LP solution.
+
+
+\begin{definition} \label{def:comp-nbr}
+	A subset $S\subseteq F$ of facilities is called a {\em complete neighborhood} if there exists a client-set $J\subseteq C$ such that $\Gamma(J) \subseteq S$.
+	In this case the subset $J$ is said to be responsible for $S$. Additionally, a complete neighborhood $S$ is said to be an $a$-complete neighborhood if $\diam(S) \leq a$.
+\end{definition}
+The idea behind this definition should also be clear -- indeed, if we find a complete neighborhood $S$ of facilities with say a set $J$ of clients responsible for it, then we know that the optimal solution must satisfy all the demand in $J$ by suitably opening facilities of sufficient capacity in $S$. Moreover, if we can find a disjoint collection of such complete neighborhoods, then the overall problem resembles the \cckp problem described in Idea 1.
+
+\medskip \noindent
+As described earlier, our algorithm tries to \emph{partition} the set of facilities into a disjoint collection of sets of small diameter, such that each set is either a \emph{complete neighborhood} of some clients, or is a roundable set with $a$ and $b$ being small constants.
+However, since the client-facility connections in the LP could be pretty complex, it will not be possible to achieve such a clean partition. Our algorithm therefore may \emph{delete some clients}, and \emph{charge} the total demand of deleted clients to the demands of undeleted nearby clients.
+%A complete partition in this form is not always possible.
+%However, in such a  case, we can massage the fractional client assignments for the remaining clients in such a way that the facilities
+%can be partitioned into roundable sets.
+This is encapsulated in the following (rather verbose) theorem. To understand the formal definition, we first provide some intuition: the clients in $\Cb$ are satisfied by locally rounding the facilities in $\calT$ using idea $1$; the clients in $\Cbb$ are satisfied by solving a suitably-defined instance of \cckp using only the locations in $\calT$; and finally the deleted clients $\Cd$ are charged to nearby clients in $\Cbb \cup \Cb$.
+
+\begin{theorem}\label{thm:decomp}
+	Given a feasible solution $(x,y)$, there exists a polynomial time algorithm which finds a decomposition with the following properties.
+	\begin{enumerate}%[noitemsep]
+		\item The client set $C$ is partitioned into three disjoint subsets $C = \Cd \cup \Cbb \cup \Cb$, and the facility set $F$ is partitioned into two families $\calS = (S_1, S_2, \ldots, S_K)$ and $\calT = (T_1, T_2, \ldots, T_L)$ of mutually disjoint subsets.
+
+\item Each $T_\ell$ is a $4$-complete neighborhood with a corresponding set $J_\ell$ of clients responsible for it, and $\Cbb = \cup_{\ell = 1}^L J_\ell$.	
+
+		\item Each $S_k \in \calS$ is $(20,16)$-roundable with respect to $(x,y)$, and moreover, each client in $\Cb$ satisfies $\sum_{i \in \calS, p} x_{ijp} \geq \frac12$.
+
+\item For the deleted clients $\Cd$, there is a mapping $\phi:\Cd \to \Cbb \cup \Cb$ such that
+(a) $d(j,\phi(j)) \leq 4$ for all $j\in \Cd$, and
+(b)	for all $j\in \Cbb \cup \Cb$, we have $\sum_{j' \in \Cd: \phi(j') = j} d_{j'} \leq 32\cdot d_j$, i.e., the total demand mapped to $j$ is small.
+
+\end{enumerate}
+\end{theorem}
+
+Before we prove the theorem, let us interpret each of the conditions above. $\Cd$ is the set of deleted clients. The fourth statement above argues that each such  client can be charged to a nearby client, and  the total charge to a client does not exceed its own demand by a constant factor. Therefore, given a feasible assignments of clients which are not in $\Cd$, we can easily extend this to all the clients with a constant increase in the connection cost and constant factor violation of capacities. The second and the third statements give two different ways in which we will round the remaining clients.
+
+
+\begin{proof}[{\bf Proof of Theorem~\ref{thm:decomp}}]
+
+Our algorithm starts with the collections $\calS$ and $\calT$, and the clients sets $\Cd$, $\Cbb$, and $\Cb$ empty. Once a facility is assigned into a set in $\calS$ or $\calT$, it is called an \emph{assigned facility}. Similarly clients are assigned once they are added to $\Cd \cup \Cbb \cup \Cb$.
+As our algorithm forms these clusters, it changes the connection graph $G$ by deleting all assigned clients and facilities. At any time, we denote the residual graph by $H$. The neighborhood structure in the residual graph is denoted by $\Gamma_H(\cdot)$, e.g., $\Gamma_H(i)$ denotes the set of neighbors of $i$ in $H$, and $\Gamma_H(S)$ denotes the neighbors of a set of vertices $S$ in $H$. Note that since we only delete vertices from the graph over the iterations, $\Gamma_H(S) \subseteq \Gamma_G(S)$ for all sets $S \subseteq V$ of the original set of vertices of $G$. For each of the partitions $\calS$ and $\calT$, let $L(\calS) = \cup_{1\leq k \leq K} S_k$ and $L(\calT) = \cup_{1 \leq \ell \leq L} T_\ell$ denote the set of all locations in them respectively.
+Each set $S_k$ (resp. $T_\ell$) in the partitions $\calS$ (resp. $\calT$) will have a {\em root} facility $i_k \in S_k$ (resp. $i_\ell \in T_\ell$). We use $R(\calS)$ and $R(\calT)$ to denote the collection of roots $\cup_{1 \leq k \leq K} i_k$ and $\cup_{1 \leq \ell \leq L} i_\ell$ in $\calS$ and $\calT$ respectively.
+
+\medskip \noindent
+At the beginning of each iteration, we shall maintain the following invariants:
+\begin{framed}
+\begin{enumerate}%[noitemsep]
+	\item[I1.] For any facility $i\in L(\calT)$, $\Gamma_G(i) \cap V(H) = \emptyset$, i.e., $\Gamma_G(i)$  contains no unassigned clients. Note that this holds even w.r.t. all the neighbors according to the original graph $G$.
+\item[I2.] Similarly, for any facility $i \in L(\calS)$ added in~\Cref{alg:case2a} below, $\Gamma_G(i)$ contains no unassigned clients.
+\end{enumerate}
+\end{framed}
+
+\noindent
+A key definition in our algorithm is that of {\em effective capacity}. For every $i\notin L(\calS)\cup L(\calT)$ and $p\in [P]$ with $y_{ip} > 0$, define
+\[
+\effc(i,p) := \frac{\sum_{j\in H \cap C} d_j x_{ijp}}{y_{ip}}
+\]
+Since all sets are initially empty, $\effc(i,p)$ is well defined for all $i\in F, p\in [P]$. Whenever a facility enters $L(\calS)\cup L(\calT)$, we fix its $\effc(i,p)$ to be what it was at the iteration it entered.
+Since the set of clients colored red only monotonically decreases, note that the effective capacity can only decrease over time. %{\bf Maybe want to define this for $i\notin S$ and fix it for those going in...} \bigskip
+
+\subsubsection{Algorithm Description}
+
+\begin{algorithm}
+\caption{Rounding algorithm for~\Cref{thm:decomp}}\label{alg:round}
+\begin{algorithmic}[1]
+\Procedure{AlgDecompose}{$x,y$}
+\State $t \gets 1$; $k \gets 1$; $\ell \gets 1$; $H  \gets G$
+\While{there are no unassigned clients, i.e., $V(H) \cap C \neq \Phi$ }
+\State {\bf update} $\effc(\cdot,\cdot)$ for all $i \in V(H) \cap F, p \in [P]$
+\State $(i^*,p^*) \gets \argmax_{i \in H, p \in [P]} \effc(i,p)$ \Comment{\emph{pick location and type with largest effective capacity}} \label{alg:istar}
+\State $J_1 \gets \Gamma_H(i^*)$ \Comment{\emph{$J_1$ is the set of unassigned client neighbors}} \label{alg:j1}
+\State $A \gets \Gamma_H(J_1) \setminus \{i^*\}$ \Comment{\emph{$A \cup \{i^*\}$ is the set of facility neighbors of $J_1$ in $H$}}
+\State $J_2 \gets \Gamma_H(A) \setminus J_1$ \Comment{\emph{$J_1 \cup J_2$ is the set of unassigned client neighbors of $A$}}
+\State $B \gets \Gamma_H(A) \setminus \{A \cup i^*\}$ \Comment{\emph{$A \cup B \cup \{i^*\}$ is the set of facility neighbors of $J_1 \cup J_2$ in $H$}}
+\State $D(J_1) \gets \sum_{j \in J_1} d(j)$
+\State $D(J_2) \gets \sum_{j \in J_2} d(j)$
+\If{$D(J_2) \geq 32 D(J_1)$} \Comment{\emph{$i^* \cup A \cup B$ will be locally roundable}}
+\State {\bf add} a new part $S_k := i^* \cup A \cup B$ to $\calS$  \label{alg:case1}
+\State {\bf define} $i^*$ to be the root of $S_k$, i.e., $R(\calS) \gets R(\calS) \cup \{i^*\}$
+\State $H \gets H \setminus (i^* \cup A \cup B)$ \Comment{\emph{delete assigned facilities from $H$}}
+\For{each $j \in H$ s.t $\sum_{i \in \calS, p} x_{ijp} \geq \frac12$}
+\State $\Cb \gets \Cb \cup \{j\}$ and $H \gets H \setminus \{j\}$ \Comment{\emph{assign clients to $\Cb$}}
+\EndFor
+\State $k \gets k + 1$
+\ElsIf{$D(J_2) < 32 D(J_1)$ and $\dist_G(i^*, R(\calS)) \leq 8$} \Comment{\emph{$i^*$ is close to some root in $R(\calS)$}}
+\State $\Cd \gets \Cd \cup J_2$ and augment $\phi$ appropriately \Comment{\emph{delete $J_2$ and charge to $J_1$}} \label{alg:phi1}
+\State $H \gets H \setminus J_2$
+\State {\bf let} $i_r = \argmin_{i \in R(\calS)} \dist_G(i^*,i)$ \Comment{\emph{$i_r$ is the nearby root from $\calS$}}
+\State $S_r \gets S_r \cup i^* \cup A$ \Comment{\emph{add these facilities to $S_r$}} \label{alg:case2a}
+\For{each $j \in H$ s.t $\sum_{i \in \calS, p} x_{ijp} \geq \frac12$}
+\State $\Cb \gets \Cb \cup \{j\}$ and $H \gets H \setminus \{j\}$ \Comment{\emph{assign clients to $\Cb$}} \label{alg:case2ac}
+\EndFor
+\Else \Comment{\emph{$i^* \cup A \cup B$ will be a $4$-complete neighborhood of $J_1$}}
+\State $\Cd \gets \Cd \cup J_2$ and augment $\phi$ appropriately \Comment{\emph{delete $J_2$ and charge to $J_1$}} \label{alg:phi2}
+\State $H \gets H \setminus J_2$
+\State {\bf add} a new part $T_\ell := i^* \cup A$ to $\calT$  \label{alg:case2b}
+\State $H \gets H \setminus (i^* \cup A)$ \Comment{\emph{delete assigned facilities from $H$}}
+\State $J_\ell \gets J_1$, $\Cbb \gets \Cbb \cup J_1$, and $H \gets H \setminus J_1$ \Comment{\emph{assign clients to $\Cbb$}} \label{alg:color2}
+\State $\ell \gets \ell + 1$
+\EndIf
+\EndWhile\label{euclidendwhile}
+\State \textbf{return} $\calS,\calT$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+
+We first show that the two invariants hold at the beginning of every iteration of the outermost loop.
+
+\begin{claim}
+\label{cl:inv}
+The two invariants hold at the beginning of every iteration of the while loop in Step 3.
+\end{claim}
+\begin{proof}
+We show this by induction over the number of iterations $t$. Clearly, at $t=1$, $L(\calT)$ and $L(\calS)$ are empty, so the invariants hold tautologically. Suppose they hold for iterations upto $i$. We show that they also hold at the end of the $i^{th}$ iteration, and hence they hold at the beginning of the $(i+1)^{th}$ iteration, thus completing the proof. To this end, consider the $i^{th}$ iteration.
+
+\medskip \noindent We first show that I1 continues to hold at the end of this iteration. Note that we only need to check if I1 holds for any new facilities added to $L(\calT)$ in this iteration, which only happens in~\Cref{alg:case2b}. In this case, consider any facility $i \in T_\ell$, the set of facilities added to $L(\calT)$, and consider the neighborhood $\Gamma_G(i)$: in this set, some clients are already in $\Cb \cup \Cbb \cup \Cd$ in which case they would have been deleted from $H$ in earlier iterations. By definition, the remaining clients belong to $J_1 \cup J_2$, since $J_1 \cup J_2$ contains all remaining neighbors of $i^* \cup A$. But clients in $J_1$ are colored black, and those in $J_2$ are added to $\Cd$, hence $i$ would have no red clients as neighbors in $G$ at the end of this iteration. Applying this to all $i$ completes the proof.
+
+\medskip \noindent We now show that I2 continues to hold at the end of this iteration. Similar to the above proof, note that we only need to check if I2 holds for any new facilities added to $L(\calS)$ in~\Cref{alg:case2a}. In this case, consider any facility $i \in (i^* \cup A)$, the set of facilities added to $L(\calS)$, and consider the neighborhood $\Gamma_G(i)$: in this neighborhood, some clients are already in $\Cb \cup \Cbb \cup \Cd$ in which case they would have been deleted from $H$ in earlier iterations. By definition, the remaining clients belong to $J_1 \cup J_2$, since $J_1 \cup J_2$ contains all remaining neighbors of $i^* \cup A$. But clients in $J_2$ are added to $\Cd$, and we now show that all clients in $J_1$ would be colored blue in~\Cref{alg:case2ac}, hence showing that $i$ would have no red clients as neighbors in $G$ at the end of this iteration.
+Indeed, consider any client $j \in J_1$: by definition, it was colored red at the beginning of this iteration and so by invariant I1, there are no edges in $G$ between $j$ and any $i \in L(\calT)$. So all neighbors in $\Gamma_G(j)$ which have already been deleted belong to $L(\calS)$. Moreover, $i^* \cup A$ includes all remaining neighbors of $j$. Hence, for any such $j$, we know that $\sum_{i \in L(\calS), p} x_{ijp} = 1$, and so it would be colored blue in~\Cref{alg:case2ac}.
+\end{proof}
+
+
+\begin{claim} \label{cl:phi-augment}
+In~\Cref{alg:phi1,alg:phi2}, $\phi$ can be augmented so that the Property~(4) of~\Cref{thm:decomp} is satisfied.
+\end{claim}
+\begin{proof}
+Note that whenever the algorithm executes either of~\cref{alg:phi1,alg:phi2}, it must be that $D(J_2) \leq 32 D(J_1)$. So indeed we are justified in deleting the clients in $J_2$ and ``charging'' them to $J_1$. More precisely, we augment the
+mapping function $\phi:J_2 \to J_1$ such that for all $j\in J_1, \sum_{k:\phi(k) = j} d_k \leq 32d_j$. Again, this is possible since $D(J_2) < 32D(J_1)$. Also note for any $j\in J_2$ and $k\in J_1$,
+we have $d(j,k) \leq 4$.
+Furthermore, our algorithm will make sure that the client set $J_1$ will become blue or black (in~\cref{alg:case2ac,alg:color2}), and was red before.
+Therefore, these clients in $J_1$ will never be images of $\phi$ again, thus completing the proof.
+\end{proof}
+
+
+We will now show that the sets $\{T_\ell\}$ in the family $\calT$ form $4$-complete neighborhoods supported by the corresponding client-sets $\{J_\ell\}$.
+\begin{lemma} \label{lem:local}
+Consider an iteration when a new set $T_\ell$ is added to $\calT$ in~\cref{alg:case2b}. The set $T_\ell$ is a $4$-complete neighborhood supported by the set of clients $J_\ell$ (defined in~\cref{alg:color2}).
+\end{lemma}
+
+\begin{proof}
+Firstly, the diameter of the new set is at most $4$, since every $i \in T_\ell$ is $2$ hops from the $i^*$ facility identified in~\cref{alg:istar}. To complete the proof, we show that $T_\ell$ is supported by the set $J_\ell$ defined in~\cref{alg:color2}, which in turn is equal to $J_1$ computed in~\cref{alg:j1}. We establish this by showing that $\Gamma_G(J_1) \subseteq T_\ell$ (recall~\cref{def:comp-nbr}).
+
+To this end, consider a client $j \in J_1$. At the beginning of this iteration, $j$ must have been unassigned. We claim that at the beginning of this iteration, $\Gamma_H(j) = \Gamma_G(j)$ (i.e., no neighboring facility has already been assigned in earlier iterations). Indeed, suppose not, and let $i$ be some facility which is present in $\Gamma_G(j)$ but not in $\Gamma_H(j)$. We first observe that $i$ cannot be in $L(\calT)$ as that would violate invariant I1 at the beginning of this iteration --- $(i,j)$ would form the violated pair. Similarly, we note that $i$ cannot be added to $\calS$ in~\cref{alg:case1} in an earlier iteration --- because then the distance between $i^*$ and $R(\calS)$ would be at most $6$ (via the path $i^* \rightarrow j \rightarrow i \rightarrow R(\calS)$), so this is a contradiction to the fact that the algorithm is in the branch executing~\cref{alg:case2b}. Finally, we note that $i$ cannot be added to $\calS$ in~\cref{alg:case2a} in an earlier iteration, as that would violate invariant I2 at the beginning of this iteration --- again $(i,j)$ would form the violated pair.
+So we can conclude that $\Gamma_H(j) = \Gamma_G(j)$ and thus that the entire neighborhood of $j$ is contained in $i^* \cup A$ which is added to $T_\ell$ in this iteration. Repeating this argument for all $j$ shows that $\Gamma_G(J_1) \subseteq T_\ell$.
+\end{proof}
+
+We now show that we can round the LP solution (and find an assignment of clients in $\Cbb$ to integrally open facilities) when restricted to the locations in  $\calT$, by solving a suitably-defined instance of \cckp.
+\begin{lemma}\label{lem:rounding-local-neighborhoods}
+	Consider disjoint subsets $T_1,\ldots,T_L \subseteq F$ where each $T_\ell$ is an $a$-complete neighborhood with $J_\ell\subseteq C$ being responsible for it.
+	Given any solution $y$ which satisfies \eqref{eq:conflpnew} for the sets $J_\ell, \ell \in [L]$, we can find an integral solution $Y$ such that
+	 (a) $\sum_{q\geq p} \sum_{i\in T_\ell} Y_{iq} \leq \ceil{\sum_{q\geq p} \sum_{i\in T_\ell} y_{iq}}$ for all $p\in [P]$, and
+	 (b) $\sum_{i\in T_\ell,p\in [P]} c_p Y_{ip} \geq D(J_\ell)/\alpha$.
+\end{lemma}
+\begin{proof}
+The proof proceeds in the following manner: we first create an instance $\calI$ of the \cckp problem based on the sets in $\calT$, clients in $\Cbb$, and LP solution $(x,y)$. Next, we derive a feasible fractional solution to a suitable configuration LP for instant $\calI$ of the \cckp problem. Finally, we show that any feasible integer solution to the \cckp instance can be used to find a placement of centers within the
+locations in $\calT$ to satisfy all the demand in $\Cbb$.
+
+Indeed, in this instance $\calI$, there is one bucket $B_\ell$ corresponding to each $T_\ell \in \calT$. The demand $D_\ell$ of this bucket is precisely $\sum_{j \in J_\ell} d_j$. To determine the number of centers available of each type, we let the LP solution guide us. Indeed, for each type $p$, we set $n_p = \ceil{\sum_{p' \leq p} \sum_{i \in L(\calF)} y_{ip}} - \ceil{\sum_{p' < p} \sum_{i \in L(\calF)} y_{ip}}$. Finally, we set the cardinality constraint $f_\ell$ to be $|T_{\ell}|$. 
+
+Then, it is easy to see that the fractional configurations opened in $\calP(J_\ell)$ form a feasible fractional solution to the configuration LP of the \cckp instance defined above. Moreover, we can easily map back an integer solution to a placement of facilities to satisfy (a) and (b) above. 
+\end{proof}
+
+\medskip \noindent We now turn our attention to locally rounding the sets in $\calS$. Toward this end, we begin with the following useful claim.
+
+\begin{claim}\label{clm:imp}
+Consider an iteration when a new set $S_k$ is added to $\calS$ in~\cref{alg:case1}. We then have that $\sum_{j\in C} \sum_{i\in S_k}  \sum_{p\in [P]} d_j x_{ijp} \geq 16\cdot \max_{i\in S_k, p\in [P]} \effc(i,p) $
+\end{claim}
+\begin{proof}
+By the definition in~\cref{alg:istar}, we know that $ \max_{i\in S_k, p\in [P]} \effc(i,p)  = \effc(i^*,p^*)$ in the iteration when $S_k$ was added to $\calS$. Furthermore, by definition,
+\[\effc(i^*,p^*) = \sum_{j\in H} d_j \frac{x_{i^*jp^*}}{y_{i^*p^*}} \leq \sum_{j\in \Gamma_H(i^*)} d_j = D(J_1)\]
+The inequality follows because we know  (a) that $x_{ijp^*} > 0$ only for $j\in \Gamma_H(i^*)$ (i.e., only clients which are neighboring $i^*$ can be serviced by $i^*$), and (b) that $x_{i^*jp^*} \leq y_{i^*p^*}$.
+Now note that for any $j\in J_2$, since $j\in H$, we have that $\sum_{i\in L(\calS), p\in [P]} x_{ijp} < 1/2$ (otherwise it would have been colored blue in an earlier iteration and deleted from $H$), and so $\sum_{i\in S_k, p\in [P]} x_{ijp} \geq 1/2$ (because $S_k$ includes all the neighbors of $j$ not already in $L(\calS)$, and $j$ has no edge to any facility in $L(\calT$) even in the original graph $G$ by invariant I1, so the fractional demand from $j$ to vertices in $L(\calT)$ is $0$).
+Therefore,
+\[
+D(J_2) = \sum_{j\in J_2} d_j \leq 2 \sum_{j\in J_2} d_j \left(\sum_{i\in S_k, p\in [P]} x_{ijp}\right)
+\]
+Since $D(J_2) \geq 32D(J_1) \geq 32\effc(i^*,p^*)$, the claim follows.
+\end{proof}
+
+
+\begin{claim}
+	At the end of the algorithm, for all $j \in \Cb$, $\sum_{i \in \calS, p \in [P]} x_{ijp} \geq \frac12$.	
+\end{claim}
+\begin{proof}
+This follows because we only add clients to $\Cb$ when their fractional allocation to $\calS$ exceeds $\frac12$.
+\end{proof}
+
+
+
+\begin{lemma}
+Each set $S_k \in \calS$ is a $(20,16)$-roundable set.
+\end{lemma}
+\begin{proof}
+(Diameter) We claim that $\diam(S_k) \leq 20$ for every $S_k \in \calS$. We show by induction that for each $S_k \in \calS,$
+$\dist_G(i,i_k) \leq 10$ for every $i \in S_k$, where $i_k$ is the root of $S_k$. When we add a new set $S$ to $\calS$ in Case~1,
+$S$ is $(i^\star \cup A \cup B)$, where we use the notation in the description of the algorithm for this case. Clearly, $\dist_G(i, i^\star) \leq 4$
+for any $i \in S$. Now, consider Case~2(a), where we may increase a set $S_r$. Again, using the notation in the algorithm,
+$\dist_G(i,i_r) \leq 10$ for any $i \in (i^\star \cup A)$. So the desired claim follows by induction.
+\smallskip
+
+\noindent
+(Roundability)
+We now show that there is a rounding of $\y_{ip}$ values for $i\in S_k$ such that
+		\begin{enumerate}
+			\item $\sum_{q \geq p} \sum_{i\in S} \y_{iq} ~\leq~ \sum_{q \geq p}\sum_{i\in S} y_{iq}$, and
+			\item $\sum_{j\in C} d_j \sum_{i\in S,p\in [P]} x_{ijp} \leq b\cdot \sum_{i\in S} \sum_{p\in [t]} c_p\y_{ip}$
+		\end{enumerate}
+To do so, we first claim
+\begin{claim}\label{clm:imp2}
+	For any $S\in \calS$, we have $\sum_{j\in C}\sum_{i\in S}\sum_{p\in [P]} d_jx_{ijp} \geq 16\max_{i\in S,p\in [P]} \effc(i,p)$.
+\end{claim}
+\begin{proof}
+	When the set $S$ is formed (that is, a root is assigned to it), we have the above from Claim~\ref{clm:imp}. Henceforth, the RHS remains the same and observe that the LHS can only increase since for any $i\in \calS$, $x'_{ijp}$ can only increase as the algorithm continues.
+\end{proof}
+\noindent
+Now we are armed to prove the lemma. Define $A_q := \{(i,p), i\in S,p\in [P]: \effc(i,p) \in [2^q,2^{q+1})\}$ and let $\max_{i\in S,p\in [P]} \effc(i,p) \in [2^Q,2^{Q+1})$.
+Define $\alpha_q := \sum_{(i,p) \in A_q} y_{i,p}$.
+For all values of $q$, {\em arbitrarily} choose $\floor{\alpha_q}$ different facilities $F_q$ in $S$; that there are so many is implied by the LP.
+For each $q$ and for each $i\in F_q$, set $\y_{i,2^q} = 1$. For every other $(i,p)$, set $\y_{i,p} = 0$. We claim that $\y$ is a valid rounding. \smallskip
+
+Note that whenever we set $\y_{i,2^q} = 1$ for all $i\in F_q$, we can charge it to $\sum_{(i,p)\in S_q} y_{i,p}$. That this charging preserves condition 1 is because $c_p \geq \effc(i,p) \geq 2^q$.
+Also note that this implies $\sum_{i\in S,p\in [P]} c_p \y_{i,p} = \sum_{q=0}^Q 2^q\floor{\alpha_q}$.
+We now need to prove condition 2 is satisfied. \smallskip
+
+Call the parameter $q$ good if $\alpha_q \geq 1$ and bad otherwise.
+From the definition of $\effc(\cdot)$, we get
+\begin{eqnarray}
+D := \sum_{j\in C} d_j \sum_{i\in S,p\in [P]} x_{ijp} & \leq &  \sum_{i\in S,p\in [P]} \effc(i,p)y_{i,p} \\
+																				& \leq & 2 \sum_{q=0}^Q 2^{q+1} \sum_{(i,p)\in A_q} y_{i,p} \\
+																				& \leq & 4\sum_{q: \textrm{ bad }} 2^q + 4\sum_{q: \textrm{ good}} 2^q\alpha_q \\
+																				& \leq & 8\cdot 2^Q + 8\sum_{q: \textrm{good}}2^q \floor{\alpha_q}  \\
+																				& \leq & D/2 + 8\sum_{i\in S,p\in [P]}c_p\y_{i,p}
+\end{eqnarray}
+Therefore, we get $16\sum_{i\in S,p\in [P]} \geq \sum_{j\in C} d_j \sum_{i\in S,p\in [P]} x_{ijp}$. Therefore, each $S$ has the $(20,16)$-rounding property.
+\end{proof}
+\end{proof}
+
+\begin{lemma} \label{lem:combine-local}
+We can efficiently find a rounding $Y$ for the family $\calS$ of locally-roundable sets such that
+\begin{enumerate}
+\item[(i)] for each $j \in \Cb$, the demand $d_j$ is assigned to integrally open facilities at distance at most $20$ from $j$,
+\item[(ii)] the capacity of each integrally open facility is violated by a factor of $10$, and
+\item[(iii)] for all $p$, $\sum_{i \in L(\calS)} \sum_{q \geq p} Y_{iq} \leq \floor{\sum_{i \in L(\calS)} \sum_{q \geq p} y_{iq}}$.
+\end{enumerate}
+\end{lemma}
+
+
+
+\begin{theorem}
+	There is a $\left(22,512\right)$-bicriteria factor algorithm for the \mckc problem.
+\end{theorem}
+\begin{proof}
+For the time being imagine we can solve the LP. Then we first apply Theorem~\ref{thm:decomp}.
+Since each $S_k \in \calS$ has the $(20,16)$ rounding property w.r.t $(x,y)$, we can find an integral opening of clients
+such that every client in $\Cb$ travels distance $20$, and each facility $i\in \calS$ capacity is violated by factor $16$.
+Similarly, using Theorem~\ref{thm:rounding-local-neighborhoods}, we can find an integral opening of clients
+such that every client in $\Cbb$ travels distance $2$ and each facility $i\in \calT$ is violated by factor $\alpha$.
+Finally, when we add the clients in $\Cd$, they each travel distance at most $24$, and the capacity violation of any facility is at most
+$\max(32\cdot 16, 32\cdot \alpha) = 512$ as long as $\alpha \leq 16$.
+\end{proof}
+

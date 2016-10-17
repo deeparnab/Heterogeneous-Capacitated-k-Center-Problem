@@ -1,0 +1,97 @@
+\section{Special Case: \cckp}
+We first consider the following very special case of the \mckc problem where the demands are all isolated from one another, and around each demand $j$ of value $D_j$, there are $f_j$ facility locations in its vicinity. More formally, suppose we are given a collection of demand requirements $D_1, D_2, \ldots, D_m$, along with cardinality constraints $f_1, f_2, \ldots, f_m$ for each demand, which come from the number of facility locations available in the vicinity each demand. There are also a collection of items with different capacities: $(n_1,c_1), (n_2,c_2),\ldots, (n_t,c_t)$
+with $c_1 \leq c_2 \le \cdots \le c_t$,
+to indicate we have $n_i$ items of capacity $c_i$ (corresponding to the different capacity types in the given \mckc instance). The goal is to assign the items to these demand requirements, so that (i) any demand $i$ is assigned no more than $f_i$ items, and (ii) the requirement of all demands are satisfied by the items assigned.
+
+Formally, we consider the following problem: we are given $m$ buckets $B_1, \ldots, B_m$. Bucket $B_j$ has demand of $D_j$ and has $f_j$ slots. We are also given collection of items, with $n_i$ items of capacity $c_i$. Without loss of generality, by making $n_i$ copies of items with capacity $c_i$, we may assume that all $n_i$ values are $1$. Now, a solution needs to allocate items to buckets (or demands) such that for each $j$,  bucket $B_j$ receives at most $f_j$ items. The goal is to find the maximum $\lambda$ such that each bucket $B_j$ gets items of total capacity at least $\lambda \cdot D_j$.
+
+Without loss of generality, we can assume that optimal value of $\lambda$ is $1$, and so for a constant-factor approximation, we would like to get an allocation such that each bucket $B_j$ gets items of total capacity at least $D_j/K$, for some constant $K$. Since we know that the optimal $\lambda=1$, our strategy would be to consider an LP relaxation for this problem which allocates items to demands such that each bucket $B_j$ gets items of total size at least $D_j$. Then we would like to round a feasible fractional solution to an integral assignment which does not reduce the total size of items assigned to a bucket by more than a constant factor.
+
+\subsection{Integrality Gap Examples}
+It turns out that several LP relaxations have large integrality gaps. We begin with the most natural relaxation, where we have variables $z_{ij}$ for item $i$ and demand $B_j$, which denotes the fractional assignment of item $i$ to bucket $B_j$. The constraints are as follows:
+\begin{align*}
+\sum_{i} z_{ij} \min(c_i, D_j) & \geq D_j, \ \  \forall j \\
+\sum_i z_{ij} & \leq f_j, \ \ \ \forall j \\
+\sum_j z_{ij} & \leq 1,  \ \ \ \forall i \\
+z_{ij} & \geq 0, \ \ \ \ \ \forall i,j
+\end{align*}
+
+Consider the following example:~each of the $k$ buckets has $f_j = 2$ slots. There are $k-1$ large items of size 1 each, and $k$ small items of size $1/k$ each. Further, $D_j$ = 1 for all buckets $B_j$. In any feasible solution integral solution, there will be a demand which gets items of total size at most $2/k$. Indeed, any integral solution will need to fill one bucket with the small items, but it can use only 2 such items. But fractionally, the following solution is feasible and assigns one unit of item size to each bucket -- set $z_{ij} = 1/k (1-1/k)$ for every big item $i$ and bucket $j$, and
+$z_{ij} = 1/k^2$ for every small item $i$ and bucket $j$.
+
+We now define a somewhat different LP relaxation. For each bucket $B_j$ will place a lower bound $\mu_j$ on the size of any item assigned to it. Define $\mu_j = \frac{D_j}{2 f_j}$. We say that an item $i$ is {\em eligible} for bucket $B_j$, denoted $i \sim j$,  if $c_i \geq \mu_j$. It is not hard to see (by a simple averaging argument) that if there is an integral solution which assigns items of size at least $D_j$ to a bucket $B_j$, then there is another solution which assigns only the subset of these   items which are eligible for this bucket, and achieves total size at least $D_j/2$. Therefore, the new relaxation is as follows:
+\begin{align*}
+\sum_{i: i \sim j} z_{ij} \min(c_i, D_j/2) & \geq D_j/2, \ \  \forall j \\
+\sum_{i: i \sim j} z_{ij} & \leq f_j, \ \ \ \forall j \\
+\sum_{j: i \sim j} z_{ij} & \leq 1,  \ \ \ \forall i \\
+z_{ij} & \geq 0, \ \ \ \ \ \forall i,j
+\end{align*}
+
+It turns out that these constraints are also not enough. Here is an integrality gap example.
+
+
+\subsection{Configuration LP relaxation}
+We now write a configuration LP relaxation. We first round all item sizes and demands $D_j$ to powers of a constant $C$ (this
+can only hurt the approximation ratio by factor $C$).  We say that an item type $i$ is large for bucket $B_j$ if $c_i \geq \frac{D_j}{4C}$, otherwise it is small.
+We have variables $y(S,j)$ for every bucket $j$. Here $S$ can be of two types -- (i) $S$ could be a singleton set containing a large item for bucket $B_j$, we call such configurations {\em large}, or (ii) $S$ could be a set of small items for $j$, whose total size is at least $D_j$.
+%However, for reasons which will become clear later, we allow $S$ to consist of only those small jobs which are eligible for $j$, i.e., of size at least $D_j/2f_j$, and we need such jobs to add up to $D_j/4$ only -- therefore, there will be at most $f_j/2$ jobs in $S$.
+We call such configurations small. The LP is now easy to write:
+\begin{align*}
+\sum_{S} y(S,j) & \geq 1, \ \ \ \forall j \\
+\sum_{i: i \in S} y(S,j) & \leq 1 \ \ \ \forall i \\
+y_{S,j} & \geq 0
+\end{align*}
+
+\subsubsection{Solving the LP: Ellipsoid Method}
+Say how..
+
+\subsubsection{Rounding Algorithm}
+
+The rounding algorithm requires several steps. We begin with some definitions. We partition the demands into classes.
+We say that a demand $j$ is of class $p$ if
+$D_j$ is $C^p$ -- we let $B^\brp$ to denote the set of demands (or buckets) of class $p$.
+We say that an item $i$ is large with respect to class $p$ if its size is at least $\frac{C^p}{4C}$, i.e., it can belong to a large configuration for a class $p$ job.  For a demand $j$, let $\cC^l(j)$ and $\cC^s(j)$ denote the large and the small configurations corresponding to $j$ respectively.
+
+Fix a solution $y$ to the configuration LP. For a demand $j$, define $y^l(j)$ to be $\sum_{(S,j) \in \cC^l(j)} y(S,j)$, i.e., the total fractional extent to which $j$ is satisfied by large configurations. Define $y^s(j)$ corresponding to small configurations similarly. We extend this definition to classes of demands as well. For a class $p$, define $y^l(B^\brp)$ as $\sum_{j \in B^\brp} y^l(j)$. Define $y^s(B^\brp)$ similarly.
+
+Likewise, for an \emph{item} $i$, define $y(i)$ as $\sum_{(S,j): i \in S} y(S,j)$. This is the extent to which it is assigned in the solution $y$. Again, we can extend this definition to large and small configurations, and over different classes of demands. Given a class $p$, let $I^\brp$ denote the items which are large for class $p$. For an item $i \in I^\brp$, define $y^l(i,p)$ as $\sum_{(\{i\}, j): j \in B^\brp} y(\{i\}, j)$. This is the extent to which $i$ is assigned (as a large job) to demands of class $p$.
+
+\medskip \noindent We are now equipped to describe our rounding algorithm. It proceeds in the following steps:
+
+
+
+\medskip \noindent
+{\bf Step 1: Rounding Large Job Assignments.} We first rearrange the large job assignments such that for each class $p$, there is at most one variable $y_{S,j}$ such that $S \in \cC^l(j), j \in B^\brp$, which is strictly between 0 and 1. In other words, there is at most one \emph{strictly fractional} large configuration assigned in any class.
+
+We perform the following steps starting from the lowest class $p$ onwards.
+We may remove some demands and items during this process. This will happen if we integrally assign an item to a bucket, and we satisfy the requirement of a bucket. In this case, we may remove both the bucket and the items assigned to this bucket. Before we start the steps for class $p$, the following invariant holds for every class $p' < p$:
+
+\begin{itemize}
+\item[({\bf I1})] After removing the integrally assigned demands, for each class $p' < p$, there is at most one  demand $j_{p'} \in B^{(p')}$ such that $y^l(j)$ lies strictly between $0$ and $1$.  Moreover, if such a demand $j_{p'}$ exists, it must be that $f_j \leq f_{j'}$ for any $j' \in B^\brp$.
+\end{itemize}
+
+Suppose this invariant holds for all classes upto $p$. Now we describe the iteration for class $p$.
+Define a total order $\prec$ on $B^\brp$, where $j' \prec j$ if $f_{j'} \leq f_{j}$.  We now iteratively transfer mass from large configurations $(S,j) \in \cC^l(j)$ to $(S',j') \in \cC^l(j')$, where $j' \prec j$. Indeed, suppose $j,j' \in B^\brp$ such that the following conditions hold: (i) $j' \prec j$, (ii) $y^l(j') < 1, y^l(j) > 0$. We modify $y$ such that
+$y^l(j')$ will increase and $y^l(j)$ will decrease. Let $(S,j)$ be a large configuration with $y(S,j) > 0$. Since $y^l(j') < 1$, we know that there is a small configuration $(T,j')$ with $y(T,j') > 0$. We perform the following changes continuously at the same rate: increase $y(S,j')$ and $y(T,j)$ and decrease $y(S,j)$ and $y(T,j')$. We stop when one of the variables becomes 0. Note that $(S,j')$ is also a large configuration because $j,j'$ are of the same size. Further, $(T,j)$ is a small configuration because $|T| \leq f_{j'} \leq f_j$. It is easy to see that this process maintains feasibility of the LP solution. We keep on performing this process as long as possible --- since we are always transferring large configuration assignments towards jobs which appear earlier in the total order, this process will stop. Further, if $\alpha$ denotes $y^l(B^\brp)$, then the following condition holds when the process stops: arrange the jobs in $B^\brp$ according to the order $\prec$. Let this ordering be $j_1, j_2, \ldots, j_r$. Let $k$ denote $\lfloor \alpha \rfloor$. Then $y^l(j_u) = 1$ for $u=1, \ldots, k$ and $y^l(j_u) = 0$ for $u > k+1$. $y^l(j_{k+1})$ is equal to the fractional part of $\alpha$.
+
+After this part, we have ensured that there is at most one demand with strictly fractional $y^l(j)$ value in the modified LP solution. However, even the demands with $y^l(j) = 1$ may currently be satisfied by many large configurations. Now we iteratively perform a second transformation to ensure that each such demand are in fact integrally satisfied by a single large item, and hence we can remove such demands and the corresponding large item, and proceed.
+
+Indeed, consider a  job $j \in B^\brp$ for which there are two large configurations, say $(\{i_1\}, j), (\{i_2\}, j)$ with positive $y$ assignments. Suppose $c_{i_1} < c_{i_2}$. Let $(T,j')$ be another configuration containing $i_1$ with $y(T,j') > 0$ (if such a configuration exists). Note that $j'$ may not be of class $p$. Let $T'$ denote the set obtained from $T$ be adding $i_2$ and removing $i_1$. Since $i_1$ has smaller size than $i_2$, the total size of items in $T'$ will exceed that of $T$. So $(T',j')$ will be a valid configuration. It is possible that $(T,j')$ was a small configuration, but $i_2$ is a large job for $j'$. For this to happen $j'$ must belong to a class higher than $p$. In this case we would replace $(T',j')$ by the large configuration $(\{i_2\},j')$. Since we have not processed demands of class larger than $p$ yet, invariant~[(I1)] continues to hold.
+
+If $(T,j')$ was a large configuration, then it is possible that $j'$ is of class less than $p$. In this case it will be the unique demand given of this class guaranteed by invariant~[(a)]. Further $(T',j')$ will also be a large configuration, and so, the invariant continues to hold if we raise $y(T',j')$.
+
+We change the following variables at the same rate: increase $y(\{i_1\},j)$ and $y(T',j')$ and decrease $y(\{i_2\},j)$ and $y(T,j')$. Again, it is easy to check the feasibility of LP solution. We stop when one of the variables becomes 0, and repeat the process.
+
+When the process ends, all demands $j \in B^\brp$  except perhaps for one demand satisfy $y^l(j)$ is either 0 or 1. Further, for any demand $j$, there is at most one large configuration $(S,j)$ with positive $y(S,j)$ value. If a large configuration $(\{i\},j)$ satisfies $y(\{i\},j)=1$, then we assign $i$ to $j$. There will be no other non-zero variable in $y(S,j)$ involving $i$. So, we can remove $i$ and $j$ from the instance. Thus, for each class $p$, there is at most one large configuration $(S,j), j \in B^\brp,$  such that $y(S,j)$ strictly between 0 and 1.  Thus, we  satisfy the invariant for class $p$ as well.
+
+We will now show that it is possible to use only small configurations to satisfy
+For each class $p$, let $j_p$ be the {\em special} demand given by invariant~[(a)]. Let $F$ denote the set of special demands.
+
+\medskip \noindent
+{\bf Step 2: Modifying Small Configurations.} For each special demand $j_p \in F$, we know that $y^s(j_p) > 0$. Let $S_p$ be a small configuration such that $y^s(j_p, S_p) > 0$ (actually any small configuration for $j_p$ will do -- we just need to use the fact that there exists one). Since all items in $S_p$ are of size at most $C^p/16$, we know that the size of $S_p$ is at most $C^p + C^{p-1}/16 \leq 2C^p$. We now make the sets $S_p$ mutually disjoint. For each $p$, define $S_p'$ as $S_p \setminus (S_1 \cup \ldots \cup S_{p-1})$. Clealry, size of $S_p'$ is still at least $C^p - 2\sum_{p' < p} C^{p'} \geq C^p/2. $
+
+We define a new LP solution ${\bar y}$.
+For each special demand $j_p \in F$,
+we set ${\bar y}(S_p',j_p) = 0.5$, and ${\bar y}(S,j_p) = 0$ for all other configurations. Further, for any demand $j$ not in $F$, we set ${\bar y}(S,j) =  y(S,j)/2$. Clearly, ${\bar y}$ satisfies each demand to at least $D_j/4$ using small configurations only. Now we can use LST to ensure we get $\Omega(D_j)$ assignment for each demand, and also that the $f_i$ bounds are satisfied.
+
+
