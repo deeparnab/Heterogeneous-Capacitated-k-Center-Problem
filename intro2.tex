@@ -1,0 +1,61 @@
+\section{Introduction}
+Blah.
+\subsection{The \mckc Problem}
+The input to this problem is a metric space $(X = F\cup C,d)$ where the set $X$ is partitioned into facilities $F$ and clients $C$.
+Furthermore, the input contains  a collection of capacities: $(n_1,c_1), (n_2,c_2),\ldots, (n_t,c_t)$
+ with $c_1 \leq c_2 \le \cdots \le c_t$,  to indicate we have $n_i$ centers of capacity $c_i$ (these are called type $i$ centers) which we can open in $F$. 
+The output is to find locations in $F$ to open these centers and assign all points of $C$ to one of these so that (a) any center of type $i$ serves at most $c_i$ clients, and (b) the maximum distance of a client $j$ to its assigned center $i$ is minimized. We use $\opt$ to denote this latter distance of the optimum solution. \smallskip
+ 
+ When there is only one type of center with capacity $c_1 = c$ and $n_1 = k$, we obtain the uniform capacitated $k$-center problem~\cite{barilan,khuller-sussman}. There are $O(1)$-approximation algorithms for this problem. We note that the non-uniform capacitated $k$-center problem which has more recently  been studied~\cite{cygan,ola,auonon} in the literature seems unrelated to the \mckc problem. (also add cygan-kociumaka ref)\smallskip
+
+\paragraph{Connection to $3$-Partitioning.}
+To underscore the difficulty and difference of \mckc from  the usual capacitated $k$-center problems, we relate it to the classic $3$-Partitioning problem~\cite{Garey-Johnson}: recall in this problem
+we are given $3t$ non-negative numbers $\{a_1,\ldots,a_{3t}\}$ which have to be partitioned into $t$-groups $S_1,\ldots, S_t$ such that $|S_i| =  3$ and $\sum_{j\in S_i} a_j$ is the same for all groups.
+
+Given an instance of $3$-Partition, consider an instance of \mckc as follows. We let $n_i = 1$ and $c_i = a_i$ for $1\leq i\leq 3t$. Also, let $D:= \sum_{i=1}^{3t} a_i$ which we assume wlog is divisible by $3$.
+Consider a metric space where $X = F\cup C$ where $X$ is partitioned into $X_1 = (F_1\cup C_1),\ldots,X_t = (F_t\cup C_t)$ such that $|F_i| = 3$ and $|C_i| = D/3$ for all $1\le i\le t$.
+Furthermore, for any pair of points $u,v$ in the same $X_i$ their distance is $0$ and otherwise $\infty$. 
+Now observe that $\opt$ for the \mckc instance is {\em finite} if and only if the $3$-Partitioning instance is a Yes-instance. In other words, unless $P=NP$, there can be no approximation algorithm for the problem
+unless we allow capacity violation. This motivates us to look at bicriteria algorithms.
+
+ \begin{definition}
+ 	An $(a,b)$-bicriteria approximation algorithm for \mckc assigns locations to a centers at most $a\cdot\opt$ away, and each center of type $i$ serves at most $b\cdot c_i$ clients. %In other words, the capacity of each type $i$ center is $b \cdot c_i$.
+ \end{definition}
+
+\begin{theorem}
+There is an $(O(1),O(1))$-bicriteria approximation algorithm for the \mckc problem.
+\end{theorem}
+
+As of now we do not know whether there are $(O(1),(1+\eps))$-bicriteria approximation algorithms for the \mckc problem -- we leave this as an open problem in our paper.
+However, for this to exist, one must first obtain PTASes for certain {\em cardinality constrained scheduling} problems looked at the literature, for which only constant factor algorithms are currently known.
+
+\subsubsection*{Connection to Cardinality Constrained Resource Allocation Problems}
+In the classic problem makespan minimization with identical machines $(P||C_{max})$ one is given $m$ machines and $n$ jobs with processing times $(p_1,\ldots,p_n)$	and the objective is to schedule them so as to minimize makespan.
+In the closely related `max-min' version the objective is to maximize the minimum loaded machine. Abusing Graham's notation, let us denote this problem as $Q||C_{min}$.
+Both these problems admits PTASes~\cite{bibid}. 
+
+In the cardinality constrained version, the problem furthermore specifies a positive integer $k_i$ for each machine indicating the maximum number of jobs that can be scheduled on it. The min-max or makespan minimization version, denoted as $P|k_i|C_{max}$ is called the $k_i$-partitioning problem~\cite{bibid}.  This extra constraint makes the problem harder as existing ideas for PTASes do not seem to work; the best known approximation factor known is $1.5$ due to Kellerer and {\bf who?}~\cite{bibid}. 
+
+It is not too hard to see that the \mckc problem is harder than the {\em capacity constrained max-min allocation} problem on {\em uniform speed machines}. We denote this as $Q|k_i|C_{min}$.
+In this version,  machine $i$ has a speed $s_i$ and processing job $j$ on machine $i$ takes time $p_j/s_i$, and the objective is to maximize the minimum completion time of a machine. The reduction is similar to the reduction from $3$-Partition. The metric space is partitioned into $m$ parts with $|F_i| = k_i$ and $|C_i| = s_i\cdot T$ for some guess $T$ of the optimum of the $Q|k_i|C_{min}$ instance. We have $n$ types of capacities with $n_j = 1$ for all $j$, and $c_j = p_j$.
+The intra-part distance is $0$ and inter-part distance is $\infty$. Any $(\textrm{finite},\alpha)$-bicriteria approximation to this \mckc instance corresponds to a schedule with $C_{min} \geq T/\alpha$.
+We encapsulate this in the following theorem.
+
+\begin{theorem}
+Any algorithm for \mckc violating the capacity constraints by $(1+\eps)$ would imply a PTAS for cardinality constrained max-min allocation problem on uniform speed machines.
+%Any $(a,b)$-bicriteria approximation for \mckc implies a $b$-approximation for the cardinality constrained max-min allocation problem on uniform speed machines.
+\end{theorem}
+\noindent
+One of the main components of our algorithm for \mckc is a constant-approximation for $Q|k_i|C_{min}$. We call out this theorem as an independent interest question, and ask if there are PTAS for the same.
+\begin{theorem}\label{thm:part2}
+	There is a $O(1)$-approximation algorithm to cardinality constrained max-min allocation problem on uniform speed machines.
+\end{theorem}
+It is natural at this point to ask the complexity of cardinality constrained max-min and min-max allocation problems on unrelated machines. For makespan minimization, Saha and Srinivasan~\cite{SS} in fact give a $2$-approximation which matches the best known algorithm without cardinality constraints. They do so by using the natural assignment LP relaxation augmented with cardinality constraints and describe a rounding algorithm. 
+The max-min problem, however, is notoriously difficult~\cite{bibid} even without the cardinality constraints -- {\em describe results.} There are $O(1)$-algorithms known for the restricted-assignment max-min allocation problem~\cite{bibid} which we denote as $P|restr|C_{min}$ (also known as the Santa Claus problem); this is the same setting as $P||C_{min}$ except some jobs are disallowed on some machines. 
+
+One can reduce the cardinality-constrained max-min allocation problem to the restricted assignment max-min allocation problem in the following straightforward manner. Given a guess $T$ for the optimum value, in the optimum solution machine $i$ must be allocated 
+a subset of jobs $J$ such that $\sum_{j\in J} p_j \ge Ts_i/2$ {\em and} $p_j \geq Ts_i/2k_i$ for $j\in J$. Therefore, if we restrict jobs $j$ to machines $i$ only if $p_j \ge Ts_i/2k_i$, then solving this restricted assignment max-min allocation problem {\em without} cardinality constraints would give a $O(1)$-approximation. In short, the $O(1)$-approximation algorithms for the Santa Claus problem imply $O(1)$-approximation algorithms for $P|k_i|C_{min}$. Unfortunately, we do not know $O(1)$-approximation algorithms for $Q|restr|C_{min}$; all the $O(1)$-algorithms for restricted-assignment max-min problems go via classifying jobs as big or small (for all machines), and it is not clear whether the various $O(1)$-algorithms~\cite{BS, Feige, Ola, AFS}  for Santa Claus generalize to this case. We leave this as an interesting open question.
+
+
+
+

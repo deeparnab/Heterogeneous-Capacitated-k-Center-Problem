@@ -1,0 +1,80 @@
+\documentclass{article}[11pt]
+\input{preamble}
+
+\def\diam{\mathrm{diam}}
+\def\dist{\mathrm{dist}}
+\def\mckc{{\sffamily Movable Cap-$k$-Center}\xspace}
+\def\cckp{{\sffamily Cardinality-Constrained Knapsack Cover}\xspace}
+\def\opt{\mathsf{OPT}}
+\def\capkc{{\sffamily Cap-$k$-Center }}
+\def\x{{\mathsf x}}
+\def\y{y^{{\mathsf{int}}}}
+\def\Supp{\mathsf{Supp}\xspace}
+\def\n{n^{(1)}}
+\def\nn{n^{(2)}}
+\def\effc{c_{\mathrm{eff}}}
+
+\def\Sone{\calS_{\mathsf{round}}}
+\def\Stwo{\calS_{\mathsf{nexp}}}
+
+\def\Cb{C_{\mathsf{blue}}}
+\def\Cbb{C_{\mathsf{black}}}
+\def\Cr{C_{\mathsf{red}}}
+\def\Cp{C_{\mathsf{purple}}}
+\def\Cd{C_{\mathsf{del}}}
+
+\def\pv{\mathbf{b}}
+%\newcommand{\gset}{Y}
+%\newcommand{\gcol}{{\cal Y}}
+\newcommand{\brp}{{(p)}}
+\renewcommand{\br}[1]{{(#1)}}
+\newcommand{\bc}{{\bar c}}
+\newcommand{\dem}{\mathsf{cap}}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+\begin{document}
+	\section{LP capturing makespan minimization}
+Fix an $\eps$. We are given parameters $m$ the number of machines, $D$ the demand on each machine, and $F$ the cardinality of each machine. We are also given a collection $(c_1,\ldots,c_P)$ of capacities and we assume $c_P\leq D$.
+We are interested in approximately capturing all {\em supply} vectors $(y_1,\ldots,y_P)$ such that given $\ceil{y_p}$ (maybe even $\floor{y_p}$) copies of jobs with capacity $c_p$ we can satisfy the $m$ demands satisfying the cardinality constraints.
+
+Call a capacity $p$ big if $c_p > \eps D$ and small otherwise. For any $1\leq k\leq K = O(1/\eps)$, let $C_k$ denote the jobs with capacities $c_p \in \eps D\cdot \left((1+\eps)^{k-1},(1+\eps)^k\right]$.
+A configuration $\phi \in \Z^K_{\ge 0}$ is a vector such that $\phi_k$ indicates the number of jobs of capacity  chosen from $C_k$. The total capacity $\dem(\phi)$ of a configuration is defined to be $\sum_{k=1}^K \phi_k (1+\eps)^k\eps D$ -- note that this is an {\em upper bound} on the actual capacity, but off by a multiplicative $(1+\eps)$-factor. We also let $|\phi| = \sum_{k=1}^K \phi_k$, the cardinality of the configuration.
+
+A configuration is {\em allowed} iff $\phi_k \leq 1/\eps$ for all $k$. Therefore, the number of allowed configurations is $N_\eps$, a constant depending only on $\eps$. We order them in a arbitrarty but fixed manner -- the $i$th  allowed configuration is $\phi^{(i)}$.
+
+A {\em profile vector} $\pv = (\pv_1,\ldots,\pv_{N_\eps})$ is a vector where $\pv_i\in \Z_{\ge 0}$ indicates the number of machines which choose the allowed configuration $\phi^{(i)}$. 
+We let $M_i$ denote the $\pv_i$  machines getting $\phi^{(i)}$; that is these are the machines $j$ with $\sum_{t < i} \pv_t < j \le \sum_{t \leq i+1} \pv_t$.
+We have $\sum_i \pv_i = m$, the number of machines. The total number of profile vectors is at most $m^{N_\eps}$.
+Let $\mathbf{B}$ be the set of all feasible profile vectors. 
+
+Fix a profile vector $\pv$ and define the following polytope. This has variables $(y_1,\ldots, y_P)$ and variables $z_{jp}$ for all $j = 1,\ldots,m$ and $p$ s.t. $c_p \leq \eps D$.
+\begin{alignat}{4}
+\calP(\pv) ~= &  \{(y_1,\ldots,y_P):   && \notag \\
+& \quad \forall ~\textrm{small}~ p,   &&\quad  \textstyle \sum_{j=1}^m z_{jp} \leq y_p \label{eq:1} \\
+& \quad  \forall 1\leq k\leq K,           && \quad  \textstyle \sum_{i=1}^{N_\eps} \pv_i \phi^{(i)}_k  \leq \sum_{p\in C_k} y_p \label{eq:2} \\
+& \forall i\in [N_\eps], \textstyle j\in M_i , && \quad \textstyle \sum_{p:~\textrm{small}} z_{jp}c_p + \dem(\phi^{(i)}) \geq D \label{eq:3}\\
+& \forall i\in [N_\eps], \textstyle j\in M_i , && \quad \textstyle \sum_{p:~\textrm{small}} z_{jp} + |\phi^{(i)}| \leq F\} \label{eq:4}
+\end{alignat}
+The final polytope is the convex hull of all these polytopes.
+\begin{equation}
+\calP := \{y = (y_1,\ldots,y_P):\exists \pv\in\mathbf{B} ~\textrm{s.t.}~y\in \calP(\pv) \}
+\end{equation}
+
+\begin{theorem}
+If $(y_1,\ldots,y_P)$ is a feasible vector for the scheduling problem, then $\calP$ is feasible. Conversely, given any solution $(y_1,\ldots,y_P)\in \calP$, 
+we can find a feasible schedule giving $(1-O(\eps))D$ to every machine.
+\end{theorem}
+\begin{proof}
+One direction is easy, and we focus on the other direction. Let $\pv$ be the profile for which $y\in \calP(\pv)$.
+For every $1\le k\le K$, we scale down the capacity of all jobs in $C_k$ to $\eps D(1+\eps)^{k-1}$ and call them jobs of type $k$; note we have $\sum_{p\in C_k} y_p$ of them available fractionally.
+For $i\in [N_\eps]$, we assign all machines in $M_i$ the configuration $\phi^{(i)}$, that is, we assign $\phi^{(i)}_k$ jobs of type $k$ to machine $j\in M_i$. \eqref{eq:2} ensures that we have these many jobs available fractionally. 
+%After assigning all these big jobs, we have a residual problem where machine $j\in M_i$ has obtained capacity $\dem(\phi^{(i)})(1+\eps)^{-1}$. Therefore, $\sum_{p:~\textrm{small}} z_{jp}c_p \geq 
+After allocating the big jobs, the cardinality constraint of machine $j\in M_i$ becomes $F - |\phi^{(i)}| \geq \sum_{p: small} z_{jp}$. The residual problem can be rounded now as Ravishankar pointed out.
+\end{proof}
+
+
+\end{document}
+ 
