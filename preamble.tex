@@ -23,7 +23,7 @@
 \usepackage{fullpage}
 \usepackage[noend]{algpseudocode}
 \usepackage{enumitem}
-
+%\usepackage{times}
 % For restating theorems in appendix
 \usepackage{thmtools}
 \usepackage{thm-restate,cleveref}
@@ -40,7 +40,7 @@
 \newtheorem{claim}[theorem]{Claim}
 \newtheorem{question}{Question}
 \newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{definition}[theorem]{Definition}
+\newtheorem{definition}{Definition}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{fact}[theorem]{Fact}
 \newtheorem{example}[theorem]{Example}
@@ -49,7 +49,7 @@
 \newtheorem{remark}[theorem]{Remark}
 
 \newcommand{\comment}[1]{\textit {\em \color{blue} \footnotesize[#1]}\marginpar{\tiny\textsc{\color{blue} To Do!}}}
-\newcommand{\mcomment}[1]{\textbf {\em \color{red} \footnotesize[#1]}\marginpar{\tiny\textsc{\color{red} PLEASE CHECK}}}
+\newcommand{\mcomment}[1]{\marginpar{\tiny\textsf{\color{red} #1}}}
 
 \newcommand{\ignore}[1]{}
 

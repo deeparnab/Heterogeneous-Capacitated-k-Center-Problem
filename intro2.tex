@@ -1,61 +1,201 @@
 \section{Introduction}
-Blah.
-\subsection{The \mckc Problem}
-The input to this problem is a metric space $(X = F\cup C,d)$ where the set $X$ is partitioned into facilities $F$ and clients $C$.
-Furthermore, the input contains  a collection of capacities: $(n_1,c_1), (n_2,c_2),\ldots, (n_t,c_t)$
- with $c_1 \leq c_2 \le \cdots \le c_t$,  to indicate we have $n_i$ centers of capacity $c_i$ (these are called type $i$ centers) which we can open in $F$. 
-The output is to find locations in $F$ to open these centers and assign all points of $C$ to one of these so that (a) any center of type $i$ serves at most $c_i$ clients, and (b) the maximum distance of a client $j$ to its assigned center $i$ is minimized. We use $\opt$ to denote this latter distance of the optimum solution. \smallskip
- 
- When there is only one type of center with capacity $c_1 = c$ and $n_1 = k$, we obtain the uniform capacitated $k$-center problem~\cite{barilan,khuller-sussman}. There are $O(1)$-approximation algorithms for this problem. We note that the non-uniform capacitated $k$-center problem which has more recently  been studied~\cite{cygan,ola,auonon} in the literature seems unrelated to the \mckc problem. (also add cygan-kociumaka ref)\smallskip
+The capacitated $k$-center problem is a classic optimization problem where a finite metric space $(X,d)$ needs to be partitioned into $k$ clusters so that  every  cluster has cardinality at most
+come specified value $C$, and the objective is to minimize the maximum intra-cluster distance. This problem introduced by Bar-Ilan et al~\cite{BKP93} has many applications in {\bf blah blah blah}.
+One application is deciding placement of machine locations (centers of clusters) in a network scheduling~\cite{Stein} environment where jobs arise in a metric space and the objective function has a  job-communication (intra-cluster distance) and machine-load (cardinality) 
+component. \mcomment{Add Venkat's References?}
 
+The above problem is {\em homogeneous} in the sizes of the clusters, that is, it has the same cardinality constraint $L$ for each cluster. In many applications, one would ask for a \emph{heterogeneous} version of the problem where we have a different cardinality constraint for the clusters.
+For instance in the network scheduling application above, suppose we had machines of differing speeds. We could possibly load higher-speed machines with more jobs than lower-speed ones. In this paper, we study  this heterogenous version.
+
+\begin{definition}\emph{(The \mckc Problem.)}
+%	\begin{itemize}[noitemsep]
+%		\item {\bf Input:} Metric space $\left(X=F\cup C, d\right)$ where $F$ are facilities and $C$ are clients. 
+%		\\$~~~~~~~~~~$ Collection: $(k_1,c_1), \ldots, (k_P,c_P)$ of $P$-tuples of positive integers.
+%		\item {\bf Output:} $F_1,\ldots, F_P \subseteq F$ which are pairwise disjoint and $|F_p| \leq k_p$ for all $1\le p\leq P$. \\
+%		$~~~~~~~~~~~~$ Assignment $\phi: C\to F_1\cup F_2\cup \cdots \cup F_P$ such that for all $p$, $|\{j\in C: \phi(j)\in F_p\}|\leq c_p$.
+%		\item {\bf Objective:} Minimize $\max_{j\in C} d(j,\phi(j))$.
+%	\end{itemize}
+The input to this problem is a metric space $(X = F\cup C,d)$  %where the set $X$ is partitioned into facilities $F$ and clients $C$.
+%Furthermore, the input contains 
+and  a collection of {\em heterogeneous} capacities: $(k_1,c_1), (k_2,c_2),\ldots, (k_P,c_P)$.
+%with $c_1 \leq c_2 \le \cdots \le c_t$,  to indicate we can open $k_p$ centers (called type $p$ centers) with capacity $c_p$ in $F$. 
+The output is to open facilities $F_1 \cup  \cdots \cup F_P$ in $F$ such that $|F_p|\le k_p$, and find an assignment $\phi:C\to F_1\cup F_2\cup \cdots \cup F_P$ such that $|\{j\in C: \phi(j)\in F_p\}|\leq c_p$ for all $1\le p \le P$.
+The objective is to minimize $\max_{j\in C} d(j,\phi(j))$.
+%
+% to open these centers and assign all points of $C$ to one of these so that (a) any center of type  $p$ serves at most $c_p$ clients, and (b) the maximum distance of a client $j$ to its assigned center $i$ is minimized. 
+We use $\opt$ to denote this latter distance of the optimum solution. 
+\end{definition}
+\noindent
+The \mckc problem is relevant in many applications where the resources available are heterogenous. The machine placement problem was one example which has applications in network scheduling~\cite{bibid} and distributed databases~\cite{morgan-levin,sen-krishnamoorthy-rangaraj}. Another example is that of  vehicle routing problems~\cite{bibid} with different sized fleets. A third relevant application may be clustering; often clusters of equal sizes are undesirable~\cite{see icalp paper} and explicitly introducing heterogeneous constraints might lead to desirable clusters.
+In this paper, we investigate the worst-case complexity of the problem. \smallskip
+
+Bar-Ilan et al~\cite{BKP93} gave a $10$-approximation for the homogeneous capacitated $k$-center problem which was improved to a $6$-factor approximation by Khuller and Sussmann~\cite{KS}. One cannot get a better than $3$-approximation even for the {\em uncapacitated} $k$-center problem~\cite{Hochbaum-shmoys}. More recently, the {\em non-uniform} capacitated $k$-center problem was considered~\cite{cygan-haji, an-et-al} in the literature: in this problem every facility $v\in F$ has a pre-determined capacity $c_v$ if opened (and $0$ otherwise). We remark that the non-uniform version and our heterogeneous version seem unrelated in the sense that none is a special case of the other. 
+Cygan et al~\cite{cygan-haji} gave a $O(1)$-approximation for the problem which was improved to a $11$-approximation by An et al~\cite{bibid}\footnote{talk about distinction between center and supplier}.
+%Cygan and Kociumura~\cite{CKstacs14} look at the capacitated $k$-center with outliers problem where some $z$ clients need not be assigned; note that this  is a special case of the \mckc problem with $P=1$ where we allow $z$ clients with capacity $1$.
+
+
+
+%\paragraph{Results}
+
+%
+%\subsection{The \mckc Problem}
+% 
+% When there is only one type of center with capacity $c_1 = c$ and $n_1 = k$, we obtain the uniform capacitated $k$-center problem~\cite{barilan,khuller-sussman}. There are $O(1)$-approximation algorithms for this problem. We note that the non-uniform capacitated $k$-center problem which has more recently  been studied~\cite{cygan,ola,auonon} in the literature seems unrelated to the \mckc problem. (also add cygan-kociumaka ref)\smallskip
+%
 \paragraph{Connection to $3$-Partitioning.}
-To underscore the difficulty and difference of \mckc from  the usual capacitated $k$-center problems, we relate it to the classic $3$-Partitioning problem~\cite{Garey-Johnson}: recall in this problem
-we are given $3t$ non-negative numbers $\{a_1,\ldots,a_{3t}\}$ which have to be partitioned into $t$-groups $S_1,\ldots, S_t$ such that $|S_i| =  3$ and $\sum_{j\in S_i} a_j$ is the same for all groups.
+To underscore the difficulty and difference of \mckc from  the homogeneous capacitated $k$-center problems, we relate it to the classic $3$-Partitioning problem~\cite{Garey-Johnson}: in this problem
+we are given $3t$ non-negative numbers $\{a_1,\ldots,a_{3t}\}$ summing to $Dt$, and we have to decide if there is a partition into $t$-groups $S_1,\ldots, S_t$ such that $|S_i| =  3$ and $\sum_{j\in S_i} a_j = D$ for all $i$.
 
-Given an instance of $3$-Partition, consider an instance of \mckc as follows. We let $n_i = 1$ and $c_i = a_i$ for $1\leq i\leq 3t$. Also, let $D:= \sum_{i=1}^{3t} a_i$ which we assume wlog is divisible by $3$.
-Consider a metric space where $X = F\cup C$ where $X$ is partitioned into $X_1 = (F_1\cup C_1),\ldots,X_t = (F_t\cup C_t)$ such that $|F_i| = 3$ and $|C_i| = D/3$ for all $1\le i\le t$.
+Given an instance of $3$-Partition, consider an instance of \mckc as follows. We let $n_i = 1$ and $c_i = a_i$ for $1\leq i\leq 3t$. %Also, let $D:= \sum_{i=1}^{3t} a_i$ which we assume wlog is divisible by $3$.
+Consider a metric space where $X = F\cup C$ where $X$ is partitioned into $X_1 = (F_1\cup C_1),\ldots,X_t = (F_t\cup C_t)$ such that $|F_i| = 3$ and $|C_i| = D$ for all $i$.
 Furthermore, for any pair of points $u,v$ in the same $X_i$ their distance is $0$ and otherwise $\infty$. 
 Now observe that $\opt$ for the \mckc instance is {\em finite} if and only if the $3$-Partitioning instance is a Yes-instance. In other words, unless $P=NP$, there can be no approximation algorithm for the problem
-unless we allow capacity violation. This motivates us to look at bicriteria algorithms.
+unless we allow some capacity violation. This phenomenon, which is in contrast to the homogeneous version, motivates us to look at bicriteria algorithms.
 
  \begin{definition}
  	An $(a,b)$-bicriteria approximation algorithm for \mckc assigns locations to a centers at most $a\cdot\opt$ away, and each center of type $i$ serves at most $b\cdot c_i$ clients. %In other words, the capacity of each type $i$ center is $b \cdot c_i$.
  \end{definition}
-
-\begin{theorem}
-There is an $(O(1),O(1))$-bicriteria approximation algorithm for the \mckc problem.
+ For $3$-Partitioning, there exist algorithms~\cite{bibid} which either return No, or find a partition with $\sum_{j\in S_i} a_j \geq D(1-\eps)$. Thus for \mckc, approximation algorithms with  arbitrarily small capacity violation is not ruled out by the above reduction.
+ 
+\paragraph{Results.}
+Our first result is an algorithm which for any $\eps>0$ returns an assignment which violates the capacities by at most $(1+\eps)$-factor and has cost at most $\tilde{O}(1/\eps)$ times $\opt$. However, it runs in quasipolynomial time.
+\begin{theorem}\label{thm:1}
+	For any $\eps > 0$, there exists an $(\tilde{O}(1/\eps), (1+\eps))$-bicriteria approximation algorithm for \mckc which runs in time $n^{\tilde{O}\left(\frac{\log^2 n}{\eps}\right)}$.
+%There is an $(O(1),O(1))$-bicriteria approximation algorithm for the \mckc problem.
 \end{theorem}
-
-As of now we do not know whether there are $(O(1),(1+\eps))$-bicriteria approximation algorithms for the \mckc problem -- we leave this as an open problem in our paper.
-However, for this to exist, one must first obtain PTASes for certain {\em cardinality constrained scheduling} problems looked at the literature, for which only constant factor algorithms are currently known.
-
-\subsubsection*{Connection to Cardinality Constrained Resource Allocation Problems}
+When restricted to polynomial time algorithms, we can get constant factor approximations.
+\begin{theorem}\label{thm:2}
+	%For any $\eps > 0$, there exists an $\left(\tilde{O}(1/\eps), (1+\eps)\right)$-bicriteria approximation algorithm for \mckc which runs in time $n^{\tilde{O}\left(\frac{\log n}{\eps}\right)}$.
+	There is a polynomial time  $(O(1),O(1))$-bicriteria approximation algorithm for the \mckc problem.
+\end{theorem}
+%
+%As of now we do not know whether there are $(O(1),(1+\eps))$-bicriteria approximation algorithms for the \mckc problem -- we leave this as an open problem in our paper.
+%However, for this to exist, one must first obtain PTASes for certain {\em cardinality constrained scheduling} problems looked at the literature, for which only constant factor algorithms are currently known.
+%
+We end this section with two comments. 
+The first comment relates to the machine placement problem described in the first paragraph which may be of independent interest. 
+\begin{definition}\emph{(Machine Placement Problem.)}
+The input is a metric space $(X=F\cup C,d)$ with jobs with processing times $p_j$ at locations $C$. We are also given $P$ machines with speeds $s_1,s_2,\ldots,s_P$.
+The goal is to find a placement of these machines on $F$ and schedule the jobs on these machines so as to minimize the makespan. The completion time of a job equals the time to reach the machine plus the processing time.
+\end{definition}
+Any $(a,b)$-bicriteria approximation algorithm for \mckc implies a $O(a+b)$ approximation for the machine placement problem. Therefore, from Theorem~\ref{thm:2}, we get the following.
+\begin{theorem}\label{thm:mpp}
+There is a polynomial time $O(1)$-approximation algorithm for the machine placement problem.
+\end{theorem}
+It would be nice to obtain a polynomial time algorithm proving Theorem~\ref{thm:1}.
+However, one must first obtain PTASes for certain {\em cardinality constrained scheduling} problems, for which only constant factor algorithms are currently known.
+%\subsubsection*{Cardinality Constrained Scheduling  Problems}
 In the classic problem makespan minimization with identical machines $(P||C_{max})$ one is given $m$ machines and $n$ jobs with processing times $(p_1,\ldots,p_n)$	and the objective is to schedule them so as to minimize makespan.
-In the closely related `max-min' version the objective is to maximize the minimum loaded machine. Abusing Graham's notation, let us denote this problem as $Q||C_{min}$.
-Both these problems admits PTASes~\cite{bibid}. 
+In the closely related `max-min' version the objective is to maximize the minimum loaded machine. Abusing Graham's notation, let us denote this problem as $P||C_{min}$.
+Both these problems, and their uniform speed versions that is $Q||C_{max}$ and $Q||C_{min}$, admit PTASes~\cite{bibid}. 
 
-In the cardinality constrained version, the problem furthermore specifies a positive integer $k_i$ for each machine indicating the maximum number of jobs that can be scheduled on it. The min-max or makespan minimization version, denoted as $P|k_i|C_{max}$ is called the $k_i$-partitioning problem~\cite{bibid}.  This extra constraint makes the problem harder as existing ideas for PTASes do not seem to work; the best known approximation factor known is $1.5$ due to Kellerer and {\bf who?}~\cite{bibid}. 
-
-It is not too hard to see that the \mckc problem is harder than the {\em capacity constrained max-min allocation} problem on {\em uniform speed machines}. We denote this as $Q|k_i|C_{min}$.
-In this version,  machine $i$ has a speed $s_i$ and processing job $j$ on machine $i$ takes time $p_j/s_i$, and the objective is to maximize the minimum completion time of a machine. The reduction is similar to the reduction from $3$-Partition. The metric space is partitioned into $m$ parts with $|F_i| = k_i$ and $|C_i| = s_i\cdot T$ for some guess $T$ of the optimum of the $Q|k_i|C_{min}$ instance. We have $n$ types of capacities with $n_j = 1$ for all $j$, and $c_j = p_j$.
-The intra-part distance is $0$ and inter-part distance is $\infty$. Any $(\textrm{finite},\alpha)$-bicriteria approximation to this \mckc instance corresponds to a schedule with $C_{min} \geq T/\alpha$.
-We encapsulate this in the following theorem.
-
-\begin{theorem}
-Any algorithm for \mckc violating the capacity constraints by $(1+\eps)$ would imply a PTAS for cardinality constrained max-min allocation problem on uniform speed machines.
-%Any $(a,b)$-bicriteria approximation for \mckc implies a $b$-approximation for the cardinality constrained max-min allocation problem on uniform speed machines.
+In the cardinality constrained version, the problem furthermore specifies a positive integer $k_i$ for each machine indicating the maximum number of jobs that can be scheduled on it. The min-max or makespan minimization version, denoted as $P|k_i|C_{max}$ is called the $k_i$-partitioning problem~\cite{bibid}.  This extra constraint makes the problem harder as existing ideas for PTASes do not seem to work; the best known approximation factor for $P|k_i|C_{max}$ is $1.5$ due to Kellerer and Kotov~\cite{KK11}.
+The max-min problem has not been investigated much (but see Section~\ref{sec:related}).
+It is not too hard to modify the reduction from $3$-Partition to show that the \mckc problem is as hard as $Q|k_i|C_{min}$, that is the capacity constrained max-min problem on {\em uniform speed} machines.
+Our $O(1)$-approximation (implied by Theorem~\ref{thm:2}) seems to be the first non-trivial algorithm for this case. 
+Furthermore, we obtain a PTAS for the identical machines case. \mcomment{We may want to \\ remove this last part}
+\begin{theorem}\label{thm:q}
+	There is an EPTAS for the $P|k_i|C_{min}$ problem.
 \end{theorem}
+
+
+
+%It is not too hard to see that the \mckc problem is harder than the {\em capacity constrained max-min allocation} problem on {\em uniform speed machines}. We denote this as $Q|k_i|C_{min}$.
+%In this version,  machine $i$ has a speed $s_i$ and processing job $j$ on machine $i$ takes time $p_j/s_i$, and the objective is to maximize the minimum completion time of a machine. The reduction is similar to the reduction from $3$-Partition. The metric space is partitioned into $m$ parts with $|F_i| = k_i$ and $|C_i| = s_i\cdot T$ for some guess $T$ of the optimum of the $Q|k_i|C_{min}$ instance. We have $n$ types of capacities with $n_j = 1$ for all $j$, and $c_j = p_j$.
+%The intra-part distance is $0$ and inter-part distance is $\infty$. Any $(\textrm{finite},\alpha)$-bicriteria approximation to this \mckc instance corresponds to a schedule with $C_{min} \geq T/\alpha$.
+%We encapsulate this in the following theorem.
+%
+%\begin{theorem}
+%	Any algorithm for \mckc violating the capacity constraints by $(1+\eps)$ would imply a PTAS for cardinality constrained max-min allocation problem on uniform speed machines.
+%	%Any $(a,b)$-bicriteria approximation for \mckc implies a $b$-approximation for the cardinality constrained max-min allocation problem on uniform speed machines.
+%\end{theorem}
+%\noindent
+%One of the main components of our algorithm for \mckc is a constant-approximation for $Q|k_i|C_{min}$. We call out this theorem as an independent interest question, and ask if there are PTAS for the same.
+%\begin{theorem}\label{thm:part2}
+%	There is a $O(1)$-approximation algorithm to cardinality constrained max-min allocation problem on uniform speed machines.
+%\end{theorem}
+%It is natural at this point to ask the complexity of cardinality constrained max-min and min-max allocation problems on unrelated machines. For makespan minimization, Saha and Srinivasan~\cite{SS} in fact give a $2$-approximation which matches the best known algorithm without cardinality constraints. They do so by using the natural assignment LP relaxation augmented with cardinality constraints and describe a rounding algorithm. 
+%The max-min problem, however, is notoriously difficult~\cite{bibid} even without the cardinality constraints -- {\em describe results.} There are $O(1)$-algorithms known for the restricted-assignment max-min allocation problem~\cite{bibid} which we denote as $P|restr|C_{min}$ (also known as the Santa Claus problem); this is the same setting as $P||C_{min}$ except some jobs are disallowed on some machines. 
+%
+%One can reduce the cardinality-constrained max-min allocation problem to the restricted assignment max-min allocation problem in the following straightforward manner. Given a guess $T$ for the optimum value, in the optimum solution machine $i$ must be allocated 
+%a subset of jobs $J$ such that $\sum_{j\in J} p_j \ge Ts_i/2$ {\em and} $p_j \geq Ts_i/2k_i$ for $j\in J$. Therefore, if we restrict jobs $j$ to machines $i$ only if $p_j \ge Ts_i/2k_i$, then solving this restricted assignment max-min allocation problem {\em without} cardinality constraints would give a $O(1)$-approximation. In short, the $O(1)$-approximation algorithms for the Santa Claus problem imply $O(1)$-approximation algorithms for $P|k_i|C_{min}$. Unfortunately, we do not know $O(1)$-approximation algorithms for $Q|restr|C_{min}$; all the $O(1)$-algorithms for restricted-assignment max-min problems go via classifying jobs as big or small (for all machines), and it is not clear whether the various $O(1)$-algorithms~\cite{BS, Feige, Ola, AFS}  for Santa Claus generalize to this case. We leave this as an interesting open question.
+%
+
+\subsection{Technical Discussion} 
+We give a brief discussion of how we prove our main theorems (Theorem~\ref{thm:1} and~\ref{thm:2}). 
+We start by writing the natural assignment LP relaxation for the problem. As is usual, we guess $\opt$ and scale everything such that $\opt = 1$.
+We have opening  variables $y_{ip}$ for every $i\in F,p\in [P]$ indicating whether we open a facility with capacity $c_p$ at location $i$.
+We have connection variables $x_{ijp}$ indicating the fraction to which client $j\in C$ connects to a facility at location $i$ where a type $p$ facility has been opened. 
+We force $x_{ijp} = 0$ for all $d(i,j) > 1$.
+If $\opt = 1$, there is a feasible $(x,y)$ solution to the following system of inequalities.\smallskip
+
+\begin{minipage}{0.45\textwidth}
+\begin{alignat}{4}
+& \quad \forall j\in C,   &&\quad  \textstyle \sum_{i\in F} \sum_{p\in [P]}  x_{ijp} \geq 1 \label{eq:lp1} \\
+& \quad \forall i\in F,p\in [P] ,  &&\quad  \textstyle \sum_{j\in C}  x_{ijp} \leq c_py_{ip} \label{eq:lp2} \\
+& \quad \forall p\in [P], && \quad \textstyle \sum_{q \geq p} y_{iq}   \leq \sum_{q\geq p} k_q \label{eq:lp3}  
+\end{alignat}
+\end{minipage}
+~\vline~
+\begin{minipage}{0.45\textwidth}
+	\begin{alignat}{4}
+	& \quad \forall i\in F, j\in C,p\in [P],  && \quad x_{ijp} \leq y_{ip}\label{eq:lp4}   \\
+	& \quad \forall i\in F, && \quad \textstyle\sum_{p\in [P]} y_{ip} \leq 1 \label{eq:lp5}  \\
+	& \quad \forall i\in F,j\in C,p\in [P], && \quad x_{ijp},y_{ip} \geq 0\label{eq:lp6}
+	\end{alignat}
+\end{minipage}
+\smallskip
+
+For technical reasons, we have written \eqref{eq:lp3} as a constraint on the prefix-sums rather than individual capacities. However, a feasible integral solution satisfying \eqref{eq:lp3} can easily be converted to a feasible solution satisfying individual capacities.
+
+%\paragraph{Integrality Gap.}
+The above LP has bad integrality gap even when we allow arbitrary violation of capacities. 
+Consider the following instance. The metric space $X$ is partitioned into $(F_1\cup C_1) \cup \cdots \cup (F_K\cup C_K)$, with $|F_k| = 2$ and $|C_k| = K$ for all $1\le k\le K$.
+The distance between any two points in $F_i\cup C_i$ is $1$ for all $i$, while all other distances are $\infty$. The capacities available are $k_1 = K$ facilities with capacity $c_1 = 1$ and 
+$k_2= K-1$ facilities with capacity $c_2 = K$. It is easy to see that integrally any solution would violate capacities by a factor of $K/2$.
+%It is easy to see that the above instance is not feasible with $OPT=1$: indeed, there is at least one client location where the optimal solution does not place a facility of capacity $H$ in its neighborhood, and it is not possible to serve the demand of this client using only capacity $1$ facilities, as there are only two locations where we can place facilities in its neighborhood.
+On the other hand, there is a feasible solution for the above LP relaxation: for $F_k = \{a_k,b_k\}$, we set $y_{a_k2} = 1-1/K$ and $y_{b_k1} = 1$, and for all $j\in C_k$, we set $x_{a_kj2} = 1-1/K$ and $x_{b_kj1} = 1/K$.
+%
+%
+%fractionally assign $1-\frac1H$ units of capacity-$H$ facility and $1$ unit of capacity-$1$ facility in the neighborhood around each client. It is easy to see that there is a feasible fractional assignment of this kind which means that the LP suffers from an unbounded (w.r.t the guessed objective function value) integrality gap.
+
+
+\paragraph{Decomposition Theorem.}
+The integrality gap suggests we need to strengthen our LP, and we will indeed do so. However, the above LP suffices to tease out the instance into parts that are indeed ``well roundable'' and problematic parts which look like the example above.
+To make this precise, let us introduce two definitions.  
+\begin{asparaitem}
+\item A subset of facilities $S$ is said to be {\em $(a,b)$-roundable wrt a feasible solution $(x,y)$} to \eqref{eq:lp1}-\eqref{eq:lp6} if its diameter is at most $a$ and there is a rounding $Y_{ip}\in \{0,1\}$ for all $i\in S,p\in [P]$
+such that the rounded solution satisfies cardinality constraints, and  has enough capacity to satisfy $1/b$th of  the {\em fractional} demand incident on $S$. In other words, if we install $b\cdot c_p$ capacity at the location where $Y_{ip} = 1$, then it can satisfy the fractional demand incident on $S$.
+%That is, if we increase the capacities by $b$ times, there is an integral rounding of facilities in $S$. 
+\item 
+A subset $S$ of facilities is called a {\em complete neighborhood} if there exists some clients $J\subseteq C$ such that $S$ contains all the facilities in distance one to clients in $J$.  That is, for all $j\in J$, the only facilities $i$ with $x_{ijp} > 0$ must lie in $S$.
+Note that in the integrality gap example above, the $F_k$'s are all complete neighborhoods due to the client set $C_k$'s. Also note that these complete neighborhood sets are also encountered in the reductions from $3$-Partition and the cardinality constrained scheduling problems.
+\end{asparaitem}
+Note that if our instance can be partitioned into roundable sets then we would be done. If our instance consists of only complete neighborhood sets, then we could hope to use techniques developed for scheduling algorithms. However, a priori, the instances are a mixture of both.
+Our main technical hammer is the decomposition theorem (Theorem~\ref{thm:decomp}) which says that given feasible solution $(x,y)$ to \eqref{eq:lp1}-\eqref{eq:lp6}, in polynomial time we can decompose the instance $(F\cup C,d)$ into two collections $\calS$ and $\calT$ where
+every set $S$ in $\calS$ is a $(\tilde{O}(1/\eps),(1+\eps))$-roundable set, and every set $T\in \calT$ is a complete neighborhood set of diameter $\leq 4$. This tells us that the core difficulty that the above LP faces are indeed complete neighborhood sets of small diameter, and shows us how to strengthen our LP relaxation. {\bf Maybe add a few lines on how we obtain -- connections to region growing algorithms.} \medskip
+
 \noindent
-One of the main components of our algorithm for \mckc is a constant-approximation for $Q|k_i|C_{min}$. We call out this theorem as an independent interest question, and ask if there are PTAS for the same.
-\begin{theorem}\label{thm:part2}
-	There is a $O(1)$-approximation algorithm to cardinality constrained max-min allocation problem on uniform speed machines.
-\end{theorem}
-It is natural at this point to ask the complexity of cardinality constrained max-min and min-max allocation problems on unrelated machines. For makespan minimization, Saha and Srinivasan~\cite{SS} in fact give a $2$-approximation which matches the best known algorithm without cardinality constraints. They do so by using the natural assignment LP relaxation augmented with cardinality constraints and describe a rounding algorithm. 
-The max-min problem, however, is notoriously difficult~\cite{bibid} even without the cardinality constraints -- {\em describe results.} There are $O(1)$-algorithms known for the restricted-assignment max-min allocation problem~\cite{bibid} which we denote as $P|restr|C_{min}$ (also known as the Santa Claus problem); this is the same setting as $P||C_{min}$ except some jobs are disallowed on some machines. 
+Next we describe two ways to strengthen the LP. One leads to a polynomial time algorjthm but gives $O(1)$-factor violation of the capacities, the other leads to a quasipolynomial time $(1+\eps)$-factor violation in the capacities. Both LPs, put extra constraints on the vector 
+of $y_{ip}$'s. Interestingly, both LPs have exponentially number of variables and constraints we do not know if either LP is polynomial or quasipolynomial time solvable. Rather, we use the ``round-and-cut'' strategy~\cite{bunch fof citations} where the constraints+auxiliary variables are added
+in phases {\em only if} a rounding algorithm fails. This technique has led to many new algorithms in the recent past, and ours adds to this canon of growing work.
 
-One can reduce the cardinality-constrained max-min allocation problem to the restricted assignment max-min allocation problem in the following straightforward manner. Given a guess $T$ for the optimum value, in the optimum solution machine $i$ must be allocated 
-a subset of jobs $J$ such that $\sum_{j\in J} p_j \ge Ts_i/2$ {\em and} $p_j \geq Ts_i/2k_i$ for $j\in J$. Therefore, if we restrict jobs $j$ to machines $i$ only if $p_j \ge Ts_i/2k_i$, then solving this restricted assignment max-min allocation problem {\em without} cardinality constraints would give a $O(1)$-approximation. In short, the $O(1)$-approximation algorithms for the Santa Claus problem imply $O(1)$-approximation algorithms for $P|k_i|C_{min}$. Unfortunately, we do not know $O(1)$-approximation algorithms for $Q|restr|C_{min}$; all the $O(1)$-algorithms for restricted-assignment max-min problems go via classifying jobs as big or small (for all machines), and it is not clear whether the various $O(1)$-algorithms~\cite{BS, Feige, Ola, AFS}  for Santa Claus generalize to this case. We leave this as an interesting open question.
+\paragraph{LP strengthening 1.} One useful idea that has helped for scheduling problems~\cite{bibid} is to look at {\em configuration LP}. For our problem, we add the following constraint. For a subset of clients $J\subseteq C$ let $\Gamma(J)\subseteq F$ 
+be the facilities at distance $1$. Since $J$ can only be assigned to clients in $\Gamma(J)$, there must be enough capacity installed on $\Gamma(J)$ -- in particular, the multiset/configuration  $S$ of capacities must be of cardinality $\le |\Gamma(J)|$ and total capacity $\geq |J|$.
+We strengthen our LP~\eqref{eq:lp1}-\eqref{eq:lp6} by adding that for every $J\subseteq C$, the $y_{ip}$ vector must {\em dominate} a feasible configuration LP solution for the complete neighborhood $(\Gamma(J),J)$. 
+
+As mentioned above, this huge LP is perhaps not solvable in polynomial time. Instead we add these constraints iteratively. In every phase, given a feasible $(x,y)$ to \eqref{eq:lp1}-\eqref{eq:lp6}, we apply our decomposition theorem and obtain the complete neighborhood sets and add the strengthened constraints for these sets. The analysis of the ellipsoid algorithm implies in polynomially many phases we will reach a solution $(x,y)$ where the $y$'s satisfy the configuration LP constraints for all the complete neighborhood sets. 
+Our final contribution is an $O(1)$-rounding of the configuration LP. {\bf deepc: maybe expand on this as well.}
 
 
+\paragraph{LP strenghtening 2}
+
+
+\subsection{Related Work and Open Problems}\label{sec:related}
+\paragraph{Work on non-uniform capacities}
+\paragraph{Work of Shi Li}
+\paragraph{Constrained Scheduling}
+\paragraph{Heterogeneous problems}
+\paragraph{Open questions}
 
 
