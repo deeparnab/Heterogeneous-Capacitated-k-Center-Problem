@@ -114,10 +114,10 @@ We now further define some useful variables which can be derived from $\{y(S,j)\
 \end{itemize}
 \end{framed}
 
-Suppose this invariant holds for all buckets upto $t-1$. Now we describe the iteration for bucket $t$. 
+Suppose this invariant holds for all buckets upto $t-1$. Now we describe the iteration for bucket $t$.
 
 \medskip \noindent {\bf Step 3a: Intra-Bucket Rounding.}  Define a total order $\prec$ on $B^\brt \setminus \calR$, where $j \prec j'$ if $f_{j} \leq f_{j'}$.  We now ensure that the demands with the smallest $f_j$ value get preference when it comes to being satisfied by large configurations. Indeed, suppose there exists $j,j' \in B^\brt \setminus \calR$ such that the following conditions hold: (i) $j \prec j'$, (ii) $y^l(j) < 1, y^l(j') > 0$. We then \emph{modify} $y$ such that
-$y^l(j)$ will increase and $y^l(j')$ will decrease until either the former hits $1$ or the latter hits $0$. To this end, let $(S,j') \in \barcalS^L_{j'}$ be a large configuration  with $y(S,j') > 0$. Now, since $y^l(j) < 1$, we know that there is a small configuration $(T,j) \in \barcalS^S_j$ with $y(T,j) > 0$. We then perform the following changes continuously at a uniform rate: increase $y(S,j)$ and $y(T,j')$ and decrease $y(S,j')$ and $y(T,j)$. We stop when one of the variables becomes 0 or 1. 
+$y^l(j)$ will increase and $y^l(j')$ will decrease until either the former hits $1$ or the latter hits $0$. To this end, let $(S,j') \in \barcalS^L_{j'}$ be a large configuration  with $y(S,j') > 0$. Now, since $y^l(j) < 1$, we know that there is a small configuration $(T,j) \in \barcalS^S_j$ with $y(T,j) > 0$. We then perform the following changes continuously at a uniform rate: increase $y(S,j)$ and $y(T,j')$ and decrease $y(S,j')$ and $y(T,j)$. We stop when one of the variables becomes 0 or 1.
 
 \begin{claim} \label{cl:swap1}
 The modified solution above is feasible for the relaxed configuration LP.
@@ -126,12 +126,12 @@ The modified solution above is feasible for the relaxed configuration LP.
 To see why the modified solution is feasible for the relaxed configuration LP, observe that $(S,j)$ is also a valid relaxed large configuration because $j$ and $j'$ are of the same bucket $t$ and hence have the same rounded demand requirement of $\Delta^t$. Similarly, observe that $(T,j')$ is a valid small configuration for $j'$ because $|T| \leq f_{j} \leq f_{j'}$, and the remaining constraints for being a small configuration (i.e., the total capacity of items in $T$ should exceed the $\barD_{j'}/\Delta$, and the numbers $n(T,p) \leq n_p$ for all types) are satisfied trivially since they enforce the same constraints for $j$ and $j'$. As a result, since we increase $y(S,j)$ and decrease $y(T,j)$ at the same rate, constraint~\cref{eq:config1} is satisfied for $j$. Similarly, since we increase $y(T,j')$ and decrease $y(S,j')$ at the same rate, constraint~\cref{eq:config1} is satisfied for $j'$. Likewise, since we increase $y(S,j)$ and decrease $y(S,j')$ at the same rate, constraint~\cref{eq:config2} is satisfied for the item type corresponding to the large item in $S$. Finally, since we increase $y(T,j')$ and decrease $y(T,j)$ at the same rate, constraints~\cref{eq:config2} are satisfied for all item types corresponding to items in $T$.
 \end{proof}
 
-We keep on performing this process as long as possible --- since we always transfer large configuration assignments to demands which appear earlier in the total order, this process will stop at some point. At this point, we add whichever demands are integrally assigned by large configurations to the set $\calR$, i.e., all $j \in B^\brt$ for which there exists $S \in \barcalS^L_j \cup \barcalS^S_j$ such that $y(S,j) = 1$, are added to $\calR$. 
+We keep on performing this process as long as possible --- since we always transfer large configuration assignments to demands which appear earlier in the total order, this process will stop at some point. At this point, we add whichever demands are integrally assigned by large configurations to the set $\calR$, i.e., all $j \in B^\brt$ for which there exists $S \in \barcalS^L_j \cup \barcalS^S_j$ such that $y(S,j) = 1$, are added to $\calR$.
 
-\begin{claim}
+\begin{claim} \label{cl:step3a}
  Let $\alpha := y^l(B^\brt \setminus \calR)$ denote the total fractional assignment of large configurations to the non-integrally rounded demands in $B^\brt$. then the following condition holds at the termination of the above iterative process: suppose we arrange the demands in $B^\brt \setminus \calR$ according to the order $\prec$. Let this ordering be $j_1, j_2, \ldots, j_r$, and let $k$ denote $\lfloor \alpha \rfloor$. Then we have that $y^l(j_u) = 1$ for $u=1, \ldots, k$, $y^l(j_u) = 0$ for $u > k+1$, and lastly, $y^l(j_{k+1})$ is equal to the fractional part of $\alpha = \alpha - \floor{\alpha}$.
  \end{claim}
- 
+
  \begin{proof}
  Complete...
  \end{proof}
@@ -150,27 +150,33 @@ with strictly fractional $y^l(j)$ value in the modified LP solution. However, ev
 
 
 
-\medskip \noindent {\bf Step 3b: Inter-Bucket Rounding.}  
-Indeed, consider a  demand $j \in B^\brt$ for which there are two large configurations, say $(\{p_1\}, j), (\{p_2\}, j)$ with positive $y$ assignments, and suppose $\bc_{p_1} < \bc_{p_2}$ without loss of generality. There are now two cases depending on whether item type $p_1$ is contained in any other non-integrally configuration or not.
+\medskip \noindent {\bf Step 3b: Inter-Bucket Rounding.}
+We repeat this step while there  exists a  demand $j \in B^\brt$ for which there are two large configurations, say $(\{p_1\}, j), (\{p_2\}, j)$ with positive $y$ assignments, and suppose $\bc_{p_1} < \bc_{p_2}$ without loss of generality. There are now two cases depending on whether item type $p_1$ is contained in any other non-integrally assigned configuration or not.
 
-\medskip \noindent {\bf Case 3b(i): There exists demand $j \notin \calR$ and configuration $(T,j')$ such that $n(T,p_1) \geq 1$ and $y(T,j') > 0$.}
-In this case, let $(T,j')$ be another configuration containing an item of type $p_1$ with $y(T,j') > 0$ and $j'$ is not already rounded, i.e., $j' \notin \calR$. Note that $j'$ may not belong to bucket $t$. Then, let $T'$ denote the multi-set obtained from $T$ be adding one item of of type $p_2$ and removing one item of type $p_1$. Since $p_1$ has smaller size than $p_2$, clearly the total size of items in $T'$ will exceed that of $T$. So if $p_1$ and $p_2$ are both either small types or both either large item types for demand $j'$, then it follows that $(T',j')$ is a valid small configuration for $j'$. On the other hand, it could be the case that $p_2$ is a large item type for $j'$ but $p_1$ is a small item type (which naturally means that $j'$ belongs to a bucket $t' > t$ since $p_1$ and $p_2$ were both large item types for $j$). In this scenario, we replace $(T',j')$ by the large configuration $(\{i_2\},j')$ in the following update: we change the following variables at a uniform rate: increase $y(\{p_1\},j)$ and $y(T',j')$ and decrease $y(\{p_2\},j)$ and $y(T,j')$, and stop when one of them reaches $0$ or $1$, and repeat the process till we never find such a demand as in the beginning of the step.
+\medskip \noindent {\bf Case 3b(i): There exists demand $j' \notin \calR$ and configuration $(T,j')$ such that $n(T,p_1) \geq 1$ and $y(T,j') > 0$.}
+In this case, note that $j'$ may not belong to bucket $t$. Now, if item type $p_2$ is a small item type for demand $j'$, then let $T'$ denote the multi-set obtained from $T$ be adding one item of type $p_2$ and removing one item of type $p_1$. Since $p_1$ has smaller size than $p_2$, clearly the total size of items in $T'$ will exceed that of $T$. On the other hand, if $p_2$ is a large item type for $j'$, then let $T' = \{p_2\}$ and we use the large configuration of $(T',j')$. In both cases, we perform the following updates at a uniform rate: increase $y(\{p_1\},j)$ and $y(T',j')$ and decrease $y(\{p_2\},j)$ and $y(T,j')$, and stop when one of them reaches $0$ or $1$. If in the process some demand is integrally assigned, we include it in $\calR$.
 
 \medskip \noindent {\bf Case 3b(ii): There exists no demand $j \notin \calR$ and configuration $(T,j')$ such that $n(T,p_1) \geq 1$ and $y(T,j') > 0$.}
 In this case, we have at least $1$ free capacity of item type $p_1$, and so we set $y(\{p_1\},j)= 1$ and all other $y(S,j) = 0$ for $S \neq \{i_1\}$. We add $j$ to the rounded set $\calR$ and repeat this step (3b).
 
+
+\begin{claim} \label{cl:step3b}
+If $\{y(S,j)\}$ is a feasible to the relaxed configuration LP, then after a single execution of either case 3b(i) or case 3b(ii), the modified solution remains feasible for the relaxed configuration LP, and moreover, invariant~(I) continues holds for all buckets $\leq t-1$. 
+\end{claim}
+\begin{proof}
 Again, it is easy to check the feasibility of LP solution much like~\Cref{cl:swap1}. We also claim that the invariant~[(I1)] continues to hold (for bucket $t-1$) during this process. Indeed, we only need to be worried for the case when $j'$ is of bucket less than $t$, as otherwise we are not modifying the configurations in lower buckets. In this case it will be the unique fractional demand of this bucket guaranteed by invariant~[I1]. Further $(T',j')$ will also be a large configuration for this demand $j'$. Therefore, $y^l(j')$ does not change, and so, the invariant still holds.
+\end{proof}
 
-When the process ends, all demands $j \in B^\brt$  except perhaps for one demand satisfy the property that $y^l(j)$ is either 0 or 1. Further, for any demand $j$, there is at most one large configuration $(S,j)$ with positive $y(S,j)$ value. If a large configuration $(\{i\},j)$ satisfies $y(\{i\},j)=1$, then we assign $i$ to $j$. There will be no other non-zero variable  $y(S,j)$ involving $i$. So, we can remove $i$ and $j$ from the instance. Thus, for each bucket $p$, there is at most one large configuration $(S,j), j \in B^\brt,$  such that $y(S,j)$ strictly between 0 and 1.  Thus, we  satisfy the invariant for bucket $p$ as well. Observe that right now all the large assignment of such a demand $j$ is satisfied by just one large configuration. However, when we carry out the
-above steps for a bucket larger than $p$, we may redistribute the large assignment of $j$ over several large configurations, but $y^l(j)$ will remain unchanged.
+  To summarize, when the process ends, all demands $j \in B^\brt$  except perhaps for one demand satisfy the property that $y^l(j)$ is either 0 or 1. Further, for any demand $j$, there is at most one large configuration $(S,j)$ with positive $y(S,j)$ value. If a large configuration $(\{i\},j)$ satisfies $y(\{i\},j)=1$, then we include $j$ in $\calR$. Thus, for bucket $t$, there is at most one large configuration $(S,j), j \in B^\brt \setminus \calR$  such that $y(S,j)$ strictly between $0$ and $1$. Moreover, since this fractional demand is the demand $j_{k+1}$ identified in Claim~\ref{cl:step3a}, it has the smallest $f$ among all $j \in B^\brt \setminus \calR$. Thus, we satisfy the invariant for bucket $t$ as well. Observe that right there is exactly one large configuration with positive $y$ value serving $j_k$. However, when we carry out the step (3b) for a bucket larger than $t$, we may redistribute the large assignment of $j$ over several large configurations, but $y^l(j)$ will remain unchanged.
 
 
-We will now show that it is possible to use only small configurations to satisfy all the demands.
-For each bucket $p$, let $j_p$ be the {\em special} demand given by invariant~[(a)]. Let $F$ denote the set of special demands.
+\medskip \noindent {\bf Step 4: Rounding all remaining demands $j \notin \calR$ using small configurations.}
+In the final part of the proof, we will snow that it is in fact possible \emph{to use only small configurations} to satisfy all the unrounded demands $j \notin \calR$.
+To this end, for each bucket $t$, let $j_t$ be the {\em unique} demand which with $0 < y^l(j_t) < 1$ given by invariant~[(I)], and let $\calD_s$ denote the set of all these unique demands in all buckets. Now, for each unique demand $j_t \in \calD_s$, we know that $y^s(j_t) > 0$, since $y^l(j_t) < 1$. Then, let $S_t$ be a small configuration such that $y^s(S_t,j_t) > 0$ (actually any small configuration for $j_t$ will do -- we just need to use the fact that there exists one). Since all items in $S_t$ are of (rounded) size at most $\frac{\Delta^{t-2}}{4}$, we know that the total (rounded) size of $S_t$ is at most $\Delta^{t-1} + \Delta^{t-2}/4 \leq 2 \Delta^{t-1}$. 
 
-\medskip \noindent
-{\bf Step 2: Modifying Small Configurations.} For each special demand $j_p \in F$, we know that $y^s(j_p) > 0$. Let $S_p$ be a small configuration such that $y^s(j_p, S_p) > 0$ (actually any small configuration for $j_p$ will do -- we just need to use the fact that there exists one).
- Since all items in $S_p$ are of size at most $\frac{C^p}{4C}$, we know that the size of $S_p$ is at most $C^p + C^{p-1}/4 \leq 2C^p$. We now make the sets $S_p$ mutually disjoint. For each $p$, define $S_p'$ as $S_p \setminus (S_1 \cup \ldots \cup S_{p-1})$. Clearly, size of $S_p'$ is still at least $C^p - 2\sum_{p' < p} C^{p'} \geq C^p/2. $
+The main idea now is to actually make the sets $S_t$ \emph{mutually disjoint}. For each $t$, let $S_t'$ to be $S_t \setminus (S_1 \cup \ldots \cup S_{t-1})$. Clearly, total size of $S_t'$ is still at least $\Delta^{t-1} - 2\sum_{t' < t} \Delta^{t'-1} \geq \Delta^{t-1}/2$.
+
+{\bf RKnote: stopping here..}
 
 We define a new LP solution ${\bar y}$.
 For each special demand $j_p \in F$,
