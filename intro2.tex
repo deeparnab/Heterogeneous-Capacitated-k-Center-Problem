@@ -55,47 +55,61 @@ unless we allow some capacity violation. This phenomenon, which is in contrast t
  \begin{definition}
  	An $(a,b)$-bicriteria approximation algorithm for \mckc assigns locations to a centers at most $a\cdot\opt$ away, and each center of type $i$ serves at most $b\cdot c_i$ clients. %In other words, the capacity of each type $i$ center is $b \cdot c_i$.
  \end{definition}
- For $3$-Partitioning, there exist algorithms~\cite{bibid} which either return No, or find a partition with $\sum_{j\in S_i} a_j \geq D(1-\eps)$. Thus for \mckc, approximation algorithms with  arbitrarily small capacity violation is not ruled out by the above reduction.
  
-\paragraph{Results.}
-Our first result is an algorithm which for any $\eps>0$ returns an assignment which violates the capacities by at most $(1+\eps)$-factor and has cost at most $\tilde{O}(1/\eps)$ times $\opt$. However, it runs in quasipolynomial time.
-\begin{theorem}\label{thm:1}
-	For any $\eps > 0$, there exists an $(\tilde{O}(1/\eps), (1+\eps))$-bicriteria approximation algorithm for \mckc which runs in time $n^{\tilde{O}\left(\frac{\log^2 n}{\eps}\right)}$.
-%There is an $(O(1),O(1))$-bicriteria approximation algorithm for the \mckc problem.
-\end{theorem}
-When restricted to polynomial time algorithms, we can get constant factor approximations.
+\subsection{Our Results}
+Our main result is a constant factor approximation algorithm which violates the capacities by at most a constant factor.
 \begin{theorem}\label{thm:2}
 	%For any $\eps > 0$, there exists an $\left(\tilde{O}(1/\eps), (1+\eps)\right)$-bicriteria approximation algorithm for \mckc which runs in time $n^{\tilde{O}\left(\frac{\log n}{\eps}\right)}$.
 	There is a polynomial time  $(O(1),O(1))$-bicriteria approximation algorithm for the \mckc problem.
 \end{theorem}
+Although the violation in the capacities is large (although bounded by a constant), it already implies $O(1)$-approximations for the machine placement problem alluded to in the first paragraph.
+This maybe of independent interest.
+\begin{definition}\emph{(Machine Placement Problem.)}
+	The input is a metric space $(X=F\cup C,d)$ with jobs with processing times $p_j$ at locations $C$. We are also given $P$ machines with speeds $s_1,s_2,\ldots,s_P$.
+	The goal is to find a placement of these machines on $F$ and schedule the jobs on these machines so as to minimize the makespan. The completion time of a job equals the time to reach the machine plus the processing time.
+\end{definition}
+Any $(a,b)$-bicriteria approximation algorithm for \mckc implies a $O(a+b)$ approximation for the machine placement problem. Therefore, from Theorem~\ref{thm:2}, we get the following.
+\begin{theorem}\label{thm:mpp}
+	There is a polynomial time $O(1)$-approximate algorithm for the machine placement problem.
+\end{theorem}
+
+The reduction from $3$-Partitioning does not rule out non-trivial approximation algorithms which violate the capacity by $(1+\epsilon)$-factor for arbitrarily small $\epsilon>0$. 
+Indeed, for $3$-Partitioning, there exist algorithms~\cite{bibid} which either return No, or find a partition with $\sum_{j\in S_i} a_j \geq D(1-\eps)$. %Thus for \mckc, approximation algorithms with  arbitrarily small capacity violation is not ruled out by the above reduction.
+However, as we discuss below, many {\em cardinality constrained scheduling problems} are also special cases of the \mckc problem. There are currently no PTASes known for these problems
+and in a sense which we elaborate in Section~\ref{sec:techs} capture the difficulty in the problem. 
+Nevertheless, we are able to obtain non-trivial algorithms with $(1+\epsilon)$-capacity violation.
+
+%Our first result is an algorithm which for any $\eps>0$ returns an assignment which violates the capacities by at most $(1+\eps)$-factor and has cost at most $\tilde{O}(1/\eps)$ times $\opt$. However, it runs in quasipolynomial time.
+\begin{theorem}\label{thm:1}
+	For any $\eps > 0$, there exists an $(O(\log n/\eps), (1+\eps))$-bicriteria approximation algorithm for the \mckc problem running in time $C_\eps^{\tilde{O}(\log^3n)}$ for a constant $C_\epsilon$ depending only on $\epsilon$.
+%There is an $(O(1),O(1))$-bicriteria approximation algorithm for the \mckc problem.
+\end{theorem}
+%When restricted to polynomial time algorithms, we can get constant factor approximations.
 %
 %As of now we do not know whether there are $(O(1),(1+\eps))$-bicriteria approximation algorithms for the \mckc problem -- we leave this as an open problem in our paper.
 %However, for this to exist, one must first obtain PTASes for certain {\em cardinality constrained scheduling} problems looked at the literature, for which only constant factor algorithms are currently known.
 %
-We end this section with two comments. 
-The first comment relates to the machine placement problem described in the first paragraph which may be of independent interest. 
-\begin{definition}\emph{(Machine Placement Problem.)}
-The input is a metric space $(X=F\cup C,d)$ with jobs with processing times $p_j$ at locations $C$. We are also given $P$ machines with speeds $s_1,s_2,\ldots,s_P$.
-The goal is to find a placement of these machines on $F$ and schedule the jobs on these machines so as to minimize the makespan. The completion time of a job equals the time to reach the machine plus the processing time.
-\end{definition}
-Any $(a,b)$-bicriteria approximation algorithm for \mckc implies a $O(a+b)$ approximation for the machine placement problem. Therefore, from Theorem~\ref{thm:2}, we get the following.
-\begin{theorem}\label{thm:mpp}
-There is a polynomial time $O(1)$-approximation algorithm for the machine placement problem.
-\end{theorem}
-It would be nice to obtain a polynomial time algorithm proving Theorem~\ref{thm:1}.
-However, one must first obtain PTASes for certain {\em cardinality constrained scheduling} problems, for which only constant factor algorithms are currently known.
-%\subsubsection*{Cardinality Constrained Scheduling  Problems}
-In the classic problem makespan minimization with identical machines $(P||C_{max})$ one is given $m$ machines and $n$ jobs with processing times $(p_1,\ldots,p_n)$	and the objective is to schedule them so as to minimize makespan.
+%We end this section with two comments. 
+\paragraph{Connection to Cardinality Constrained Scheduling.}
+%The first comment relates to the machine placement problem described in the first paragraph which may be of independent interest. 
+%It would be nice to obtain a polynomial time algorithm proving Theorem~\ref{thm:1}.
+%However, one must first obtain PTASes for certain {\em cardinality constrained scheduling} problems, for which only constant factor algorithms are currently known.
+%%\subsubsection*{Cardinality Constrained Scheduling  Problems}
+In the classic scheduling problem of makespan minimization with identical machines $(P||C_{max})$ one is given $m$ machines and $n$ jobs with processing times $(p_1,\ldots,p_n)$	and the objective is to schedule them so as to minimize the maximum load on a machine.
 In the closely related `max-min' version the objective is to maximize the minimum loaded machine. Abusing Graham's notation, let us denote this problem as $P||C_{min}$.
-Both these problems, and their uniform speed versions that is $Q||C_{max}$ and $Q||C_{min}$, admit PTASes~\cite{bibid}. 
+Both these problems, and their uniform speed versions $Q||C_{max}$ and $Q||C_{min}$, admit PTASes~\cite{bibid}. In the uniform speed versions, each machine $i$  has a speed $s_i$ and the processing time of job $j$ on machine $i$ is $p_j/s_i$.
 
 In the cardinality constrained version, the problem furthermore specifies a positive integer $k_i$ for each machine indicating the maximum number of jobs that can be scheduled on it. The min-max or makespan minimization version, denoted as $P|k_i|C_{max}$ is called the $k_i$-partitioning problem~\cite{bibid}.  This extra constraint makes the problem harder as existing ideas for PTASes do not seem to work; the best known approximation factor for $P|k_i|C_{max}$ is $1.5$ due to Kellerer and Kotov~\cite{KK11}.
 The max-min problem has not been investigated much (but see Section~\ref{sec:related}).
-It is not too hard to modify the reduction from $3$-Partition to show that the \mckc problem is as hard as $Q|k_i|C_{min}$, that is the capacity constrained max-min problem on {\em uniform speed} machines.
-Our $O(1)$-approximation (implied by Theorem~\ref{thm:2}) seems to be the first non-trivial algorithm for this case. 
-Furthermore, we obtain a PTAS for the identical machines case. \mcomment{We may want to \\ remove this last part}
+It is not too hard to modify the reduction from $3$-Partition (see Section~\ref{sec:prelims}) to show that the \mckc problem is as hard as $Q|k_i|C_{min}$, that is the capacity constrained max-min problem on {\em uniform speed} machines.
+
+Theorem~\ref{thm:1} is obtained by proving a kind of converse. We show that any $\alpha$-approximation for the $Q|k_i|C_{min}$ problem gives a $\left(O(\log n/\epsilon), \alpha(1+\eps))\right)$-approximation for the \mckc problem.
+Theorem~\ref{thm:1} then follows from the following theorem.
+%
+%Our $O(1)$-approximation (implied by Theorem~\ref{thm:2}) seems to be the first non-trivial algorithm for this case. 
+%Furthermore, we obtain a PTAS for the identical machines case. \mcomment{We may want to \\ remove this last part}
 \begin{theorem}\label{thm:q}
-	There is an EPTAS for the $P|k_i|C_{min}$ problem.
+	There is a QPTAS for the $Q|k_i|C_{min}$ problem.
 \end{theorem}
 
 
@@ -171,6 +185,7 @@ such that the rounded solution satisfies cardinality constraints, and  has enoug
 A subset $S$ of facilities is called a {\em complete neighborhood} if there exists some clients $J\subseteq C$ such that $S$ contains all the facilities in distance one to clients in $J$.  That is, for all $j\in J$, the only facilities $i$ with $x_{ijp} > 0$ must lie in $S$.
 Note that in the integrality gap example above, the $F_k$'s are all complete neighborhoods due to the client set $C_k$'s. Also note that these complete neighborhood sets are also encountered in the reductions from $3$-Partition and the cardinality constrained scheduling problems.
 \end{asparaitem}
+
 Note that if our instance can be partitioned into roundable sets then we would be done. If our instance consists of only complete neighborhood sets, then we could hope to use techniques developed for scheduling algorithms. However, a priori, the instances are a mixture of both.
 Our main technical hammer is the decomposition theorem (Theorem~\ref{thm:decomp}) which says that given feasible solution $(x,y)$ to \eqref{eq:lp1}-\eqref{eq:lp6}, in polynomial time we can decompose the instance $(F\cup C,d)$ into two collections $\calS$ and $\calT$ where
 every set $S$ in $\calS$ is a $(\tilde{O}(1/\eps),(1+\eps))$-roundable set, and every set $T\in \calT$ is a complete neighborhood set of diameter $\leq 4$. This tells us that the core difficulty that the above LP faces are indeed complete neighborhood sets of small diameter, and shows us how to strengthen our LP relaxation. {\bf Maybe add a few lines on how we obtain -- connections to region growing algorithms.} \medskip
@@ -180,7 +195,7 @@ Next we describe two ways to strengthen the LP. One leads to a polynomial time a
 of $y_{ip}$'s. Interestingly, both LPs have exponentially number of variables and constraints we do not know if either LP is polynomial or quasipolynomial time solvable. Rather, we use the ``round-and-cut'' strategy~\cite{bunch fof citations} where the constraints+auxiliary variables are added
 in phases {\em only if} a rounding algorithm fails. This technique has led to many new algorithms in the recent past, and ours adds to this canon of growing work.
 
-\paragraph{LP strengthening 1.} One useful idea that has helped for scheduling problems~\cite{bibid} is to look at {\em configuration LP}. For our problem, we add the following constraint. For a subset of clients $J\subseteq C$ let $\Gamma(J)\subseteq F$ 
+\paragraph{LP strengthening.} One useful idea that has helped for scheduling problems~\cite{bibid} is to look at {\em configuration LP}. For our problem, we add the following constraint. For a subset of clients $J\subseteq C$ let $\Gamma(J)\subseteq F$ 
 be the facilities at distance $1$. Since $J$ can only be assigned to clients in $\Gamma(J)$, there must be enough capacity installed on $\Gamma(J)$ -- in particular, the multiset/configuration  $S$ of capacities must be of cardinality $\le |\Gamma(J)|$ and total capacity $\geq |J|$.
 We strengthen our LP~\eqref{eq:lp1}-\eqref{eq:lp6} by adding that for every $J\subseteq C$, the $y_{ip}$ vector must {\em dominate} a feasible configuration LP solution for the complete neighborhood $(\Gamma(J),J)$. 
 
@@ -188,7 +203,7 @@ As mentioned above, this huge LP is perhaps not solvable in polynomial time. Ins
 Our final contribution is an $O(1)$-rounding of the configuration LP. {\bf deepc: maybe expand on this as well.}
 
 
-\paragraph{LP strenghtening 2}
+
 
 
 \subsection{Related Work and Open Problems}\label{sec:related}

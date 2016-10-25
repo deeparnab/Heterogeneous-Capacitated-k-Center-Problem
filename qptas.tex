@@ -1,0 +1,192 @@
+\section{QPTAS for $Q|k_i|C_{min}$}
+\def\pv{\mathbf{b}}
+\newcommand{\dem}{\mathsf{cap}}
+Let the instance $\calI$ given to us have $m$ machines with speeds $s_1,\ldots, s_m$ and cardinality upper bounds $k_1,\ldots,k_m$. We are also given $n$ jobs with loads $c_1,\ldots,c_n$. We assume each $1\leq c_i,s_j \leq \poly(n)$.
+Fix an $\eps$. 
+Let us guess the optimum value $T\geq 1$.  We wish to either prove $T$ is too large a guess, or find an assignment which assigns machine $i$ a subset of jobs $S_i$ with {\em load} $\sum_{p\in S_i} c_p \geq T_i := Ts_i$.
+
+
+We start with a lemma which states that finding solutions satisfying cardinality constraints approximately suffices.
+\begin{lemma}\label{lem:appx-feas}
+	Given an assignment of jobs such that the load on any machine $i$  is at least $T_i(1 - \epsilon_1)$ such that machine $i$ gets $\leq (1+\epsilon_2)k_i$ jobs, 
+	we can find another assignment which satisfies the cardinality constraints and the load of any machine $i$ is $\geq T_i(1 - \epsilon_3)$ for $\epsilon_3 < 2\epsilon_1+\epsilon_2$.
+\end{lemma}
+\begin{proof}
+For every machine $i$, let $S_i$ be the jobs currently allocated to it. We may assume $\eps_1 k_i \geq 1$, otherwise $|S_i| \leq k_i$.
+Remove the $\floor{2\eps_1 k_i} \geq \eps_1 k_i$ least capacity jobs to obtain the set $S'_i$. Note that the total capacity of $S'_i$ is at least $(1-2\eps_1)$ times capacity of $S_i$, and therefore
+at least $(1-2\epsilon_1 - \epsilon_2)T_i$. 
+\end{proof}
+\noindent
+\paragraph{Input Modification and Grouping.}
+We now modify the data so that everything is rounded to the nearest power of $(1+\epsilon)$. More precisely we round  $k_i$  to the {\em smallest} power of $(1+\epsilon)$ larger than the original value and $T_i$ to the largest power of $(1+\epsilon)$ smaller than the original value.
+If $T$ was optimum, then there is a feasible allocation in the new instance. 
+For technical reasons, we round $c_p$ to the smallest value of the form $\epsilon(1+\epsilon)^t$ larger than the original value.
+Let $J_p$ be the set of jobs with modified capacity $c_p = \eps (1+\epsilon)^p$, and let $n_p = |J_p|$. Furthermore, armed with Lemma~\ref{lem:appx-feas}, any $(1-\epsilon)$-approximate solution to the new instance gives an $(1-O(\epsilon))$-approximate solution to the original instance.  \smallskip
+
+
+We now divide the machines into groups. For $0\leq r\leq O(\log n)$ and $0\leq s\leq O(\log n)$, let $M^{(r,s)}$ be the number of machines with $T_i = (1+\epsilon)^r$ and $k_i = (1+\epsilon)^s$.
+%\[
+%M^{(r,s)} := \{i: (1+\epsilon)^{r-1} \le T_i  \le (1+\epsilon)^r, ~~\textrm{and}~~ (1+\epsilon)^{s-1} \le k_i  \le (1+\epsilon)^s  \}
+%\]
+%Throughout the paper we fix $\delta,\eps > 0$. As is standard, we assume we have a guess $T$ of the optimum; given such a guess we would either prove $\opt > T$ or obtain a feasible schedule of makespan at most $(1+\eps)T$.
+%Subsequently, binary search would provide a schedule of makespan $\leq \opt(1+\eps)$. \smallskip
+%
+\def\sm{\mathsf{small}}
+Call a job $p$  big  for machine $i$ if $c_p \geq \eps T_i$. If $i\in M^{(r,s)}$, then $p$ lies in the set $J_r \cup J_{r+1} \cup \cdots$.
+Otherwise, $p$ is small for machine $i$.
+We define a bipartite graph $H$ with jobs and machines on either side, with an edge $(i,p)$ iff $p$ is small for $i$. 
+
+For every $0\leq r,s \leq O(\log n)$, we define a set of {\em feasible configurations} $\Phi^{(r,s)}$. These consist of vectors $\phi \in \Z^K_{\geq 0}$ for $K=O(1/\epsilon)$ corresponding to big jobs assigned to machines $i$ in $M^{(r,s)}$.
+To be precise, $\phi_k$ is supposed to count the number of jobs with $c_p = \eps (1+\epsilon)^{r+k}$ contained in the configuration $\phi$. 
+The last coordinate $\phi_K$ counts the number of jobs $p$ with $c_p > (1+\epsilon)^r$.
+Let
+$\dem(\phi) := \sum_{k=0}^K \phi_k \epsilon(1+\epsilon)^{r+k}$ be the total load of the configuration and $|\phi| = \sum_{k=0}^K \phi_k$ be its cardinality.
+We let $\Phi^{(r,s)}$ be the collection of feasible minimal configurations, that is, $\phi$'s with (a) $|\phi|\leq (1+\epsilon)^s$ and (b) either $\dem(\phi)\leq (1+\epsilon)^r$ or $\dem(\phi) > (1+\epsilon)^r$ and $\dem(\phi') \leq (1+\epsilon)^r$ for any $\phi'$ obtained by decreasing any positive coordinate of $\phi$ by exactly $1$. Note that $|\Phi^{(r,s)}| \leq N_0 = (1/\epsilon)^{(1/\epsilon)}$. Also note that in any optimal solution, each machine $i\in M^{(r,s)}$ does get one configuration from $\Phi^{(r,s)}$. 
+Our algorithm constructs these classes and arbitrary numbers them. The $t$th member of $\Phi^{(r,s)}$ will be denotes as $\phi^{(r,s,t)}$.% where $r,s$ would be clear from context.
+
+%if $p_j > \eps T$, and small otherwise. Let $J_\sm$ 	be the set of small jobs.
+%For any $1\leq k\leq K = O(1/\eps)$, let $J_k$ denote the big jobs with capacities $p_j \in \eps T\cdot \left((1+\eps)^{k-1},(1+\eps)^k\right]$.
+%A configuration $\phi \in \Z^K_{\ge 0}$ is a vector where $\phi_k$ indicates the number of jobs of chosen from $J_k$. The total load $\dem(\phi)$ of a configuration is defined to be $\sum_{k=1}^K \phi_k (1+\eps)^{k-1}\eps T$ -- note that this is a {\em lower bound} on the actual load but is within a multiplicative $(1+\eps)$-factor. Finally, we let $|\phi| = \sum_{k=1}^K \phi_k$, the cardinality of the configuration. A configuration $\phi$ is {\em allowed} if $\phi_k \leq 1/\epsilon$. The number of allowed configurations is denoted as $N_0 \leq (1/\epsilon)^{(1/\epsilon)}$.
+%We call this set $\Phi$ which we order in an arbitrary but fixed manner. The $i$th member is denoted as $\phi^{(i)}$.
+%
+%\smallskip
+%Call a machine $i$ large if $k_i > 1/\eps^2$. Let $M^{(0)}$ denote the set of large machines, and let $m_0 = |M^{(0)}|$. 
+%Every other machine is small and these are partitioned into $N_1 = O(1/\eps \ln(1/\eps))$ groups as follows. For $1\leq \ell \leq N_1$, define 
+%$M^{(\ell)} := \{i: (1+\eps)^{\ell-1} < k_i \leq (1+\epsilon)^\ell\}$. Let $m_\ell := |M^{(\ell)}|$.
+%
+%\subsection{MILP Formulation}
+\paragraph{Enumeration.} 
+For every $0\leq r,s \leq O(\log n)$ and $1\le t\le N_0$, we {\em guess}  the  integer $\pv^{(r,s)}_t \in \Z_{\geq 0}$ which indicates the number of machines in $M^{(r,s)}$ who are allocated the configuration $\phi^{(t)}$.
+%That is, the number of big jobs from $J_k$, for $1\le k\le K$ assigned to these machines is $\phi^{(t)}_k$. Note that the number of variables is at most $N_0 N_1 = 2^{O(1/\eps \ln(1/\epsilon))}$.
+%The number of such integer variables is $d := O(\log^2 n)2^{\tilde{O}(1/\epsilon)}$. For every machine $i$ and every job $p$ small for $i$, we have a variable $z_{ip} \in [0,1]$. This indicates whether small job $p$ is allocated to machine $i$.
+These guesses must satisfy 
+%The first constraint states that the total number of machines need to be respected.
+\begin{equation}\label{eq:milp1}
+\forall 0\leq r,s \leq O(\log n), ~~~~ \sum_{t=1}^{N_0} \pv^{(r,s)}_t = |M^{(r,s)}|
+\end{equation}
+The number of such guesses is $\leq \prod_{r,s} |M_{r,s}|^{N_0} \leq C_\eps^{O(\log^3 n)}$. 
+Since machines in $M^{(r,s)}$ are all equivalent (in terms of demand and cardinality constraint), by symmetry we can assign the $\pv^{(r,s)}_t$ copies of $\phi^(r,s,t)$ as we like.
+For a guess to be feasible, for every job of type $p$, at most $n_p$ copies must be used up in the guessed configurations.
+For every guess we get a residual problem on the bipartite graph $H$.
+Let $n'_p$ be the remaining number of jobs of type $p$. 
+Let $T'_i$ be the residual demand of machine $i$, that is, $T_i - \dem(\phi)$ where $\phi$ is allocated to it by the guess.
+Let $k'_i$ be the residual cardinality constraint, that is, $k'_i = k_i - |\phi|$.
+\paragraph{Rounding.}
+The remaining copies of jobs must satisfy the residual demand. For this we simply write the assignment LP.
+\begin{alignat}{4}
+	& \quad \forall p,   &&\quad  \textstyle \sum_{i\sim p} z_{ip} \leq n'_p \label{eq:asslp1} \\
+	& \quad \forall i\in [m] ,  &&\quad  \textstyle \sum_{p\sim i} c_pz_{ip}  \geq T'_i \label{eq:asslp2}\\
+	& \quad \forall i\in [m], && \quad \textstyle \sum_{p\sim i} z_{ip}  \leq  k'_i \label{eq:asslp3}
+\end{alignat}
+\def\zz{z^{\mathsf{int}}}
+For the correct guess, the above LP is feasible. If so, using the fact that $c_p \leq T_i$ for all $i\sim p$, we can get a feasible solution with a slight hit in the demand.
+\begin{lemma}\label{lem:iter}
+If \eqref{eq:asslp1}-\eqref{eq:asslp3} is feasible, then there is an integral assignment $\zz_{ip}$ which satisfies \eqref{eq:asslp1} and \eqref{eq:asslp3}, and 
+$\quad \forall i\in [m], ~~ \sum_{p\sim i} c_p\zz_{ip}  \geq T'_i - O(\epsilon)T_i$.
+\end{lemma}
+\begin{proof}
+The proof is via iterative rounding. We look at a vertex solution and if some $z_{ip}$ is $0$ or $1$, we set $\zz_{ip}$ the same. 
+If for any machine $i$, the number of $z_{ip}$s is $\leq 5$, we set $\zz_{ip} = 0$ for these and delete the constraint in \eqref{eq:asslp2} and \eqref{eq:asslp3} corresponding to $i$.
+For this machine $i$, the integral assignment is fixed with cardinality $\le k'_i$ and with total load $\geq T'_i - 5\max_p c_p \geq T'_i - 5\eps T_i$.
+
+Therefore, we may assume that the vertex solution $z$ has at least $5$ non-zeros for every row $i$ and at least $2$ non-zeros for every column $p$.
+Let the number of rows (machines) at any point be $m'$ and number of columns (jobs) be $n'$.  The above observation implies the fractional support is $\geq \max(5m',2n')$ 
+Since $z$ is a vertex solution, the fractional support is of cardinality $\leq n' + 2m'$.
+This is a contradiction.
+\end{proof}
+\begin{proof}[{\bf Proof of Theorem~\ref{thm:q}}]
+The final algorithm is as follows.
+First modify the inputs and then perform the grouping obtaining the feasible configurations for every group.
+For every guess of $\pv^{(r,s)}_t$'s in the enumeration step, obtain the residual problem and check if \eqref{eq:asslp1}-\eqref{eq:asslp3} is feasible or not. If not, then the guess is infeasible.
+If yes, then Lemma~\ref{lem:iter} implies a residual solution which satisfies the cardinality constraints, and every machine $i$ obtains a total load of at least $T_i (1 - 5\epsilon)$. 
+The running time is dominated by the number of guesses which is $C_\epsilon^{O(\log^3 n)}$.
+\end{proof}
+
+
+
+%
+%The second constraint states that the total number of big jobs need to be respected. We introduce another piece of notation.
+%Let  $n(\phi,p)$ denotes the number of copies of $p$ in $\phi$.
+%More precisely, if $\phi\in \Phi^{(r,s)}$, then $n(\phi,p)=0$ if $p$ is small for $i\in M^{(r,s)}$, otherwise $n(\phi,p) = \phi_k$ where $c_p = \epsilon(1+\epsilon)^{r+k}$.
+%\begin{equation}\label{eq:milp2}
+%\forall p\in [P], ~~~~ \sum_{r,s} \sum_{t=1}^{N_0} \pv^{(r,s)}_t n(\phi^{(r,s,t)},p) + \sum_{i=1}^m z_{ip} = n_p
+%\end{equation}
+%
+%Next, we add the machine specific constraints. The first constraint among these states that the total load in any class $M^{(\ell)}$ is bounded.
+%The first term in the LHS accounts for the total load from the big jobs to all the machines in $M^{(\ell)}$, and the second term accounts for the small jobs.
+%\begin{equation}\label{eq:milp4}
+%\forall 0\leq \ell \leq N_1, ~~~~ \sum_{t=1}^{N_0} \pv^{(\ell)}_t \dem(\phi^{(t)}) ~ + ~ \sum_{i\in M^{(\ell)}} \sum_{j\in J_\sm} z_{ij}p_j ~\leq~ m_\ell T
+%\end{equation}
+%%The next few machine specific constraints imposes the cardinality restriction. 
+%%First we impose that if $|\phi^{(t)}| > (1+\epsilon)^\ell$, then we must have $\pv^{(\ell)}_t = 0$.
+%%\begin{equation}\label{eq:milp5}
+%%\forall 1\leq \ell \leq N_1, 1\leq t\leq N_0, ~~~~ \pv^{(\ell)}_t\cdot\left((1+\epsilon)^\ell - |\phi^{(t)}| \right) \geq 0
+%%\end{equation}
+%Second, we impose that the total number of slots/cardinality used by machines in $M^{(\ell)}$ is at most $(1+\epsilon)^\ell m_\ell$ for $1\le \ell \le N_1$.
+%We take care of  $\ell = 0$ separately (since $k_i$'s for machines in $M^{(0)}$ can be very different).
+%\begin{equation}\label{eq:milp6}
+%\forall 1\leq \ell \leq N_1, ~~~~ \sum_{t=1}^{N_0} \pv^{(\ell)}_t |\phi^{(t)}|~ + ~ \sum_{i\in M^{(\ell)}} \sum_{j\in J_\sm} z_{ij} ~\leq~ m_\ell (1+\epsilon)^\ell
+%\end{equation}
+%For machines in $M^{(0)}$, we just impose the cardinality constraints from small jobs. The reason is that any large configuration can only violate the cardinality constraint by an $\epsilon$-factor.
+%\begin{equation}\label{eq:milp7}
+%\forall i\in M^{(0)}, ~~~~ \sum_{j\in J_\sm} z_{ij} ~\leq~ k_i
+%\end{equation}
+%This completes the description of the MILP. It has $O_\epsilon(1)$ integer variables, $O(mn)$ non-integer variables, and $O(m+n) + O_\epsilon(1)$ constraints.
+%We end this section with the following theorem.
+%\begin{theorem}\label{thm:p1}
+%	If $T \geq \opt$, then the MILP given by \eqref{eq:milp1}-\eqref{eq:milp7} is feasible.
+%\end{theorem}
+%\begin{proof}
+%\end{proof}
+%\subsection{Solving the MILP}
+%
+%\subsection{Rounding}
+%Given $T$ we check if the MILP has a feasible solution. If not, we know $T < \opt$. 
+%Let $\pv^{(\ell)}_t$ for $0\leq\ell\leq N_1$ and $1\leq t\leq N_0$, and $z_{ij}$ for $1\leq i\leq m$ and $j\in J_\sm$ be a feasible solution. Our objective is to find a schedule which respects the cardinality constraints
+%and the total load on any machine is $\leq (1+O(\epsilon))T$.
+%
+%The first step is to note that getting to solutions which satisfy the cardinality constraints approximately suffices.
+%
+%%\end{document}
+%%
+%%We are given parameters $m$ the number of machines, $D$ the demand on each machine, and $F$ the cardinality of each machine. We are also given a collection $(c_1,\ldots,c_P)$ of capacities and we assume $c_P\leq D$.
+%%We are interested in approximately capturing all {\em supply} vectors $(y_1,\ldots,y_P)$ such that given $\ceil{y_p}$ (maybe even $\floor{y_p}$) copies of jobs with capacity $c_p$ we can satisfy the $m$ demands satisfying the cardinality constraints.
+%%
+%%Call a capacity $p$ big if $c_p > \eps D$ and small otherwise. For any $1\leq k\leq K = O(1/\eps)$, let $C_k$ denote the jobs with capacities $c_p \in \eps D\cdot \left((1+\eps)^{k-1},(1+\eps)^k\right]$.
+%%A configuration $\phi \in \Z^K_{\ge 0}$ is a vector such that $\phi_k$ indicates the number of jobs of capacity  chosen from $C_k$. The total capacity $\dem(\phi)$ of a configuration is defined to be $\sum_{k=1}^K \phi_k (1+\eps)^k\eps D$ -- note that this is an {\em upper bound} on the actual capacity, but off by a multiplicative $(1+\eps)$-factor. We also let $|\phi| = \sum_{k=1}^K \phi_k$, the cardinality of the configuration.
+%%
+%%A configuration is {\em allowed} iff $\phi_k \leq 1/\eps$ for all $k$. Therefore, the number of allowed configurations is $N_\eps$, a constant depending only on $\eps$. We order them in a arbitrarty but fixed manner -- the $i$th  allowed configuration is $\phi^{(i)}$.
+%%
+%%A {\em profile vector} $\pv = (\pv_1,\ldots,\pv_{N_\eps})$ is a vector where $\pv_i\in \Z_{\ge 0}$ indicates the number of machines which choose the allowed configuration $\phi^{(i)}$. 
+%%We let $M_i$ denote the $\pv_i$  machines getting $\phi^{(i)}$; that is these are the machines $j$ with $\sum_{t < i} \pv_t < j \le \sum_{t \leq i+1} \pv_t$.
+%%We have $\sum_i \pv_i = m$, the number of machines. The total number of profile vectors is at most $m^{N_\eps}$.
+%%Let $\mathbf{B}$ be the set of all feasible profile vectors. 
+%%
+%%Fix a profile vector $\pv$ and define the following polytope. This has variables $(y_1,\ldots, y_P)$ and variables $z_{jp}$ for all $j = 1,\ldots,m$ and $p$ s.t. $c_p \leq \eps D$.
+%%\begin{alignat}{4}
+%%	\calP(\pv) ~= &  \{(y_1,\ldots,y_P):   && \notag \\
+%%	& \quad \forall ~\textrm{small}~ p,   &&\quad  \textstyle \sum_{j=1}^m z_{jp} \leq y_p \label{eq:1} \\
+%%	& \quad  \forall 1\leq k\leq K,           && \quad  \textstyle \sum_{i=1}^{N_\eps} \pv_i \phi^{(i)}_k  \leq \sum_{p\in C_k} y_p \label{eq:2} \\
+%%	& \forall i\in [N_\eps], \textstyle j\in M_i , && \quad \textstyle \sum_{p:~\textrm{small}} z_{jp}c_p + \dem(\phi^{(i)}) \geq D \label{eq:3}\\
+%%	& \forall i\in [N_\eps], \textstyle j\in M_i , && \quad \textstyle \sum_{p:~\textrm{small}} z_{jp} + |\phi^{(i)}| \leq F\} \label{eq:4}
+%%\end{alignat}
+%%The final polytope is the convex hull of all these polytopes.
+%%\begin{equation}
+%%\calP := \{y = (y_1,\ldots,y_P):\exists \pv\in\mathbf{B} ~\textrm{s.t.}~y\in \calP(\pv) \}
+%%\end{equation}
+%%
+%%\begin{theorem}
+%%	If $(y_1,\ldots,y_P)$ is a feasible vector for the scheduling problem, then $\calP$ is feasible. Conversely, given any solution $(y_1,\ldots,y_P)\in \calP$, 
+%%	we can find a feasible schedule giving $(1-O(\eps))D$ to every machine.
+%%\end{theorem}
+%%\begin{proof}
+%%	One direction is easy, and we focus on the other direction. Let $\pv$ be the profile for which $y\in \calP(\pv)$.
+%%	For every $1\le k\le K$, we scale down the capacity of all jobs in $C_k$ to $\eps D(1+\eps)^{k-1}$ and call them jobs of type $k$; note we have $\sum_{p\in C_k} y_p$ of them available fractionally.
+%%	For $i\in [N_\eps]$, we assign all machines in $M_i$ the configuration $\phi^{(i)}$, that is, we assign $\phi^{(i)}_k$ jobs of type $k$ to machine $j\in M_i$. \eqref{eq:2} ensures that we have these many jobs available fractionally. 
+%%	%After assigning all these big jobs, we have a residual problem where machine $j\in M_i$ has obtained capacity $\dem(\phi^{(i)})(1+\eps)^{-1}$. Therefore, $\sum_{p:~\textrm{small}} z_{jp}c_p \geq 
+%%	After allocating the big jobs, the cardinality constraint of machine $j\in M_i$ becomes $F - |\phi^{(i)}| \geq \sum_{p: small} z_{jp}$. The residual problem can be rounded now as Ravishankar pointed out.
+%%\end{proof}
+%%
+%%
+%%
+\newpage
