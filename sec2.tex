@@ -161,7 +161,7 @@ In this case, we have at least $1$ free capacity of item type $p_1$, and so we s
 
 
 \begin{claim} \label{cl:step3b}
-If $\{y(S,j)\}$ is a feasible to the relaxed configuration LP, then after a single execution of either case 3b(i) or case 3b(ii), the modified solution remains feasible for the relaxed configuration LP, and moreover, invariant~(I) continues holds for all buckets $\leq t-1$. 
+If $\{y(S,j)\}$ is a feasible to the relaxed configuration LP, then after a single execution of either case 3b(i) or case 3b(ii), the modified solution remains feasible for the relaxed configuration LP, and moreover, invariant~(I) continues holds for all buckets $\leq t-1$.
 \end{claim}
 \begin{proof}
 Again, it is easy to check the feasibility of LP solution much like~\Cref{cl:swap1}. We also claim that the invariant~[(I1)] continues to hold (for bucket $t-1$) during this process. Indeed, we only need to be worried for the case when $j'$ is of bucket less than $t$, as otherwise we are not modifying the configurations in lower buckets. In this case it will be the unique fractional demand of this bucket guaranteed by invariant~[I1]. Further $(T',j')$ will also be a large configuration for this demand $j'$. Therefore, $y^l(j')$ does not change, and so, the invariant still holds.
@@ -170,36 +170,3 @@ Again, it is easy to check the feasibility of LP solution much like~\Cref{cl:swa
   To summarize, when the process ends, all demands $j \in B^\brt$  except perhaps for one demand satisfy the property that $y^l(j)$ is either 0 or 1. Further, for any demand $j$, there is at most one large configuration $(S,j)$ with positive $y(S,j)$ value. If a large configuration $(\{i\},j)$ satisfies $y(\{i\},j)=1$, then we include $j$ in $\calR$. Thus, for bucket $t$, there is at most one large configuration $(S,j), j \in B^\brt \setminus \calR$  such that $y(S,j)$ strictly between $0$ and $1$. Moreover, since this fractional demand is the demand $j_{k+1}$ identified in Claim~\ref{cl:step3a}, it has the smallest $f$ among all $j \in B^\brt \setminus \calR$. Thus, we satisfy the invariant for bucket $t$ as well. Observe that right there is exactly one large configuration with positive $y$ value serving $j_k$. However, when we carry out the step (3b) for a bucket larger than $t$, we may redistribute the large assignment of $j$ over several large configurations, but $y^l(j)$ will remain unchanged.
 
 
-\medskip \noindent {\bf Step 4: Rounding all remaining demands $j \notin \calR$ using small configurations.}
-In the final part of the proof, we will snow that it is in fact possible \emph{to use only small configurations} to satisfy all the unrounded demands $j \notin \calR$.
-To this end, for each bucket $t$, let $j_t$ be the {\em unique} demand which with $0 < y^l(j_t) < 1$ given by invariant~[(I)], and let $\calD_s$ denote the set of all these unique demands in all buckets. Now, for each unique demand $j_t \in \calD_s$, we know that $y^s(j_t) > 0$, since $y^l(j_t) < 1$. Then, let $S_t$ be a small configuration such that $y^s(S_t,j_t) > 0$ (actually any small configuration for $j_t$ will do -- we just need to use the fact that there exists one). Since all items in $S_t$ are of (rounded) size at most $\frac{\Delta^{t-2}}{4}$, we know that the total (rounded) size of $S_t$ is at most $\Delta^{t-1} + \Delta^{t-2}/4 \leq 2 \Delta^{t-1}$. 
-
-The main idea now is to actually make the sets $S_t$ \emph{mutually disjoint}. For each $t$, let $S_t'$ to be $S_t \setminus (S_1 \cup \ldots \cup S_{t-1})$. Clearly, total size of $S_t'$ is still at least $\Delta^{t-1} - 2\sum_{t' < t} \Delta^{t'-1} \geq \Delta^{t-1}/2$.
-
-{\bf RKnote: stopping here..}
-
-We define a new LP solution ${\bar y}$.
-For each special demand $j_p \in F$,
-we set ${\bar y}(S_p',j_p) = 0.5$, and ${\bar y}(S,j_p) = 0$ for all other configurations. Further, for any demand $j$ not in $F$, we set ${\bar y}(S,j) =  y(S,j)/2$. The solution ${\bar y}$ satisfies the demand $\barD_j$ of every demand $j$ to an extent of at least $\barD_j/4$ using small configurations only.  Although we can now invoke the rounding algorithm of Lenstra et al.~\cite{}.
-
-\begin{lemma}
-\label{lem:lst}
-Suppose there is a fractional solution to the configuration LP which assigns $\barD_j/4$ amount to each demand $j$ using small configurations only.
-Then there is an integral solution which satisfies each demand to an extent of at least $\barD_j/8$.
-\end{lemma}
-\begin{proof}
-Needs to be written.
-\end{proof}
-
-Thus we get the following result.
-\begin{theorem}
-\label{thm:config}
-Given a solution $y$ to the configuration LP, there is an integral assignment of items to demands which satisfies each demand $j$ to the extent of at least
-$D_j/128$.
-\end{theorem}
-\begin{proof}
-The demands which get removed during the above rounding algorithm are assigned items to the extend of $\barD_j$. The remaining demands
-get items adding up to at least $\barD_j/8$ (Lemma~\ref{lem:lst}). Since $\barD_j \geq D_j/C$ and we had rounded item sizes up to powers of $C$ as
-well, we see that each demand $j$ is assigned items of total size at least $D_j/4C^2$. Take $C=4$ to get the desired result.
-(Do we need to round item sizes?? -- may be we can save a $C$ factor).
-\end{proof}
