@@ -1,6 +1,21 @@
-\section{Overall Algorithm: Putting Ideas 1 and 2 together}
-Of course, we will not be able to get such a clean decomposition into a \cckp instance and a collection of locally roundable pieces. Indeed, as we iteratively identify pieces which are either locally roundable or get added to the \cckp instance, the neighborhood structure of the remaining clients and facilities changes, and what may have been originally a locally roundable neighborhood piece may cease to be one subsequently. Our final algorithm then combine the above two ideas in a dynamic manner: we iteratively decompose the clients and facilities into three parts: the first being clients which are supported in the LP solution by locally-roundable neighborhoods, along with the facilities in these neighborhoods, the second is the clients and facilities which are isolated from each other and hence form the \cckp instance, and a third kind of clients (which we refer to as the deleted clients), which are in the proximity of the clients of the first two kinds, and their total demand can be charged to the demands in the first two kinds.
-In fact, it is only the second kind of clients and facilities which causes the natural LP to have an unbounded integrality gap, and forces us to use a stronger configuration LP.
+
+\section{$(O(1), O(1))$-approximation algorithm}
+%Of course, we will not be able to get such a clean decomposition into a \cckp instance and a collection of locally roundable pieces. Indeed, as we iteratively identify pieces which are either locally roundable or get added to the \cckp instance, the neighborhood structure of the remaining clients and facilities changes, and what may have been originally a locally roundable neighborhood piece may cease to be one subsequently. Our final algorithm then combine the above two ideas in a dynamic manner: we iteratively decompose the clients and facilities into three parts: the first being clients which are supported in the LP solution by locally-roundable neighborhoods, along with the facilities in these neighborhoods, the second is the clients and facilities which are isolated from each other and hence form the \cckp instance, and a third kind of clients (which we refer to as the deleted clients), which are in the proximity of the clients of the first two kinds, and their total demand can be charged to the demands in the first two kinds.
+%In fact, it is only the second kind of clients and facilities which causes the natural LP to have an unbounded integrality gap, and forces us to use a stronger configuration LP.
+In this section, we use the decomposition given by Theorem~\ref{thm:decomp} to obtain a rounding algorithm for the~\mckc problem. Given 
+a fractional solution $(x,y)$ to the LP relaxation specified by constraints~(\ref{eq:lp1})--(\ref{eq:lp6}), we can use Theorem~\ref{thm:decomp} to partition 
+the clients and the locations into parts which are either  locally roundable or complete neighborhoods. By definition, we can integrally open facilities
+in locally roundable subsets. However, rounding complete neighborhoods turns out to be much more trickier. It is the presence of these kind of clients
+and facilities which cause the natural LP to have an unbounded integrality gap, and forces us to use a stronger configuration LP.  For the clients
+and the facilities in complete neighborhoods, we reduce the rounding problem to an instance of the \cckp problem. It turns out that one needs
+to work with a configuration LP even for the \cckp problem. We show in Section~\ref{} how to round a fractional solution to the configuration LP 
+relaxation for this problem. However, the LP relaxation for the~\mckc problem gets more complex because we do not know beforehand the 
+clients and the faciltiies which will be used in the reduction to the~\cckp problem. Therefore, our configuration LP needs to have one constraint
+for {\em every} such subset of clients and facilities. For each such subset, we will be able to extract a solution to the corresponding LP relaxation 
+for the~\cckp problem. 
+
+We now describe 
+the configuration LP, show how it can be solved and then we give the rounding procedure. 
 
 
 \subsection{Configuration LP}
@@ -31,7 +46,10 @@ For a tuple  $S \in \Supp$, we abuse notation and let $|S|$ denote $\sum_p n(S,p
  in $\Supp$ which satisfy these two properties. For every subset of clients $J$ and $S \in \calF_J$, we have a variable $z_{S,J}$ which is 1 if and only if
  for all $p$, $1 \leq p \leq k$,
  we open $n(S,p)$ facilities of capacity $c_p$ in $\Gamma(J)$. Now the constraints in~\eqref{eq:conflpnew} should be clear -- for each $p$, the total number of
- facilities of size $c_p$ opened in $\Gamma(J)$ must be equal to $\sum_{S \in \calF_j} n(S,p) z_{S,J}$. Note that we have an exponential number of constraints of type~\eqref{eq:proj}, one for each subset $J$. Further, for each such $J$, we have defined an exponential number of variables. We show in Section~\ref{sec:ellipsoid} how to solve such an LP.
+ facilities of size $c_p$ opened in $\Gamma(J)$ must be equal to $\sum_{S \in \calF_j} n(S,p) z_{S,J}$. Note that we have an exponential number of constraints of type~\eqref{eq:proj}, one for each subset $J$. Further, for each such $J$, we have defined an exponential number of variables. We show in Section~\ref{sec:ellipsoid} how to solve such an LP. The idea behind these constraints is the following: suppose $J_1, \ldots, J_\ell$ are the set of 
+ clients in the collection of complete neighborhoods formed by the decomposition obtained by Theorem~\ref{thm:decomp}. Then we would like to 
+ use these constraints for $J_1, \ldots, J_\ell$. For each of these subsets $J_i$, we will use the variables $z_{S, J_i}$ to construct a feasible solution 
+ to the configuration LP for the~\cckp problem. 
 
 
 
@@ -78,42 +96,128 @@ which we call dual LP:
 Now, if there is no feasible solution to the above set of constraints, then we know that the solution $y \in \calP(J)$. Otherwise, if there is a
 feasible solution, then the first constraint  gives a separating hyperplane. Thus, it is enough to find a solution to the above set of constraints, or
 declare that it is infeasible. We check the above constraints again by the ellipsoid algorithm. Thus, given $\alpha_p$ values we need to check that
-for all $S \in \calF_J$, $\sum_{p \in [P]} n(S,p) \cdot \alpha_p \leq 1$. We can restate the following problem as follows:
+for all $S \in \calF_J$, $\sum_{p \in [P]} n(S,p) \cdot \alpha_p \leq 1$. We can restate the  problem as a general version of the knapsack cover
+problem. We are given a knapsack of capacity 1. We are also given $n_p$ items of size $\alpha_p$ and profit $c_p$ each. We would like to 
+select at most $|\Gamma(J)|$ items which cover  the knapsack, i.e., whose total $\alpha_p$ values add up to at least $1$, and maximize the 
+total profit. If we can get profit at least $D(J)$, we know that there is a violating constraint (given by the set of items $S$)  to the above set 
+of constraints; otherwise the values $\alpha_p$ are feasible. This general version of knapsack cover can be solved exactly using dynamic programming. 
+Using standard rounding techniques, we can give an FPTAS for this problem (\textcolor{red}{Do we need a reference here?}). Thus, we can give a polynomial
+time algorithm which given the values $\alpha_p$ either (i) declares that the dual LP is infeasible (and so, $y \in \calP(J)$), or (ii) declares that 
+$\alpha_p$ values are feasible even if  we relax the  set $\calF_J$ to a set $\calF_J^\varepsilon$ defined as : $\{S\in \Supp: |S| \leq |\Gamma(J)|, \sum_{p\in S} c_p \geq (1- \varepsilon) D(J)\}$, where $\varepsilon$ is an arbitrarily small constant. Thus, in terms of the primal LP, 
+we get an algorithm which either declares (i) $y \in \calP(J)$, or (ii) finds a separating hyperplane with respect to $\calP(J)$ where we modify $\calF_J$ to 
+$\calF_J^\varepsilon$. Running the ellipsoid algorithm (and assuming that the configuration LP is feasible), we can ensure that for a fixed $J$, 
+we get a solution $y$ which lies in $\calP(J)$ provided we change $\calF_J$ to $\calF_J^\varepsilon$. 
 
-Amit: need to write this part.
+
+Now, we need to ensure that $y \in \calP(J)$ for all subsets $J$. This looks difficult, and we observe that we only need to ensure this constraint
+for those sets $J$ which belong to the collection of complete neighborhoods. Thus we get the following result. 
+
+\begin{theorem}
+\label{thm:ellipsoid}
+We can find in polynomial time a solution $(x,y)$ to the configuration LP such that if $J_1, \ldots, J_\ell$ are the clients in the 4-complete neighborhood
+given by Theorem~\ref{thm:decomp} for the solution $(x,y)$, then $y \in \calP(J_i)$, for $i=1, \ldots, \ell$ provided we modify the definitions 
+$\calF(J_i)$ to $\calF^\varepsilon(J_i)$. 
+\end{theorem}
+
+\noindent
+When we use the theorem, we will ignore the distinction between $\calF(J_i)$ and $\calF^\varepsilon(J_i)$ as it will only affect the capacity violation
+by a factor $(1+\varepsilon)$. 
+\subsection{Rounding the Configuration LP}
+Given a solution $(x,y)$ to the configuration LP, we now show how to round it to an integral solution. We first use the decomposition algorithm given
+by Theorem~\ref{thm:decomp} to get the partitions $\calS$ and $\calT$ respectively. Observe that it is enough to assign the demands in $\Cb \cup \Cbb$.
+Any client $j \in \Cd$ will get assigned to the same facility as $\phi(j)$. This will violate the capacity by another factor of 32. 
+
+\noindent
+Lemma~\ref{lem:sk} implies that we can assign the clients in $\Cb$ to integrally opened facilities in $\calS$. 
+\begin{corollary} \label{cor:combine-local}
+We can efficiently find a rounding $Y$ for the family $\calS$ of locally-roundable sets such that
+\begin{enumerate}
+\item[(i)] for each $j \in \Cb$, the demand $d_j$ is assigned to integrally open facilities at distance at most $20$ from $j$,
+\item[(ii)] the capacity of each integrally open facility is violated by a factor of $64$, and
+\item[(iii)] for all $p$, $\sum_{i \in L(\calS)} \sum_{q \geq p} Y_{iq} \leq \floor{\frac12 \cdot \sum_{i \in L(\calS)} \sum_{q \geq p} y_{iq}}$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+We use the rounding $Y:=\y$ given by the proof of Lemma~\ref{lem:sk}.  Statement~(iii) follows directly from this Lemma. Now, we assign clients
+in $\Cb$ to facilities in  a set $S_k$ to the extent $\sum_{i \in S_k, p} x_{ijp}$. This can be done provided we violate the capacities of
+integrally open facilities by a factor 32. Now the third statement in Theorem~\ref{thm:decomp} shows that we have assigned at least half of 
+each client in $\Cb$. Doubling the capacity violation, we can assign all demand in $\Cb$ to open facilities in $\calS$ -- this gives statement~(ii). 
+Since the diameter of each 
+of the sets $S_k$ is at most 20, the statement~(i) follows. 
+\end{proof}
+
+\noindent
+Now we show how to assign the clients in $\calT$. 
+\begin{lemma}\label{lem:rounding-local-neighborhoods}
+Consider the disjoint subsets $T_1,\ldots,T_L \subseteq F$ where each $T_\ell$ is a $4$-complete neighborhood with $J_\ell\subseteq C$ 
+being responsible for it. Recall that $L(\calT)$ denotes the set of locations in $T_1 \cup \cdots \cup T_L$. 
+%Given any solution $y$ which satisfies \eqref{eq:conflpnew} for the sets $J_\ell, \ell \in [L]$, 
+We can find an integral solution $Y$ such that
+ (a) $\sum_{q\geq p} \sum_{i\in L(\calT)} Y_{iq} \leq \ceil{\sum_{q\geq p} \sum_{i\in L(\calT)} y_{iq}}$ for all $p\in [P]$, and
+ (b) $\sum_{i\in T_\ell,p\in [P]} c_p Y_{ip} \geq D(J_\ell)/8\alpha$, where $\alpha$ is the integrality gap of the configuration LP relaxation for
+ the \cckp problem. 
+\end{lemma}
+\begin{proof}
+The proof proceeds in the following manner: we first create an instance $\calI$ of the \cckp problem based on the sets in $\calT$, clients in $\Cbb$, and the LP solution $(x,y)$. Next, we derive a feasible fractional solution to a suitable configuration LP for the instance $\calI$ of the \cckp problem. Finally, we show that any feasible integer solution to the configuration LP for the \cckp instance can be used to find a placement of centers within the
+locations in $\calT$ to satisfy all the demand in $\Cbb$.
+
+The instance $\calI$ needs a set of demands $D_1, \ldots, D_m$ with corresponding bounds $f_1, \ldots, f_m$. We also need to specify how
+many items of each type are available. Let $n_{\geq p}'$ denote $\ceil{\sum_{q \geq p} \sum_{i \in L(\calT)} y_{ip}}$. These are total
+number of available facilities of type $p$ or higher. Instead of specifying the numbers of available items of each type in $\calI$, we will specify
+how many items of size $c_p$ or higher are available in the instance $\calI$. Clearly, this does not change the problem specification. 
+
+One natural way of defining $\calI$ is as follows: for each $T_\ell$, we have a demand of requirement $D_\ell$ which is the total requirements
+of clients in $J_\ell$. We set $f_\ell$ as $|\Gamma(J_\ell)|$. Finally, for each type $p$, we have $n_{\geq p}'$ items of size $c_p$ or higher. 
+Now the configuration LP for the~\cckp instance needs a feasible solution $y(S,\ell)$, where $\ell$ is a demand and $S$ is a feasible assignment 
+for this demand. We could naively set $y(S,\ell) := z_{S,J_\ell}$, where $z$ is given by  the constraints~(\ref{eq:conflpnew}). However, there
+is a technical problem -- the configuration corresponding to $S$ may not be feasible. For example, it is possible that there is a configuration $S$ 
+for which $z_{S, J_\ell} > 0$ and 
+$S$ uses more than $n_{\geq p}'$ items of type $p$ or higher. Constraint~(\ref{eq:conflpnew}) only guarantees that the {\em average} number
+of items of type $p$ or higher in the solution $z$ would be at most $n_{\geq p}'$. Thus, we need to first massage the solution $z$ so that it is
+supported on feasible configurations only. We now show how this can be done. 
+\begin{claim}
+\label{cl:massage}
+Let $S \in \calF(J_\ell)$. Then we can truncate $S$ to a vector $S'$ such that  (i) for all $p \in P$, $\sum_{q \geq p} n(S',p) \leq n_{\geq p}'$, 
+(ii) $\sum_p n(S',p) \cdot c_p \geq \ceil{D(J_\ell)/2}$. 
+\end{claim}
+\begin{proof}
+Let $n_{\geq p}$ denote $\sum_{q \geq p} n_q$. Note that Corollary~\ref{cor:combine-local} implies that for each $p \in [P]$, $n_{\geq p}' 
+\geq \ceil{n_{\geq p}/2}$. Now we give a procedure for truncating $S$ to $S'$. Arrange the items in $S$ in descending order of $c_p$ values. 
+Let this order be $i_1, i_2, \ldots, i_m$, where $m = |S|$ (recall that $|S|$ denotes $\sum_p n(S,p)$). Also observe that the items in $S$
+which are of size at least $c_p$ or higher form a prefix of this sequence. Now define $S'$ as the set of items $\{i_1, i_3, i_5, \ldots\}$, i.e., 
+the items located at odd indices in this order. Clearly, the total capacity of items in $S'$ is at least $\ceil{D(J_\ell)/2}$. Further, for any $p$, 
+ $S'$ has at most $\ceil{n_{\geq p}/2}$ items of size $c_p$ or higher (because $S$ had at most $n_{\geq p}$ such items). 
+ The claim follows because the latter quantity is at most $n_{\geq p}'$. 
+\end{proof}
+
+We are now ready to define the instance $\calI$. As before, for each $T_\ell \in \calT$, we have a demand $\ell$ of requirement $D_\ell := D(J_\ell)/2$. 
+As before, we set $f_\ell := |\Gamma(J_\ell)|$. For each type $p$, we have $n_{\geq p}'$ items of size $c_p$ or higher. Now 
+we define a fractional solution to the configuration LP for $\calI$. For each set $T_\ell \in \calT$, consider the set of variables $z_{S, J_\ell}$
+corresponding to the constraints~\ref{eq:conflpnew}. Corresponding to each such variable, we define a variable $y(S', \ell) := z_{S, J_\ell)$,
+where $S'$ is the truncation of $S$ given by Claim~\ref{cl:massage}. 
+Since the total size of items in $S'$ is at least $D_\ell$, we see that 
+it is a valid configuration. We now show that it is a feasible solution as well. Constraint~\ref{eq:config1} follows directly from the fact that 
+$\sum_{S \in \calf_{J_\ell}} z_{S, J_\ell} \geq 1$. Now we check constraint~\ref{eq:config2}. 
+
+%
+%Needs to be written.
+%
+%%Indeed, in this instance $\calI$, there is one bucket $B_\ell$ corresponding to each $T_\ell \in \calT$. The demand $D_\ell$ of this bucket is precisely $\sum_{j \in J_\ell} d_j$. To determine the number of centers available of each type, we let the LP solution guide us. Indeed, for each type $p$, we set $n_p = \ceil{\sum_{p' \leq p} \sum_{i \in L(\calF)} y_{ip}} - \ceil{\sum_{p' < p} \sum_{i \in L(\calF)} y_{ip}}$. Finally, we set the cardinality constraint $f_\ell$ to be $|T_{\ell}|$.
+%%
+%%Then, it is easy to see that the fractional configurations opened in $\calP(J_\ell)$ form a feasible fractional solution to the configuration LP of the \cckp instance defined above. Moreover, we can easily map back an integer solution to a placement of facilities to satisfy (a) and (b) above.
+\end{proof}
+
+\begin{theorem}
+\label{thm:final}
+There is a rounding algorithms which opens at most $n_p$ facilities of type $p$ and assigns clients to facilities such  that 
+(i) each client $j$ is assigned to facilities which are at distance at most 21 from it , and (ii) the capacity of each facility is violated by a constant factor. 
+\end{theorem}
+\begin{proof}
+The proof follows by combining Corollary~\ref{cor:combine-local} and Lemma~\ref{lem:rounding-local-neighborhoods}, and the fact that 
+clients in $\Cd$ can use the mapping $\phi$ given by Theorem~\ref{thm:decomp}. 
+\textcolor{red}{Need to figure out the exact capacity violation.}
+\end{proof}
 
 
-%
-%Solving the above dual is same as finding the maximum value of
-%$\sum_{p \in P} \left( \sum_{i \in \Gamma(J)} y_{ip} \right) \cdot  \alpha_p $  subject to constraints~\eqref{eq:ellipsoid1}-\eqref{eq:ellipsoid2}.
-%This can be solved by another round of ellipsoid algorithm. At this time, a separation oracle will require us to solve the following problem -- given
-%non-negative values $\alpha_p, p \in [P]$, find the maximum, over all $S \in \calF_J$, of $\sum_{p \in [P]} n(S,p) \cdot \alpha_p$. One can solve this by a standard
-%dynamic programming algorithm. In the DP, we can maintain a table $T[p,C,q]$ which will store the maximum value of $\sum_{p'=1}^p n(S,p') \cdot
-%\alpha_{p'}$ over all $S$ satisfying the following constraints~: (i) $\sum_{p'=1}^p n(S,p') = q$, (ii) $\sum_{p'=1}^p n(S,p') \cdot c_{p'} = C$,
-%(iii) $n(S,p') \leq n_{p'}$ for $p = 1, \ldots p'$.
-%It is to easy to see that we can fill in the DP table in pseudo-polynomial time. In order to make it run in polynomial time, we need to use standard
-%rounding techniques, but we then we lose $(1+\varepsilon)$ factor in approximation ratio for a small parameter  $\varepsilon$ -- we can make
-%$\varepsilon$ to be $1/poly(n)$, where $n$ is the number of vertices in $G$.
-%
-%This implies that we will be able to check the dual LP up to this factor only. Translating this statement back to the primal LP (i.e., constraints given
-%by~\eqref{eq:proj}), we see that in polynomial time, we can show one of the following facts: (i) There is a separating hyperplane between $y$
-%and $\calP(J)$, or (ii) the solution $y$ satisfied $\calP(J)$ {\em approximately}, i.e., there exist $z_{S, J}$ variables such that
-%$\sum_{S \in \calS(J)} z_{S,J} \geq 1$ and $\sum_{i \in \Gamma(J)} y_{ip} \geq (1 - \varepsilon) \cdot \sum_{S \in \calF_J} z_{S,J} \cdot n(S,p)$
-%for all $p \in [P]$.
-%
-%So far we have discussed the case of single set $J$ only. Now we use the observation that given a tentative solution $(x_{ijp}, y_{ip})$, our algorithm
-%requires the constraints~\eqref{eq:proj} to hold for a linear (in terms of vertices in $G$) number of subsets $J$ only -- say $J_1, \ldots, J_\ell$. Thus,
-%we can apply the above steps for $J = J_1, \ldots J_\ell$. We get the following result:
-%\begin{theorem}
-%\label{thm:ellipsoid}
-%Given a tentative solution $(x, y)$, and polynomial number of subsets $J_1, \ldots, J_\ell$, we can decide between the following two cases in polynomial time:
-%\begin{itemize}
-%\item The solution is infeasible and and we can find a separating hyperplane.
-%\item The solution satisfies the constraints $\calP(J)$ for $J=J_1, \ldots, J_\ell$ up to $(1-\varepsilon)$ factor as mentioned above, where
-%$\varepsilon$ is a polynomially small parameter.
-%\end{itemize}
-%\end{theorem}
-%It follows that as far as our rounding algorithm is concerned, we can assume that we have a solution to the LP (assuming the $(1- \varepsilon)$ factor).
-%
-%
+
 
