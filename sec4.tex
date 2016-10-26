@@ -193,11 +193,11 @@ the items located at odd indices in this order. Clearly, the total capacity of i
 We are now ready to define the instance $\calI$. As before, for each $T_\ell \in \calT$, we have a demand $\ell$ of requirement $D_\ell := D(J_\ell)/2$. 
 As before, we set $f_\ell := |\Gamma(J_\ell)|$. For each type $p$, we have $n_{\geq p}'$ items of size $c_p$ or higher. Now 
 we define a fractional solution to the configuration LP for $\calI$. For each set $T_\ell \in \calT$, consider the set of variables $z_{S, J_\ell}$
-corresponding to the constraints~\ref{eq:conflpnew}. Corresponding to each such variable, we define a variable $y(S', \ell) := z_{S, J_\ell)$,
+corresponding to the constraints~\ref{eq:conflpnew}. Corresponding to each such variable, we define a variable $y(S', \ell) := z_{S, J_\ell}$,
 where $S'$ is the truncation of $S$ given by Claim~\ref{cl:massage}. 
 Since the total size of items in $S'$ is at least $D_\ell$, we see that 
 it is a valid configuration. We now show that it is a feasible solution as well. Constraint~\ref{eq:config1} follows directly from the fact that 
-$\sum_{S \in \calf_{J_\ell}} z_{S, J_\ell} \geq 1$. Now we check constraint~\ref{eq:config2}. 
+$\sum_{S \in \calF_{J_\ell}} z_{S, J_\ell} \geq 1$. Now we check constraint~\ref{eq:config2}. 
 
 %
 %Needs to be written.
