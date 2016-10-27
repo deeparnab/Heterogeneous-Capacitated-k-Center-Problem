@@ -2,11 +2,17 @@
 \newcommand{\brt}{{(t)}}
 %\newcommand{\calR}{\cal{R}\xspace}
 
-\section{Special Case: \cckp}
-We first consider the following very special case of the \mckc problem where the demands are all isolated from one another, and around each demand $j$ of value $D_j$, there are $f_j$ facility locations in its vicinity. More formally, in this problem, we are given a collection of demand requirements $D_1, D_2, \ldots, D_m$, along with cardinality constraints $f_1, f_2, \ldots, f_m$ for each demand. There are also a collection of items with different capacities: $(n_1,c_1), (n_2,c_2),\ldots, (n_P,c_P)$ with $c_1 \leq c_2 \le \cdots \le c_P$,
-to indicate we have $n_p$ items of capacity $c_p$. The goal is to assign the items to these demand requirements, so that (i) any demand $j$ is assigned no more than $f_j$ items, and (ii) the requirement of all demands are satisfied by the items assigned. We assume that there is a feasible assignment which achieves these two goals. In an $\alpha$-approximation, our target is to find an assignment such that all demands are met up to a factor of $\alpha$, i.e., demand $j$ is satisfied to extent $D_j/\alpha$.
-Our main result in this section is an LP-rounding constant-factor approximation for \cckp. Before we present the algorithm, we first show why some natural approaches fail, which will then motivate the configuration LP we use, which is by now standard for these kinds of max-min (the so-called santa-claus type) allocation problems.
+\section{$O(1)$ Rounding of Configuration LP for the $Q|k_i|C_{min}$ problem}\label{sec:conf-round}
+Let the instance $\calI$ of $Q|k_i|C_{min}$ have $m$ machines with speeds $s_1,\ldots, s_m$ and cardinality upper bounds $k_1,\ldots,k_m$. We are also given jobs with capacities
+and we assume there are $n_p$ jobs present with capacity $c_p$.
+Fix an $\eps$. 
+Let us guess the optimum value $D\geq 1$.  We wish to either prove $T$ is too large a guess, or find an assignment which assigns machine $i$ a subset of jobs $S_i$ with {\em load} $\sum_{p\in S_i} c_p \geq D_i/\alpha$ where $D_i := Ds_i$.
+This would be an $\alpha$-factor approximation. In particular, we derive such an approximation by rounding the {\em configuration LP} solution.
 
+%We first consider the following very special case of the \mckc problem where the demands are all isolated from one another, and around each demand $j$ of value $D_j$, there are $f_j$ facility locations in its vicinity. More formally, in this problem, we are given a collection of demand requirements $D_1, D_2, \ldots, D_m$, along with cardinality constraints $f_1, f_2, \ldots, f_m$ for each demand. There are also a collection of items with different capacities: $(n_1,c_1), (n_2,c_2),\ldots, (n_P,c_P)$ with $c_1 \leq c_2 \le \cdots \le c_P$,
+%to indicate we have $n_p$ items of capacity $c_p$. The goal is to assign the items to these demand requirements, so that (i) any demand $j$ is assigned no more than $f_j$ items, and (ii) the requirement of all demands are satisfied by the items assigned. We assume that there is a feasible assignment which achieves these two goals. In an $\alpha$-approximation, our target is to find an assignment such that all demands are met up to a factor of $\alpha$, i.e., demand $j$ is satisfied to extent $D_j/\alpha$.
+%Our main result in this section is an LP-rounding constant-factor approximation for \cckp. Before we present the algorithm, we first show why some natural approaches fail, which will then motivate the configuration LP we use, which is by now standard for these kinds of max-min (the so-called santa-claus type) allocation problems.
+\iffalse
 \subsection{Integrality Gap Examples}
 It turns out that several natural LP relaxations have unbounded integrality gaps. For the following examples, we suitably make copies of every item, and hence assume that $n_p = 1$ for all $p$. After making copies thusly, let $I$ denote the set of all items. Further, we will abuse notation and let $c_p$ denote the
 size of an item $p \in I$.
@@ -31,11 +37,27 @@ z_{pj} & \geq 0, \ \ \ \ \ \forall i \in I,j=1, \ldots, m
 \end{align*}
 
 It turns out that these constraints are also not enough. Here is an integrality gap example (don't remember this one...).
-
+\fi
 \newcommand{\barD}{{\bar D}}
 
 \subsection{Configuration LP relaxation}
-Our final LP relaxation is in fact a by-now standard configuration LP relaxation which is useful for such allocation problems. In the section, we consider the problem in full generality and consider instances where there are $n_p$ items of capacity $c_p$ for $1 \leq p \leq P$. For the following, let $\Delta$ be a large constant which will determine our final approximation factor $\alpha$. For clarity in presentation, we have not tried to optimize for the exact value of $\alpha$, but we will remark on the limitations of this approach toward the end of this section. {\bf do this!}. We say that an item of type $p$ is {\em large} for demand $j$ if $c_p \geq \frac{D_j}{4\Delta}$, otherwise it is said to be \emph{small}. In the configuration LP, we shall have variables $y(S,j)$ for every demand $j$, and certain subsets $S$ of items (which depend on $j$).
+%Our final LP relaxation is in fact a by-now standard configuration LP relaxation which is useful for such allocation problems. 
+%In the section, we consider the problem in full generality and consider instances where there are $n_p$ items of capacity $c_p$ for $1 \leq p \leq P$. 
+For every machine $j\in [m]$ we define a collection $\calS_j$ of feasible sets of jobs whose total capacity exceeds $D_j$ and total cardinality is at most $k_j$.
+The configuration LP fractionally allocates one configuration to every machine and makes sure no job is over-utilized.
+More precisely, there is a variable $y(S,j)\ge 0$ for every subset of jobs $S\in \calS_j$ and machine $j$. Given $S$, let $n(S,p)$ denote the number of jobs of type $p$ in $S$.
+\begin{align}
+	\label{eq:config1}
+	\sum_{S \in \calS_j} y(S,j) & \geq 1, \ \ \ \forall j=1, \ldots, m \\
+	\label{eq:config2}
+	\sum_{j \in [m], S \in \calS_j} y(S,j) \, n(S,p) & \leq n_p, \ \ \ \forall t  \in I 
+\end{align}
+In the remainder of the section,  let $\Delta$ be a large constant which determines our final approximation factor $\alpha$. For simplicity of  presentation, we have not tried to optimize for the exact value of $\alpha$. %, but we will remark on the limitations of this approach toward the end of this section. {\bf do this!}. 
+We call a job of capacity $p$ {\em large} for machine $j$ if $c_p \geq \frac{D_j}{4\Delta}$, otherwise it is said to be \emph{small} for machine $j$. 
+Given an LP solution to the above, if for any $S$ with $y(S,j) > 0$ there exists a large job $p$ for machine $j$, then we replace $S$ by the singleton $p$ and call this a large configuration.
+Let $\calS^L_j$ be the collection of large configurations for $j$; the rest $\calS^S_j$ being small configurations.
+\iffalse
+In the configuration LP, we shall have variables $y(S,j)$ for every demand $j$, and certain subsets $S$ of items (which depend on $j$).
 The subset $S$ will be of two types -- (i) $S$ could be a singleton set containing exactly one large item for demand $j$ --- we call such configurations {\em large}, or (ii) $S$ could be a multi-set of small items, whose total size is at least $D_j$ and whose cardinality is at most $f_j$ --- we call such configurations {\em small}. The collection of all large configurations for a demand $j$ is denoted by $\calS^L_j = \{ \{p\} \text{ s.t } c_p \geq \frac{D_j}{4 \Delta}  \}$. Similarly, the collection of all small configurations for demand $j$ is denoted by $\calS^S_j = \{ ((1,n'_1), (2,n'_2), \ldots, (P,n'_P)) \text{ s.t } \sum_{p \in [T]} c_p n'_p \geq D_j \text{ and } \sum_{p \in [P]} n'_p \leq f_j \text{ and } n'_p \leq n_p \text{ for all } 1 \leq p \leq P \}$. For a given small configuration $S \in \calS^S_j$ for demand $j$, we let $n(S,p)$ to denote the number of items of size $c_p$ in this configuration. With this notation, the LP is now straightforward to specify:
 \begin{align}
 \label{eq:config1}
@@ -45,8 +67,15 @@ The subset $S$ will be of two types -- (i) $S$ could be a singleton set containi
 \notag
 y({S,j}) & \geq 0
 \end{align}
-It is easy to see that this is a valid relaxation. In any integral solution, either a demand $j$ is assigned a large item or the multi-set of small items assigned to it is a valid small configuration, i.e., it belongs to $\calS^S_j$.
+\fi
+It is easy to see that this is a valid relaxation. Furthermore, if there is an integral solution, then in polynomial time, using techniques from Section \ref{}, one obtains a fractional solution which 
+puts mass on configurations of total capacity at most $(1-\epsilon)$ times less than needed. We ignore this factor for simplicity of presentation. 
+The main theorem of this section is:
+%
+% to obtain an $\epsilon$-approximate solution. 
+%In any integral solution, either a demand $j$ is assigned a large item or the multi-set of small items assigned to it is a valid small configuration, i.e., it belongs to $\calS^S_j$.
 
+\iffalse
 \subsubsection{Solving the LP: Ellipsoid Method}
 {\bf RKNOTE: Do this.}
 
@@ -72,20 +101,19 @@ a knapsack of size $D_j$, and items of size $c_i$ (note that we are only interes
 profit $\beta_i$. We would now like to cover the knapsack with these items (i.e., total size of items must be at least $D_i$) and check if the total
 profit can exceed $\alpha_j$. Since there is a PTAS for the knapsack cover problem, we can check if a constraint of type~(\ref{eq:config5})
 is violated by more than $(1+\varepsilon)$-factor.
-
-\subsubsection{The Rounding Algorithm}
-
-In this section, we prove the following theorem.
+\fi
 \begin{theorem} \label{thm:round-conf}
-Given a feasible fractional solution $\{y(S,j)\}$ to the configuration LP above, we can efficiently round it to obtain an integer solution which is a $100$-approximation for the given \cckp instance.
+	The integrality gap of the LP \eqref{}-\eqref{} is $O(1)$.
+	%Given a feasible fractional solution $\{y(S,j)\}$ to the configuration LP above, we can efficiently round it to obtain an integer solution which is a $100$-approximation for the given \cckp instance.
 \end{theorem}
 
-
-Our algorithm starts with a feasible fractional solution to the configuration LP, and over time modifies the solution to make \emph{most} of the \emph{large configuration assignments} integral $0/1$ while remaining feasible to a slightly \emph{relaxed} configuration LP. Finally, it rounds the small item types to $0/1$ using the classical algorithm of Lenstra Shmoys and Tardos~\cite{LST}. Overall, the rounding algorithm requires several steps which we next present one by one.
+\subsubsection{The Rounding Algorithm}
+Given a feasible fractional solution $\{y(S,j)\}$ to the configuration LP above, we want to  efficiently round it to obtain an integer solution which is a $100$-approximation for the given \cckp instance.
+Our algorithm starts with a feasible fractional solution to the configuration LP, and over time modifies the solution to make \emph{most} of the \emph{large configuration assignments} integral $0/1$ while remaining feasible to a slightly \emph{relaxed} configuration LP. Finally, it rounds the small item types to $0/1$ using the classical algorithm of Lenstra, Shmoys and Tardos~\cite{LST}. Overall, the rounding algorithm requires several steps which we next present one by one.
 
 \medskip \noindent {\bf Step 1: Rounding Sizes and Demand Requirements.}
 We first round the quantities $c_p$ and $D_j$ down to nearest power of $\Delta$, and let the rounded quantities be $\bc_p$ and $\barD_j$ respectively.
-We also slightly expand the set of small and configurations to satisfy some weaker conditions involving $\bc_p$ and $\barD_j$ as follows: we define a set $\barcalS^L_j$ of \emph{relaxed} large configurations to be $\barcalS^L_j = \{ \{p\} \text{ s.t } \bc_p \geq \frac{\barD_j}{4 \Delta^2}  \}$. Similarly, the expanded collection of \emph{relaxed} small configurations for demand $j$ is denoted by $\barcalS^S_j = \{ ((1,n'_1), (2,n'_2), \ldots, (P,n'_P)) \text{ s.t } \sum_{p \in [P]} \bc_p n'_p \geq \frac{\barD_j}{\Delta} \text{ and } \sum_{p \in [P]} n'_p \leq f_j \text{ and } n'_p \leq n_p \text{ for all } 1 \leq p \leq P \}$.
+We also slightly expand the set of small and large configurations to satisfy some weaker conditions involving $\bc_p$ and $\barD_j$ as follows: we define a set $\barcalS^L_j$ of \emph{relaxed} large configurations to be $\barcalS^L_j = \{ \{p\} \text{ s.t } \bc_p \geq \frac{\barD_j}{4 \Delta^2}  \}$. Similarly, the expanded collection of \emph{relaxed} small configurations for demand $j$ is denoted by $\barcalS^S_j = \{ ((1,n'_1), (2,n'_2), \ldots, (P,n'_P)) \text{ s.t } \sum_{p \in [P]} \bc_p n'_p \geq \frac{\barD_j}{\Delta} \text{ and } \sum_{p \in [P]} n'_p \leq f_j \text{ and } n'_p \leq n_p \text{ for all } 1 \leq p \leq P \}$.
 
 \begin{claim}
 The relaxed large and small configurations satisfy $\calS^L_j \subseteq \barcalS^L_j$ and $\calS^S_j \subseteq \barcalS^S_j$.
