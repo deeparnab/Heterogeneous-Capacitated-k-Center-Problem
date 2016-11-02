@@ -1,0 +1,60 @@
+\documentclass{article}[11pt]
+\input{preamble}
+
+\def\diam{\mathrm{diam}}
+\def\dist{\mathrm{dist}}
+\def\mckc{{\sffamily Heterogeneous Cap-$k$-Center}\xspace}
+%\def\cckp{{\sffamily Cardinality-Constrained Knapsack Cover}\xspace}
+\def\cckp{$Q|k_i|C_{min}$\xspace}
+\def\opt{\mathsf{OPT}}
+\def\capkc{{\sffamily Cap-$k$-Center }}
+\def\x{{\mathsf x}}
+\def\y{y^{{\mathsf{int}}}}
+\def\Supp{\mathsf{Supp}\xspace}
+\def\n{n^{(1)}}
+\def\nn{n^{(2)}}
+\def\effc{c_{\mathrm{eff}}}
+
+
+\def\Sone{\calS_{\mathsf{round}}}
+\def\Stwo{\calS_{\mathsf{nexp}}}
+
+\def\Cb{C_{\mathsf{blue}}}
+\def\Cbb{C_{\mathsf{black}}}
+\def\Cr{C_{\mathsf{red}}}
+\def\Cp{C_{\mathsf{purple}}}
+\def\Cd{C_{\mathsf{del}}}
+
+%\newcommand{\gset}{Y}
+%\newcommand{\gcol}{{\cal Y}}
+\newcommand{\brp}{{(p)}}
+\renewcommand{\br}[1]{{(#1)}}
+\newcommand{\bc}{{\bar c}}
+
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+\begin{document}
+\title{\huge The Heterogeneous Capacitated $k$-Center Problem}
+\date{}
+\author{Deeparnab Chakrabarty \\ \small Microsoft Research India\\\small  deeparnab@gmail.com \and Ravishankar Krishnaswamy \\ \small Microsoft Research India\\\small  ravishankar.k@gmail.com \and Amit Kumar \\ \small  Comp. Sci. \& Engg., IIT Delhi \\ \small amitk@cse.iitd.ac.in}
+\maketitle
+\begin{abstract}
+	The abstract goes here.
+\end{abstract}
+\thispagestyle{empty}
+\newpage
+\setcounter{page}{1}
+\input{section1}
+\input{section2}
+\input{section3}
+\input{section4}
+\input{section5}
+\input{section6}
+\input{section7}
+\input{qptas}
+
+
+\end{document}

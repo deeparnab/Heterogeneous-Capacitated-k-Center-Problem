@@ -1,0 +1,136 @@
+\documentclass{article}[11pt]
+\input{preamble}
+
+\def\diam{\mathrm{diam}}
+\def\dist{\mathrm{dist}}
+\def\mckc{{\sffamily Movable Cap-$k$-Center}\xspace}
+\def\cckp{{\sffamily Cardinality-Constrained Knapsack Cover}\xspace}
+\def\opt{\mathsf{OPT}}
+\def\capkc{{\sffamily Cap-$k$-Center }}
+\def\x{{\mathsf x}}
+\def\y{y^{{\mathsf{int}}}}
+\def\Supp{\mathsf{Supp}\xspace}
+\def\n{n^{(1)}}
+\def\nn{n^{(2)}}
+\def\effc{c_{\mathrm{eff}}}
+
+\def\Sone{\calS_{\mathsf{round}}}
+\def\Stwo{\calS_{\mathsf{nexp}}}
+
+\def\Cb{C_{\mathsf{blue}}}
+\def\Cbb{C_{\mathsf{black}}}
+\def\Cr{C_{\mathsf{red}}}
+\def\Cp{C_{\mathsf{purple}}}
+\def\Cd{C_{\mathsf{del}}}
+
+\def\pv{\mathbf{b}}
+%\newcommand{\gset}{Y}
+%\newcommand{\gcol}{{\cal Y}}
+\newcommand{\brp}{{(p)}}
+\renewcommand{\br}[1]{{(#1)}}
+\newcommand{\bc}{{\bar c}}
+\newcommand{\dem}{\mathsf{load}}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+\begin{document}
+\title{An EPTAS for the $k_i$-Partitioning Problem}
+\author{Deeparnab Chakrabarty \\ MSR India \and Ravishankar Krishnaswamy \\ MSR India \and Amit Kumar \\ IIT Delhi}
+\date{}
+\maketitle
+\section{Introduction}
+In the $k_i$-Partitioning problem we are given $n$ numbers $p_1,\ldots,p_n$ which need to be partitioned into $m$ sets $S_1,\ldots,S_m$ such that for all $1\le i\le m$, $|S_i| \leq k_i$ for some given non-negative integers $k_1,\ldots,k_m$.
+The objective is to minimize the maximum value of any set, that is minimize $\max_{i=1}^m \sum_{j\in S_m} p_j$. This is a generalization of the classic makespan minimization problem in scheduling on identical machines.
+In the Graham notation, this problem is denoted as $P|k_i|C_{max}$. 
+
+\paragraph{Relevance} Write.
+
+\paragraph{History} Write.
+
+\paragraph{Technical Difficulty} Write.  \\
+
+\noindent
+We given an EPTAS for the problem. Give Theorem statement. 
+
+\paragraph{Technique}
+
+	
+\section{Algorithm}
+
+Throughout the paper we fix $\delta,\eps > 0$. As is standard, we assume we have a guess $T$ of the optimum; given such a guess we would either prove $\opt > T$ or obtain a feasible schedule of makespan at most $(1+\eps)T$.
+Subsequently, binary search would provide a schedule of makespan $\leq \opt(1+\eps)$. \smallskip
+
+\def\sm{\mathsf{small}}
+Call a job $j$ big if $p_j > \eps T$, and small otherwise. Let $J_\sm$ 	be the set of small jobs.
+For any $1\leq k\leq K = O(1/\eps)$, let $J_k$ denote the big jobs with capacities $p_j \in \eps T\cdot \left((1+\eps)^{k-1},(1+\eps)^k\right]$.
+A configuration $\phi \in \Z^K_{\ge 0}$ is a vector where $\phi_k$ indicates the number of jobs of chosen from $J_k$. The total load $\dem(\phi)$ of a configuration is defined to be $\sum_{k=1}^K \phi_k (1+\eps)^{k-1}\eps T$ -- note that this is a {\em lower bound} on the actual load but is within a multiplicative $(1+\eps)$-factor. Finally, we let $|\phi| = \sum_{k=1}^K \phi_k$, the cardinality of the configuration. A configuration $\phi$ is {\em allowed} if $\phi_k \leq 1/\epsilon$. The number of allowed configurations is denoted as $N_0 \leq (1/\epsilon)^{(1/\epsilon)}$.
+We call this set $\Phi$ which we order in an arbitrary but fixed manner. The $i$th member is denoted as $\phi^{(i)}$.
+
+\smallskip
+Call a machine $i$ large if $k_i > 1/\eps^2$. Let $M^{(0)}$ denote the set of large machines, and let $m_0 = |M^{(0)}|$. 
+Every other machine is small and these are partitioned into $N_1 = O(1/\eps \ln(1/\eps))$ groups as follows. For $1\leq \ell \leq N_1$, define 
+$M^{(\ell)} := \{i: (1+\eps)^{\ell-1} < k_i \leq (1+\epsilon)^\ell\}$. Let $m_\ell := |M^{(\ell)}|$.
+
+\subsection{MILP Formulation}
+For every $0\leq \ell\leq N_1$ and $1\le t\le N_0$, we have an {\em integer variable} $\pv^{(\ell)}_t \in \Z_{\geq 0}$ which indicated the number of machines in $M^{(\ell)}$ whose allocation of big jobs is given by $\phi^{(t)}$.
+That is, the number of big jobs from $J_k$, for $1\le k\le K$ assigned to these machines is $\phi^{(t)}_k$. Note that the number of variables is at most $N_0 N_1 = 2^{O(1/\eps \ln(1/\epsilon))}$.
+
+\noindent
+The first constraint states that the total number of machines need to be respected.
+\begin{equation}\label{eq:milp1}
+\forall 0\leq \ell \leq N_1, ~~~~ \sum_{t=1}^{N_0} \pv^{(\ell)}_t = m^{(\ell)}
+\end{equation}
+The second constraint states that the total number of big jobs need to be respected.
+\begin{equation}\label{eq:milp2}
+\forall 1\leq k \leq K, ~~~~ \sum_{\ell = 0}^{N_1} \sum_{t=1}^{N_0} \pv^{(\ell)}_t \phi^{(t)}_k = |J_k|
+\end{equation}
+For every machine $i$ and every small job $j$, we have a variable $z_{ij} \in [0,1]$. This indicates whether job $j$ is allocated to machine $i$.
+\begin{equation}\label{eq:milp3}
+\forall j\in J_\sm, ~~~~ \sum_{i=1}^m z_{ij} = 1
+\end{equation}
+Finally, we add the machine specific constraints. The first constraint among these states that the total load in any class $M^{(\ell)}$ is bounded.
+The first term in the LHS accounts for the total load from the big jobs to all the machines in $M^{(\ell)}$, and the second term accounts for the small jobs.
+\begin{equation}\label{eq:milp4}
+\forall 0\leq \ell \leq N_1, ~~~~ \sum_{t=1}^{N_0} \pv^{(\ell)}_t \dem(\phi^{(t)}) ~ + ~ \sum_{i\in M^{(\ell)}} \sum_{j\in J_\sm} z_{ij}p_j ~\leq~ m_\ell T
+\end{equation}
+The next few machine specific constraints imposes the cardinality restriction. 
+First we impose that if $|\phi^{(t)}| > (1+\epsilon)^\ell$, then we must have $\pv^{(\ell)}_t = 0$.
+\begin{equation}\label{eq:milp5}
+\forall 1\leq \ell \leq N_1, 1\leq t\leq N_0, ~~~~ \pv^{(\ell)}_t\cdot\left((1+\epsilon)^\ell - |\phi^{(t)}| \right) \geq 0
+\end{equation}
+Second, we impose that the total number of slots/cardinality used by machines in $M^{(\ell)}$ is at most $(1+\epsilon)^\ell m_\ell$ for $1\le \ell \le N_1$.
+We take care of  $\ell = 0$ separately (since $k_i$'s for machines in $M^{(0)}$ can be very different).
+\begin{equation}\label{eq:milp6}
+\forall 1\leq \ell \leq N_1, ~~~~ \sum_{t=1}^{N_0} \pv^{(\ell)}_t |\phi^{(t)}|~ + ~ \sum_{i\in M^{(\ell)}} \sum_{j\in J_\sm} z_{ij} ~\leq~ m_\ell (1+\epsilon)^\ell
+\end{equation}
+For machines in $M^{(0)}$, we just impose the cardinality constraints from small jobs. The reason is that any large configuration can only violate the cardinality constraint by an $\epsilon$-factor.
+\begin{equation}\label{eq:milp7}
+\forall i\in M^{(0)}, ~~~~ \sum_{j\in J_\sm} z_{ij} ~\leq~ k_i
+\end{equation}
+This completes the description of the MILP. It has $O_\epsilon(1)$ integer variables, $O(mn)$ non-integer variables, and $O(m+n) + O_\epsilon(1)$ constraints.
+We end this section with the following theorem.
+\begin{theorem}\label{thm:p1}
+If $T \geq \opt$, then the MILP given by \eqref{eq:milp1}-\eqref{eq:milp7} is feasible.
+\end{theorem}
+\begin{proof}
+\end{proof}
+\subsection{Solving the MILP}
+
+\subsection{Rounding}
+Given $T$ we check if the MILP has a feasible solution. If not, we know $T < \opt$. 
+Let $\pv^{(\ell)}_t$ for $0\leq\ell\leq N_1$ and $1\leq t\leq N_0$, and $z_{ij}$ for $1\leq i\leq m$ and $j\in J_\sm$ be a feasible solution. Our objective is to find a schedule which respects the cardinality constraints
+	and the total load on any machine is $\leq (1+O(\epsilon))T$.
+	
+The first step is to note that getting to solutions which satisfy the cardinality constraints approximately suffices.
+\begin{lemma}
+	Given an assignment of jobs such that the load on any machine is at most $T(1+\epsilon_1)$ such that machine $i$ gets $\leq (1+\epsilon_2)k_i$ jobs, 
+	we can find another assignment which satisfies the cardinality constraints and the load of any machine is $\leq T(1+\epsilon_3)$. 
+\end{lemma}
+\begin{proof}
+	{\bf This doesn't seem to be correct.}
+	The issue is that all but one of the machines can be violating $k_i$'s and then mass can't be moved on to the one machine since the load would go to $n\eps T$.
+\end{proof}
+\end{document}
+ 

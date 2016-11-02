@@ -1,9 +1,10 @@
+\newpage
 \section{QPTAS for $Q|k_i|C_{min}$}
 \def\pv{\mathbf{b}}
-\newcommand{\dem}{\mathsf{cap}}
+\renewcommand{\dem}{\mathsf{cap}}
 Let the instance $\calI$ given to us have $m$ machines with speeds $s_1,\ldots, s_m$ and cardinality upper bounds $k_1,\ldots,k_m$. We are also given $n$ jobs with loads $c_1,\ldots,c_n$. We assume each $1\leq c_i,s_j \leq \poly(n)$.
 Fix an $\eps$. 
-Let us guess the optimum value $D\geq 1$.  We wish to either prove $T$ is too large a guess, or find an assignment which assigns machine $i$ a subset of jobs $S_i$ with {\em load} $\sum_{p\in S_i} c_p \geq D_i := Ds_i$.
+Let us guess the optimum value $D\geq 1$.  We wish to either prove $D$ is too large a guess, or find an assignment which assigns machine $i$ a subset of jobs $S_i$ with {\em load} $\sum_{p\in S_i} c_p \geq D_i := Ds_i$.
 
 
 We start with a lemma which states that finding solutions satisfying cardinality constraints approximately suffices.
@@ -74,19 +75,19 @@ Let $k'_i$ be the residual cardinality constraint, that is, $k'_i = k_i - |\phi|
 \paragraph{Rounding.}
 The remaining copies of jobs must satisfy the residual demand. For this we simply write the assignment LP.
 \begin{alignat}{4}
-	& \quad \forall p,   &&\quad  \textstyle \sum_{i\sim p} z_{ip} \leq n'_p \label{eq:asslp1} \\
-	& \quad \forall i\in [m] ,  &&\quad  \textstyle \sum_{p\sim i} c_pz_{ip}  \geq T'_i \label{eq:asslp2}\\
-	& \quad \forall i\in [m], && \quad \textstyle \sum_{p\sim i} z_{ip}  \leq  k'_i \label{eq:asslp3}
+	& \quad \forall p,   &&\quad  \textstyle \sum_{i\sim p} z_{ip} \leq n'_p \label{eq:assgnlp1} \\
+	& \quad \forall i\in [m] ,  &&\quad  \textstyle \sum_{p\sim i} c_pz_{ip}  \geq T'_i \label{eq:assgnlp2}\\
+	& \quad \forall i\in [m], && \quad \textstyle \sum_{p\sim i} z_{ip}  \leq  k'_i \label{eq:assgnlp3}
 \end{alignat}
 \def\zz{z^{\mathsf{int}}}
 For the correct guess, the above LP is feasible. If so, using the fact that $c_p \leq T_i$ for all $i\sim p$, we can get a feasible solution with a slight hit in the demand.
 \begin{lemma}\label{lem:iter}
-If \eqref{eq:asslp1}-\eqref{eq:asslp3} is feasible, then there is an integral assignment $\zz_{ip}$ which satisfies \eqref{eq:asslp1} and \eqref{eq:asslp3}, and 
+If \eqref{eq:asslp1}-\eqref{eq:asslp3} is feasible, then there is an integral assignment $\zz_{ip}$ which satisfies \eqref{eq:assgnlp1} and \eqref{eq:assgnlp3}, and 
 $\quad \forall i\in [m], ~~ \sum_{p\sim i} c_p\zz_{ip}  \geq T'_i - O(\epsilon)T_i$.
 \end{lemma}
 \begin{proof}
 The proof is via iterative rounding. We look at a vertex solution and if some $z_{ip}$ is $0$ or $1$, we set $\zz_{ip}$ the same. 
-If for any machine $i$, the number of $z_{ip}$s is $\leq 5$, we set $\zz_{ip} = 0$ for these and delete the constraint in \eqref{eq:asslp2} and \eqref{eq:asslp3} corresponding to $i$.
+If for any machine $i$, the number of $z_{ip}$s is $\leq 5$, we set $\zz_{ip} = 0$ for these and delete the constraint in \eqref{eq:assgnlp2} and \eqref{eq:assgnlp3} corresponding to $i$.
 For this machine $i$, the integral assignment is fixed with cardinality $\le k'_i$ and with total load $\geq T'_i - 5\max_p c_p \geq T'_i - 5\eps T_i$.
 
 Therefore, we may assume that the vertex solution $z$ has at least $5$ non-zeros for every row $i$ and at least $2$ non-zeros for every column $p$.
@@ -97,7 +98,7 @@ This is a contradiction.
 \begin{proof}[{\bf Proof of Theorem~\ref{thm:q}}]
 The final algorithm is as follows.
 First modify the inputs and then perform the grouping obtaining the feasible configurations for every group.
-For every guess of $\pv^{(r,s)}_t$'s in the enumeration step, obtain the residual problem and check if \eqref{eq:asslp1}-\eqref{eq:asslp3} is feasible or not. If not, then the guess is infeasible.
+For every guess of $\pv^{(r,s)}_t$'s in the enumeration step, obtain the residual problem and check if \eqref{eq:assgnlp1}-\eqref{eq:assgnlp3} is feasible or not. If not, then the guess is infeasible.
 If yes, then Lemma~\ref{lem:iter} implies a residual solution which satisfies the cardinality constraints, and every machine $i$ obtains a total load of at least $T_i (1 - 5\epsilon)$. 
 The running time is dominated by the number of guesses which is $C_\epsilon^{O(\log^3 n)}$.
 \end{proof}

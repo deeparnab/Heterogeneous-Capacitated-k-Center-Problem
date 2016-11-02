@@ -1,0 +1,40 @@
+\section{Region Growing: Reduction to $Q|k_i|C_{min}$}
+In this section, we give a reduction to $Q|k_i|C_{min}$ when we allow logarithmic approximations. The main technique is region growing which was first used in the context of sparsest and multi cut problems~\cite{LeightonRao,GVY}.
+\begin{theorem}\label{thm:red}
+	Given an $\alpha$-approximation algorithm for $Q|k_i|C_{min}$, for any $\epsilon>0$ there exists an \\ $\left(O(\log n/\epsilon), \alpha(1+\epsilon)\right)$-approximate algorithm for the \mckc problem.
+\end{theorem}
+\begin{proof}
+	We start with a guess of $\opt$ and the $\opt$-induced graph $G$. We assume this is a correct guess.
+	Given $G$ we given an algorithm construct an instance $\calI$ of $Q|k_i|C_{min}$.
+	Initially $\calI$ is empty. We maintain a set of alive clients $C'$ which is initially $C$. We maintain a working graph $H$ which is initialized to $G$ and is always a subgraph of $G$.
+	Given a client $j$ and an integer $t$, let $N_t(j)$ denote all the clients $j'$ s.t. $d_H(j,j') < 2t$ and $\Gamma_t(j)$ denote all the clients $j'$ with $d_H(j,j')  = 2t$.\smallskip
+	
+	
+	Till $C'$ is empty, we perform the following operation.
+	Select an arbitrary active client $j\in C'$. Find the smallest $t$ such that $|\Gamma_t(j)| < \eps\cdot |N_t(j)|$. Since for all $s < t$ we have $|N_{s+1}(j)|\geq (1+\epsilon)|N_s(j)|$ which implies $|N_{s+1}(j)| > (1+\epsilon)^s$, 
+	we get  $t \leq (\ln n)/\epsilon$ where $n=|C'|$. Let us use $A_j$ to denote $N_t(j)$ and $B_j$ to denote $\Gamma_{t}(j)$. Also let us use $F_j$ to denote all the facilities neighboring any client in $A_j$. Note that any facility $i\in F_j$ has neighbors in $A_j \cup B_j$.
+	We now add a machine to $\calI$ and attribute it to the client $j$. Abusing notation, we call the machine $j$ as well.
+	We add the  cardinality constraint $k_j = |F_j|$. The speed of the machine is set to be $s_j := 1/|A_j|$.
+	Finally,  we delete $A_j\cup B_j$ from $C'$ and $A_j\cup B_j\cup F_j$ from $H$ and repeat. \smallskip
+	
+	At the end of the above operation, we have an instance $\calI$ where the machines and their cardinality constraints have been specified.
+	We are given $P$ jobs where the processing time of the $p$th job is $c_p$. This completes the description of the $Q|k_i|C_{min}$ instance.
+	
+	\begin{claim}
+		There exists an allocation where the total processing time of each machine is at least $1$.
+	\end{claim}
+	\begin{proof}
+		In the optimal solution to \mckc, a total capacity of $|A_j|$ must be installed among the facilities $F_j$. 
+		We mimic this solution for $\calI$, and since the speed of machine $j$ is $1/|A_j|$, the claim follows.
+	\end{proof}
+	\begin{claim}
+		Given an allocation to $\calI$ where each machine gets processing time $\geq \alpha$, we can construct a solution for the \mckc problem
+		which is $O(\log n/\epsilon)$-approximate and violates the capacities by at most $(1+\epsilon)/\alpha$-factor.
+	\end{claim}
+	\begin{proof}
+		For machine $j$ in $\calI$, let $S_j$ be the jobs allocated; we have $\sum_{p\in S_j} c_p \ge \alpha\cdot |A_j|$ and $|S_j| \leq k_j = |F_j|$.
+		We arbitrarily open $|S_j|$ facilities in $F_j$ to which we assign all the clients in $A_j \cup B_j$. Since $|B_j|<\eps |A_j|$, we have the total capacity opened is at least $\alpha/(1+\epsilon)$ times 
+		the total number of clients in $A_j\cup B_j$. Furthermore, every client in $A_j\cup B_j$ is at most $O(\log n/\epsilon)$-away from any facility in $F_j$. This implies the assignment.
+	\end{proof}	
+\end{proof}
+

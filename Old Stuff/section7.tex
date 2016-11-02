@@ -1,0 +1,364 @@
+\def\Supp{\mathsf{Supp}\xspace}
+\newcommand{\barcalS}{\bar{\cal S}\xspace}
+\def\cckp{$Q|k_i|C_{min}$\xspace}
+\newcommand{\brp}{{(p)}}
+\renewcommand{\br}[1]{{(#1)}}
+\renewcommand{\brp}{{(p)}}
+\renewcommand{\br}[1]{{(#1)}}
+\newcommand{\bc}{{\bar c}}
+\newcommand{\barD}{{\bar D}}
+
+
+\newcommand{\brt}{{(t)}}
+\begin{document}
+\section{Approximate Supply Polyhedra for $Q|f_i|C_{min}$}
+Let the instance $\calI$ of $Q||C_{min}$  have $m$ machines $M$ with demands $D_1 \geq \cdots \geq D_m$ and cardinality constraints $f_1,\ldots,f_m$, and $n$ types of  jobs $J$ with capacities $c_1 \geq \cdots \geq c_n$.  We assume $D_1/D_m \leq n^C$\comment{deepc: i think this can be made wlog with some std trick}
+A supply vector $(s_1,\ldots,s_n)$ indicates the number of jobs of each type available; a supply vector is feasible if together they can satisfy all the demands.
+An $\alpha$-approximate supply polyhedra $\calP$ has the following properties: any feasible supply vector lies in $\calP$, and given any integral vector $(s_1,\ldots,s_n) \in \calP$ there is an allocation 
+of the $s_j$ jobs of capacity $c_j$ which satisfies every demand up to an $\alpha$-factor.
+%We wish to find a convex set/polyhedra which captures all the feasible supply vectors. In particular, any feasible supply vector should be in the set, and given any (integer) supply vector in the set
+%there should be an allocation which satisfies the demands to an $\alpha$-factor.
+\smallskip
+
+\noindent
+A feasible supply vector $(s_1,\ldots,s_n)$ must lie in the following polytope. Let $\Supp$ be a set indicating infinitely many copies of all jobs.
+For every machine $i$, let $\calF_i :=\{S\in \Supp: |S| \leq f_i ~\textrm{ and } \sum_{j\in S} c_j \geq D_i\}$ denote all the feasible sets that can satisfy machine $i$. 
+Let $n(S,j)$ denote the number of copies of job of type $j$.
+	\begin{alignat}{4}
+		\calP_\mathsf{conf} && = \{(s_1,\ldots,s_n):  && \notag \\
+		&& \quad \forall i \in M,   &\quad  \textstyle \sum_{S\in \calF_i} z(i,S)  =  1 \label{eq:conflp1} \\
+		&& \quad \forall j\in J ,  &\quad  \textstyle \sum_{i\in M,S\in \calF_i}  z(i,S)n(S,j) \le  s_j \label{eq:conflp2} \\
+		&& \quad \forall i\in M, S\in \calF_i, & \quad z(i,S)   \geq 0 \label{eq:conflp3}  \}
+	\end{alignat}
+	
+\begin{theorem}\label{thm:conflprounding}
+	Given $(s_1,\ldots,s_n) \in \calP_\mathsf{conf}$, there is an of assignment $\phi$ of the $s_j$ jobs of capacity $c_j$  to the machines such that for all $i\in M$, 
+	$\sum_{j:\phi(j) = i} c_j \geq D_i/\alpha$ for $\alpha = O(\log n)$.
+\end{theorem}
+\def\calFr{\calF^{\mathsf{rel}}}
+\begin{proof}
+		Given a feasible fractional solution $\{z(i,S)\}$ to the configuration LP above, we want to  efficiently round it to obtain an integer solution which is an $\alpha$-approximation for the given \cckp instance.
+		\medskip 
+		
+		We call a job of capacity $c_j$ {\em large} for machine $i$ if $c_j \geq \frac{D_i}{16C\log n}$, otherwise it is said to be \emph{small} for machine $i$. 
+		For a machine $i$, we define a relaxed collection of feasible sets $\calFr_i$ where $S\in \calFr_i$ if either (a) $S = \{j\}$ and $j$ is large for $i$, or (b) $c_j < \frac{D_i}{8C\log n}$ for all $j\in S$, $|S| \leq f_i$, and $\sum_{j\in S} c_j \geq D_i/2$.
+	
+		
+
+%		
+%			Let $\Delta$ be a large enough constant.
+%				For every machine $i$, let $\calFr_i$ denote the subsets $S\subseteq \Supp$ with $|S|\leq f_i$ but $\sum_{j\in S} c_j \geq D_i/4\Delta^2$.
+%				
+%		%First we round the quantities $c_p$ and $D_j$ down to nearest power of $\Delta$, and let the rounded quantities be $\bc_p$ and $\barD_j$ respectively.
+%	   We call a configuration $S\subseteq \Supp$ large for $i$ if $z(i,S) > 0$ and $S$ contains a large job for $i$. Otherwise it is called small.
+\paragraph{Partitioning Configurations  and Bucketing Demands.}	
+Our first step is  to modify $z$ such that its support $z(i,S) > 0$ for only $S\in \calFr_i$ for all $i$.
+For every machine $i$, if $z(i,S) > 0$ and $S$ contains any large job $j$ for $i$, then we replaces $S$ by $\{j\}$. To be precise, we set $z(i,\{j\}) = z(i,S)$ and $z(i,S) = 0$.
+We call such singleton configurations {\em large} for $i$; all others are small. Note that after this step, $z(i,S) > 0$ only for $S\in \calFr_i$.
+Let $\calF^L_i$ be the collection of large configurations for $i$; the rest $\calF^S_i$ being small configurations.
+		Define $z^L(i) := \sum_{S\in \calF^L_i} z(i,S)$ be the total large contribution to $i$, and let $z^S(i) := 1 - z^L(i)$ the small contribution.
+
+
+ 	
+	
+%	Our algorithm starts with a feasible fractional solution to the configuration LP, and over time modifies the solution to make \emph{most} of the \emph{large configuration assignments} integral $0/1$ while remaining feasible to a slightly \emph{relaxed} configuration LP. Finally, it rounds the small item types to $0/1$ using the classical algorithm of Lenstra, Shmoys and Tardos~\cite{LST}. Overall, the rounding algorithm requires several steps which we next present one by one.
+%	
+
+%	We also slightly expand the set of small and large configurations to satisfy some weaker conditions involving $\bc_p$ and $\barD_j$ as follows: we define a set $\barcalS^L_j$ of \emph{relaxed} large configurations to be $\barcalS^L_j = \{ \{p\} \text{ s.t } \bc_p \geq \frac{\barD_j}{4 \Delta^2}  \}$. Similarly, the expanded collection of \emph{relaxed} small configurations for demand $j$ is denoted by $\barcalS^S_j = \{ ((1,n'_1), (2,n'_2), \ldots, (P,n'_P)) \text{ s.t } \sum_{p \in [P]} \bc_p n'_p \geq \frac{\barD_j}{\Delta} \text{ and } \sum_{p \in [P]} n'_p \leq f_j \text{ and } n'_p \leq n_p \text{ for all } 1 \leq p \leq P \}$.
+%	
+%	\begin{claim}
+%		The relaxed large and small configurations satisfy $\calS^L_j \subseteq \barcalS^L_j$ and $\calS^S_j \subseteq \barcalS^S_j$.
+%	\end{claim}
+%	
+%	\begin{proof}
+%		Since we scale down the demands and capacities by a factor of $\Delta$, it is easy to see.
+%	\end{proof}
+%	
+%	\begin{corollary}
+%		The solution $\{y(S,j)\}$ is feasible to the relaxed configuration LP where we allow relaxed large and small configurations.
+%	\end{corollary}
+%	
+%	
+%	\medskip % \noindent {\bf Step 2: ``Bucketing'' Demand Requirements.}
+	
+	The next step of our algorithm is to partition the demands into buckets depending on their requirement values $D_i$. To this end, we say that demand $i$ belongs to \emph{bucket $t$} if
+	$2^{t-1} \leq D_i < 2^t$  (we assume wlog by scaling that  the smallest demand is $1$). We let $B^\brt$ to denote the bucket $t$. 
+		Note that the number of buckets $K \leq C\log n$; this drives the approximation factor.
+We make one observation. 
+\begin{claim}\label{clm:c001}
+	For any $t$, let $i$ and $i'$ be two machines in $B^\brt$ and let $f_i \leq f_{i'}$. 
+	Let $z(i,T) > 0$ for some small configuration for $i$.
+Then $T\in \calFr_{i'}$ and $\sum_{j\in T} c_j \geq D_{i'}/2$.
+\end{claim}
+\begin{proof}
+Note that since $z(i,T) > 0$, we have $\sum_{j\in T} c_j \geq D_{i} \geq 2^{t-1} \ge D_{i'}/2$. Furthermore, for any $j\in T$, we have $c_j \leq \frac{D_{i}}{8C\log n} \le \frac{2^t}{8C\log n}$.
+Therefore any other machine $i'\in B^\brt$, $T$ satisfies two conditions of being in $\calFr_{i'}$.
+Now if $f_{i'} \geq f_i$, we get $|T| \leq f_{i'}$ as well. 
+\end{proof}
+Before describing our subroutines, we make a few definitions. All of these are with respect to a solution $z$. 
+A machine $i$ is called {\em rounded} if there exists $S\in \calFr_i$ with $z(i,S) = 1$. We let $\calR$ denote the rounded demands.
+The remaining machines are of three kinds:  {\em large} ones with $z^L(i) = 1$, {\em hybrid} ones with $z^L(i) \in (0,1)$ and {\em small} ones with $z^L(i) = 0$. 
+Let $\calL,\calH,\calS$ denote these respectively. 
+
+
+%Every job $j$ participates in large configurations $z(i,\{j\})$ and small configurations $z(i,S)$ with $j\in S$. We let $z^L(j) := \sum_{i: j \textrm{ is large for } i} z(i,\{j\})$. 
+%We let $\calL$ be the set of {\em super-large} jobs with $z^L(j) = s_j$. %This set can only increase in our algorithm. 
+%Finally, we maintain a set of {\em rounded demands} $\calR$ which consists of $(i,S)$ with $z(i,S) = 1$ and $S\in \calFr_i$. That is, the jobs in $S$ are assigned to machine $i$ and both $i$ and $S$ can be removed from consideration.
+%	We say that a job $j$ is \emph{large} with respect to bucket $t$ if its size $\bc_p$ is at least $\frac{\Delta^{t-2}}{4}$, i.e., it can belong to a relaxed large configuration for a bucket-$t$ demand.  %For a demand $j$, let $\barcalS^L_j$ and $\barcalS^S_j$ denote the large and the small configurations corresponding to $j$ respectively.
+	
+%	We now further define some useful variables which can be derived from $\{y(S,j)\}$. Indeed, fix a solution $y$ to the relaxed configuration LP. For a demand $j$, define $y^L(j)$ to be $\sum_{(S,j) \in \barcalS^L_j} y(S,j)$, i.e., the total fractional extent to which $j$ is satisfied by large configurations. Define $y^S(j)$ similarly corresponding to small configurations. Likewise, we extend this definition to buckets of demands as well. For a bucket $t$, define $y^L(B^\brt)$ to be $\sum_{j \in B^\brt} y^L(j)$, and define $y^S(B^\brt)$ analogously. Now, for a \emph{type $p$} of items, define $y(p)$ to be $\sum_{(S,j)} n(S,p) y(S,j)$, the fractional extent to which this type is assigned across all items in the solution $y$. From the LP feasibility constraint, we know that $y(p) \leq n_p$. Finally, given a bucket $t$, let $I^\brt$ denote the set of item types which are large for bucket $t$. For a bucket $t$ and item type $p \in I^\brt$, define $y^L(p,t)$ as $\sum_{(\{p\}, j): j \in B^\brt} y(\{p\}, j)$, which is the extent to which items of type $p$ are assigned as large demands to demands in bucket $t$.
+%	
+\paragraph{Subroutine: {\sf FixBucket}($t$).} This takes a bucket $t$ with more than one hybrid machine, and modifies the $z$-solution such that
+there is at most one hybrid machine in $t$. Other machines in other buckets are unaffected.
+
+%Let 
+%	{\bf Step 2: Rounding Large Demand Assignments.} In this step, we modify the LP solution 
+% such that for each bucket $t$, there is at most one hybrid machine $i\in B^{(t)}$ with  $z^L(i) \in (0,1)$.
+%% and at most one $j$ with $c_j \geq D_i/4\Delta^2$  with $z(i,\{j\}) \in (0,1)$. 
+%% The flip side is that we may introduce variables $z(i,S)$ for sets $S$ where $|S|\leq f_i$ but $\sum_{j\in S} c_j \geq D_i/4\Delta^2$.
+% %\emph{at most one strictly fractional variable} $0 < y_{S,j} < 1$ over all $j \in B^\brt$ and $S \in \barcalS^L_j$. 
+% To this end, we repeatedly perform the following steps, starting from the smallest bucket $t$ onwards. 
+ 
+% 
+% Before we start the steps for bucket $t$, we always maintain the following invariant holds for every bucket $t' < t$ (which is vacuously true for the smallest ($t=1$) bucket):
+%	\begin{framed}
+%		\begin{itemize}
+%			\item[({\bf I})] For each bucket $t' < t$, there is at most one  demand $i_{t'} \in B^{(t')}$ %\setminus \calR$ 
+%			such that $z^L(i_{t'}) \in (0,1)$. Further, if such a demand $i_{t'}$ exists, then $f_{i_{t'}} \leq f_{i}$ for all $i \in B^{(t')} \setminus \calR$.
+%		\end{itemize}
+%	\end{framed}
+	
+%	Suppose this invariant holds for all buckets upto $t-1$. Now we describe the iteration for bucket $t$.
+	
+Among the hybrid machines $ B^\brt$, let $i$  be the one with the smallest $f_i$. Let $i'$ be any other hybrid machine. We know there is at least one more.
+%	
+%	
+%	%\medskip \noindent {\bf Step 2a: Intra-Bucket Rounding.}  
+%	Define a total order $\prec$ on $B^\brt \setminus \calR$, where $i \prec i'$ if $f_{i} \leq f_{i'}$.  
+%	%We now ensure that the demands with the smallest $f_j$ value get preference when it comes to being satisfied by large configurations. 
+%	Suppose there exists $i,i' \in B^\brt \setminus \calR$ such that the following conditions hold: (i) $i\prec i'$, (ii) $z^L(i)$ and $z^L(i')$ are both in $(0,1)$. 
+	We now \emph{modify} $z$ as follows.
+	Since $z^L(i') > 0$, there exists a large configuration $\{j'\}$ for $i'$ with $z(i',\{j'\}) > 0$. Similarly, since $z^L(i) < 1$, there must exist a {\em small} configuration $T\in \calFr_i$ such that $z(i,T) > 0$.
+	%To this end, let $(S,j') \in \barcalS^L_{j'}$ be a large configuration  with $y(S,j') > 0$. Now, since $y^l(j) < 1$, we know that there is a small configuration $(T,j) \in \barcalS^S_j$ with $y(T,j) > 0$. 
+	By Claim~\ref{clm:c001}, note that $T\in \calFr_{i'}$ as well.
+	We then perform the following change: increase $z(i,\{j'\})$ and $z(i',T)$ by $\delta$,  and decrease $z(i',\{j'\})$ and $z(i,T)$ by $\delta$, for a $\delta > 0$ such that one of the variables becomes 0 or 1.
+	Note that this keeps \eqref{eq:conflp1} and \eqref{eq:conflp2} maintained. 	%In particular, no job $j$ leaves $\calL$.
+	
+	
+	We keep on performing this process as long as possible; since we always transfer large configuration assignments to demands which appear earlier in the total order, this process will stop at some point. At this point, we add whichever demands are integrally assigned by large configurations to 
+	the set $\calR$, i.e., all $i \in B^\brt$ for which   $z(i,S) = 1$ for some $S\in \calFr_i$ are added to $\calR$.
+%	
+%	\begin{claim} \label{cl:swap1}
+%		The modified solution above is feasible for the relaxed LP where support $z(i,S)$ is allowed for $S\in \calFr_i$.
+%	\end{claim}
+%	\begin{proof}
+%		Since $i$ and $i'$ are in the same bucket, $c_{j'} \geq D_i/4\Delta^2$ as well, and so $\{j'\} \in \calFr_i$. Similartly, $\sum_{j\in T} c_j \geq D_{i'}/\Delta$. Furthermore, since $i\prec i'$, we have $|T| \leq f_{i} \leq f_{i'}$. Thus, the support of $z$ stays in the relaxed support. Finally, the LHS of \eqref{eq:conflp2} remains unchanged in the above operation for all jobs.
+%%		
+%%		
+%%		To see why the modified solution is feasible for the relaxed configuration LP, observe that $(S,j)$ is also a valid relaxed large configuration because $j$ and $j'$ are of the same bucket $t$ and hence have the same rounded demand requirement of $\Delta^t$. Similarly, observe that $(T,j')$ is a valid small configuration for $j'$ because $|T| \leq f_{j} \leq f_{j'}$, and the remaining constraints for being a small configuration (i.e., the total capacity of items in $T$ should exceed the $\barD_{j'}/\Delta$, and the numbers $n(T,p) \leq n_p$ for all types) are satisfied trivially since they enforce the same constraints for $j$ and $j'$. As a result, since we increase $y(S,j)$ and decrease $y(T,j)$ at the same rate, constraint~\cref{eq:config1} is satisfied for $j$. Similarly, since we increase $y(T,j')$ and decrease $y(S,j')$ at the same rate, constraint~\cref{eq:config1} is satisfied for $j'$. Likewise, since we increase $y(S,j)$ and decrease $y(S,j')$ at the same rate, constraint~\cref{eq:config2} is satisfied for the item type corresponding to the large item in $S$. Finally, since we increase $y(T,j')$ and decrease $y(T,j)$ at the same rate, constraints~\cref{eq:config2} are satisfied for all item types corresponding to items in $T$.
+%	\end{proof}
+%	
+\begin{claim}\label{clm:step2}
+	Fix Bucket on $t$ produces a solution with at most one hybrid machine in $B^\brt$.
+\end{claim}
+	
+
+
+
+
+%	The following claim encapsulates the state of affairs after taking care of the $t$th bucket.
+%	
+%	\begin{claim} \label{cl:step3a}
+%		Let $\alpha := z^L(B^\brt \setminus \calR)$ denote the total fractional assignment of large configurations to the non-integrally rounded demands in $B^\brt$. Then the following condition holds at the termination of the above iterative process: suppose we arrange the demands in $B^\brt \setminus \calR$ according to the order $\prec$. Let this ordering be $i_1, i_2, \ldots,i_r$, and let $k$ denote $\lfloor \alpha \rfloor$. Then we have that $z^L(i_u) = 1$ for $u=1, \ldots, k$, $z^L(i_u) = 0$ for $u > k+1$, and lastly, $z^l(i_{k+1})$ is equal to the fractional part of $\alpha = \alpha - \floor{\alpha}$.
+%	\end{claim}
+%	
+%	\begin{proof}
+%		Complete...
+%	\end{proof}
+	
+%	\begin{claim}
+%		After step (3a), the invariant (I) continues to hold for all buckets $t' < t$.
+%	\end{claim}
+%	
+%	\begin{proof}
+%		This is true because we do not alter the assignments in buckets $p' < p$ in the step.
+%	\end{proof}
+	
+	
+%	To summarize, after the above step, we have ensured that there is at most one demand (i.e., $j_{k+1}$ from the claim above) of bucket $t$
+%	with strictly fractional $y^l(j)$ value in the modified LP solution. However, even the demands with $y^l(j) = 1$, i.e.,  $j_1, \ldots, j_k$,  may currently be satisfied by many large configurations. In the next step of the algorithm, we iteratively perform a \emph{second transformation} to ensure that each such demand is in fact \emph{integrally satisfied by a single large item}, and hence we can add such demands to $\calR$ and proceed.
+%	
+%	
+	%{\Huge NEED TO FIX BELOW}
+\paragraph{Subroutine: {\sf FixLargeMachine}($i$).}
+This takes input a large machine $i\in B^\brt\setminus \calR$ with  $z^L(i) = 1$ and modifies $z$ such that  at the end $i$ enters  $\calR$.
+Since $i\notin \calR$ in the beginning, there must exist then two large configurations with $z(i,\{j_1\}) \in (0,1)$ and $z(i,\{j_2\}) \in (0,1)$. 
+	Let $j_1$ be the job with the smallest capacity among all large configurations $(i,\{j\})$ with $z(i,\{j\}) > 0$.
+%	Wlog, assume $c_{j_1} \le c_{j_2}$.
+	Two cases arise. In the simple case, there exists no $i'\notin \calR$ and $S'\in \calFr_{i'}$ with $z(i',S') > 0$ and $j_1 \in S'$. That is, no other machine fractionally claims the job $j_1$.
+	Since $s_{j_1}$ is an integer, we have slack in \eqref{eq:conflp2} and therefore we can round up $z(i,\{j_1\}) = 1$ (zeroing out all other $i$'s $z(i,S)$'s ) without violating \eqref{eq:conflp2}. We then  add $(i,\{j_1\})$ to $\calR$.
+	
+	Otherwise, there exists a machine $i'$ (which could be in a different bucket) and a set $S\in \calFr_{i'}$ such that $z(i',S) \in (0,1)$ and $j_1 \in S$. 
+	Now define the set $T$ as follows. If $c_{j_2} > \frac{D_{i'}}{8C\log n}$, then $T = \{j_2\}$; otherwise $T = S - j_1 + j_2$. Note that in either case $T \in \calFr_{i'}$.
+	In the first case, $j_2$ is large for $i'$. In the second case, $|T| = |S|$ and $\sum_{j\in T} c_j \ge \sum_{j\in S} c_j$ since $c_{j_2} \geq c_{j_1}$ by choice of $j_1$.
+	
+	We modify $z$-as follows. We decrease $z(i,\{j_2\})$ and $z(i',S)$ by $\delta$ and increase $z(i,\{j_1\})$ and $z(i',T)$ by $\delta$ till one of the values becomes $0$ or $1$. 
+	As before, this preserves the LHS of \eqref{eq:conflp1} and can only decrease the LHS of \eqref{eq:conflp2} (for jobs $j\in S\setminus j_1$ if $T = \{j_2\}$).
+%	Also note that $z^L(j)$ can only increase for any job; in particular no job leaves $\calL$. {\Huge NOT CORRECT}
+   This process ends with assigning $z(i,\{j_1\}) = 1$ and we add $(i,\{j_1\})$ to $\calR$.
+   
+   \begin{claim}\label{clm:002}
+Subroutine Fix Large  Machine $i$ modifies the LP solution and adds $i$ to $\calR$. 
+   	\end{claim}
+   \noindent
+   Note that Fix Large Machine can make a small machine $i'$ hybrid or large for its bucket since $z^L(i')$ could potentially increase.  
+   We run the following while loop in Step 1 of te algorithm.
+   
+   \paragraph{Step 1: Taking care of large machines}
+   \begin{itemize}[noitemsep]
+   	\item[] While $\calL$ is non-empty: 
+   	\begin{itemize}[noitemsep]
+   		\item If $i\in \calL$, then {\sf Fix-Large-Machine}($i$). Note that $i$ enters $\calR$ after this. This can increase the number of hybrid machines across buckets.
+   		\item For all $1\leq t\leq K$, if $B^\brt$ contains more than one hybrid machine, then {\sf Fix-Bucket}($t$). This can increase the number of machines in $\calL$.
+   	\end{itemize}
+   \end{itemize}
+   The above while loop terminates in at most $m$ iterations, since the first bullet point adds a machine to $\calR$.
+%   If there are more than one hybrid in any bucket, we apply Step 2 again. Since Step 3 moves machines to $\calR$, this process can go on for at most $m$ steps. After doing this sequence of steps, we have the following scenario.
+%   
+   \begin{claim}\label{clm:003}
+   	At the end of {\bf Step 1}, we have for every bucket $t$, at most one  $i\in B^\brt\setminus\calR$ has $z^L(i) \in (0,1)$ and the rest have $z^S(i) = 1$. Furthermore, for every $i\in \calS$ and $z(i,S) > 0$, 
+   	we have $\sum_{j\in S} c_j \geq D_i/2$.
+   	\end{claim}
+   	
+
+   
+   
+%	We need to make sure that $S - j_1 + j_2$  lies in 
+%	Note that $S$ could already have one (or more) copies of $j_2$; we have just increases $n(S,j_2)$ by additive $1$. Since $c_{j_1} \leq c_{j_2}$, the total capacity of $S-j_1+j_2$ exceeds that of $S$. The cardinality of both sets are the same. Therefore, they are valid sets to put $z$-mass on. We keep doing this modification till one of the fractional values become integral. Since for $i$, mass moves from large configurations $(i,\{j\})$ of larger $c_j$-capacity to smaller $c_j$-capacity, this process terminates at one point. At this point, we must have $z(i,\{j_1\}) = 1$; we add $(i,\{j_1\})$ to $\calR$.
+%	
+	%We perform Step 3 for all large machines. After Step 3, every bucket $B^\brt\setminus \calR$ contains at most one hybrid machine $i_t$ with $z^L(i_t) \in (0,1)$ and small machines $i$ with $z^S(i) = 1$.
+%	At the end of it, for every machine $i$ there can be at most one large configuration $\{j\}$ with $z(i,\{j\}) > 0$.\medskip
+%	
+%	We repeat this step while there  exists a  demand $j \in B^\brt$ for which there are two large configurations, say $(\{p_1\}, j), (\{p_2\}, j)$ with positive $y$ assignments, and suppose $\bc_{p_1} < \bc_{p_2}$ without loss of generality. There are now two cases depending on whether item type $p_1$ is contained in any other non-integrally assigned configuration or not.
+%	
+%	\medskip \noindent {\bf Case 3b(i): There exists demand $j' \notin \calR$ and configuration $(T,j')$ such that $n(T,p_1) \geq 1$ and $y(T,j') > 0$.}
+%	In this case, note that $j'$ may not belong to bucket $t$. Now, if item type $p_2$ is a small item type for demand $j'$, then let $T'$ denote the multi-set obtained from $T$ be adding one item of type $p_2$ and removing one item of type $p_1$. Since $p_1$ has smaller size than $p_2$, clearly the total size of items in $T'$ will exceed that of $T$. On the other hand, if $p_2$ is a large item type for $j'$, then let $T' = \{p_2\}$ and we use the large configuration of $(T',j')$. In both cases, we perform the following updates at a uniform rate: increase $y(\{p_1\},j)$ and $y(T',j')$ and decrease $y(\{p_2\},j)$ and $y(T,j')$, and stop when one of them reaches $0$ or $1$. If in the process some demand is integrally assigned, we include it in $\calR$.
+%	
+%	\medskip \noindent {\bf Case 3b(ii): There exists no demand $j \notin \calR$ and configuration $(T,j')$ such that $n(T,p_1) \geq 1$ and $y(T,j') > 0$.}
+%	In this case, we have at least $1$ free capacity of item type $p_1$, and so we set $y(\{p_1\},j)= 1$ and all other $y(S,j) = 0$ for $S \neq \{i_1\}$. We add $j$ to the rounded set $\calR$ and repeat this step (3b).
+%	
+%	
+%	\begin{claim} \label{cl:step3b}
+%		If $\{y(S,j)\}$ is a feasible to the relaxed configuration LP, then after a single execution of either case 3b(i) or case 3b(ii), the modified solution remains feasible for the relaxed configuration LP, and moreover, invariant~(I) continues holds for all buckets $\leq t-1$.
+%	\end{claim}
+%	\begin{proof}
+%		Again, it is easy to check the feasibility of LP solution much like~\Cref{cl:swap1}. We also claim that the invariant~[(I1)] continues to hold (for bucket $t-1$) during this process. Indeed, we only need to be worried for the case when $j'$ is of bucket less than $t$, as otherwise we are not modifying the configurations in lower buckets. In this case it will be the unique fractional demand of this bucket guaranteed by invariant~[I1]. Further $(T',j')$ will also be a large configuration for this demand $j'$. Therefore, $y^l(j')$ does not change, and so, the invariant still holds.
+%	\end{proof}
+%	
+%	To summarize, when the process ends, all demands $j \in B^\brt$  except perhaps for one demand satisfy the property that $y^l(j)$ is either 0 or 1. Further, for any demand $j$, there is at most one large configuration $(S,j)$ with positive $y(S,j)$ value. If a large configuration $(\{i\},j)$ satisfies $y(\{i\},j)=1$, then we include $j$ in $\calR$. Thus, for bucket $t$, there is at most one large configuration $(S,j), j \in B^\brt \setminus \calR$  such that $y(S,j)$ strictly between $0$ and $1$. Moreover, since this fractional demand is the demand $j_{k+1}$ identified in Claim~\ref{cl:step3a}, it has the smallest $f$ among all $j \in B^\brt \setminus \calR$. Thus, we satisfy the invariant for bucket $t$ as well. Observe that right there is exactly one large configuration with positive $y$ value serving $j_k$. However, when we carry out the step (3b) for a bucket larger than $t$, we may redistribute the large assignment of $j$ over several large configurations, but $y^l(j)$ will remain unchanged.
+%	
+
+%	\paragraph{Step 2:} This takes input a hybrid machine $i\in B^\brt\setminus \calR$ with the property there exists at least two jobs $j_1$ and $j_2$
+%	which are large for $i$, $z(i,\{j_1\}) > 0$ and $z(i,\{j_2\}) > 0$, and neither $j_1$ or $j_2$ are in $\calL$. This subroutine, which is very similar to Fix Large Machine, modifies the LP solution and at the end at least one new job enters $\calL$.
+%	
+%Let $j_1$ be the smallest capacity job among jobs $j$ with $z(i,\{j\}) > 0$ and $j\notin \calL$. Let $j_2$ be another such job which is guaranteed to exist.
+%		%Pick any hybrid  machine $i$ and, after renaming, let $j_1,j_2,\ldots,j_r $ be the jobs in non-decreasing capacity order,  with $z(i,\{j_t\})>0$ for all $1\leq t\leq r$. 
+%%	Starting with $j_1$, we check if there exists any other machine $i'$ (small or hybrid) and {\em small} configuration $S$ for $i'$ containing $j_1$.
+%Since $j_1\notin \calL$, there must exist some machine $i'$  with $z(i',S) > 0$ and $j_1\in S$ for some small configuration $S$. We now move mass precisely as in Step 3. 
+%Define a set $T$ as follows. If $c_{j_2} > D_{i'}/4\log n$, then $T = \{j_2\}$; otherwise $T = S - j_1 + j_2$. Note that in either case $T \in \calFr_{i'}$.
+%	In the first case, $j_2$ is large for $i'$. In the second case, $|T| = |S|$ and $\sum_{j\in T} c_j \ge \sum_{j\in S} c_j$ since $c_{j_2} \geq c_{j_1}$ by choice of $j_1$. We decrease $z(i,\{j_2\})$ and $z(i',S)$ by $\delta$ and increase $z(i,\{j_1\})$ and $z(i',T)$ by $\delta$ till one of the values becomes $0$ or $1$. 
+%	As before, this preserves the LHS of \eqref{eq:conflp1} and can only decrease the LHS of \eqref{eq:conflp2} (for jobs $j\in S\setminus j_1$ if $T = \{j_2\}$).
+%	Unlike Step 3, once we are done with job $j_1$, we won't have $z(i,\{j_1\}) = 1$; either $j_1$ enters $\calL$ or all other jobs enter $\calL$.
+%	
+%	We keep performing this procedure; once again this procedure increases large-configuration mass on lower capacity configurations, and therefore it will terminate.
+%	After termination, we have the following property: for any hybrid machine $i$ and jobs $j_1,\ldots,j_r$ with $z(i,\{j_t\}) > 0$, there can be at most one job $j_t$ which appears
+%	in a small configuration of some other machine $i'$ (hybrid or small). For the hybrid machine $i_t$, let this job be $j_t$. Note that $i_t$ and $i_{t'}$ could have the same $j_t$. \smallskip
+%	
+%	Next, for every hybrid machine $i$ with $z^L(i) < 1 -1/2K$, we simply zero-out their large configuration mass. Note that $z^S(i) > 1/2K$ for all such machines. We rename these machines small.
+%	Let $i_1,\ldots,i_{K'}$ be the hybrid machines that remain with $K' \leq K$. Let $J'$ be the jobs which are large for machine in $K'$.
+%	Note that $|J'| \geq K'$.
+
+\paragraph{Step 2: Taking care of hybrid machines.} 
+Let $\calH$ be the set of hybrid machines at this point. We know that $|\calH| \leq K \leq C\log n$ since each bucket has at most one hybrid machine.
+For any machine $i\in \calH$ with $z^L(i) \le 1-1/K$, we zero-out all its large contribution. More precisely, for all $j$ large for $i$ we set $z(i,\{j\})= 0$.
+Note that \eqref{eq:conflp1} is no longer true, but it holds with RHS $\geq 1/K$. Note that these machines enter $\calS$.
+
+At this point, we have $\calH$ where every $i\in \calH$ has $z^L(i) > 1-1/K$. Let $K' := |\calH|$. Let $J'$ be the set of jobs $j$ which are large for some machine $i\in \calH$ and $z(i,\{j\}) > 0$.
+Let $G$ be a bipartite graph with $\calH$ on one side and $J'$ on the other and we draw an edge $(i,j)$ iff $j$ is large for $i$.
+\begin{claim}
+	There is a matching in $G$ saturating all $i\in \calH$.
+\end{claim}
+\begin{proof}
+Pick a subset $\calH' \subseteq \calH$ and let $J''$ be its neighborhood in $G$. We need to show $\sum_{j\in J''} s_j \geq \calH'$.
+Since $z$ satisfies \eqref{eq:conflp2}, we get
+\[
+\sum_{j\in J''} s_j \geq \sum_{j\in J''} \sum_{i\in \calH'} z(i,\{j\}) = \sum_{i\in \calH'} \sum_{j\in J''} z(i,\{j\})  > (1-1/K)|\calH'| \geq |\calH'| - 1
+\]
+The inequality follows since $J''$ is the neighborhood of $\calH'$ and the fact that $z^L(i) > 1-1/K$ for all $i\in \calH$.
+The claim follows since $s_j$'s are integers.
+\end{proof}
+If machine $i\in \calH$ is matched to job $j$, then we assign $i$ this job and add $i$ to $\calR$. Let $J_M \subseteq J'$ be the subset of jobs allocated; note $|J_M| \leq K$.
+After this point we have only small machines remaining. For every $i\in \calS$ and every small configuration $S$ with $z(i,S) > 0$, we move this mass to $z(i,S\setminus J_M)$.
+Note that $\sum_{j\in S\setminus J_M} c_j \geq  \sum_{j\in S} c_j - |J_M|\cdot \frac{D_i}{8C\log n} \geq 3D_i/8$ where we use the fact that $\sum_{j\in S} c_j \geq D_i/2$ (by Claim~\ref{clm:003}) and $K\leq C\log n$.
+
+
+\begin{claim}\label{clm:007}
+At the end of {\bf  Step 2}, we have a set of residual machines $\calS$ and a set of residual jobs $J_{res}$  and a solution $z(i,S)$ where 
+\begin{enumerate} [noitemsep]
+	\item For all $i\in \calS$ we have $z(i,S) > 0$ iff $|S| \leq f_i$, $\sum_{j\in S} c_j \geq 3D_i/8$, and $c_j < \frac{D_i}{8C\log n}$ for all $j\in S$.
+	\item $\forall i \in \calS, ~ \textstyle 1 \ge \sum_{S} z(i,S)  \geq   1/K \geq \frac{1}{C\log n}$.
+	\item $\forall j\in J_{res}, ~ \textstyle \sum_{i} z(i,S)n(S,j)  \leq  s_j$.
+	
+\end{enumerate}
+\end{claim}
+\paragraph{Step 3: Taking care of Small Machines.} We convert the LP solution in Claim~\ref{clm:007} to an assignment LP solution in the standard way.
+For every $i\in \calS$ and $j\in J_{res}$ define $z_{ij} = \sum_{S} z(i,S)n(S,j)$. Note that this satisfies the constraint of the assignment LP:
+	\begin{alignat}{4}
+		&& \quad \forall j \in J_{res},   &\quad  \textstyle \sum_{i\in \calS} z_{ij}  \leq  s_j \notag  \\
+		&& \quad \forall i\in \calS ,      &\quad  \textstyle \sum_{j\in J_{res}}  z_{ij}c_j \geq \frac{3D_i}{8C\log n} \notag\\
+	&& \quad \forall i\in \calS ,      &\quad  \textstyle \sum_{j\in J_{res}}  z_{ij} \leq f_i \notag\\ 
+		&& \quad \forall i\in \calS, j\in J_{res} ~\textrm{with}~ c_j \geq \frac{D_i}{8C\log n}, & \quad z_{ij}   =  0   \notag
+	\end{alignat}
+	The last equality follows from point $1$ of Claim~\ref{clm:007}.
+The first inequality follows from point 3 of Claim~\ref{clm:007}. To see the second and third point, note 
+that for any $i\in \calS$,
+\[
+\sum_{j\in J_{res}} z_{ij}c_j = \sum_j \sum_S z(i,S)n(S,j)c_j = \sum_S z(i,S) \sum_j n(S,j)c_j \geq \frac{1}{C\log n}\cdot \frac{3D_i}{8}
+\]
+	and,
+\[
+\sum_{j\in J_{res}} z_{ij} = \sum_j \sum_S z(i,S)n(S,j) = \sum_S z(i,S) \sum_j n(S,j) \leq f_i
+\]
+since for any $S$, $\sum_{j\in S} n(S,j) \leq f_i$. \smallskip
+
+Now we use Theorem~\ref{thm:shmoystardos} to find an allocation of $J_{res}$ to machines $\calS$ such that every machine gets capacity $\geq \frac{D_i}{4C\log n}$.
+
+\end{proof}
+
+
+\subsection{Assignment LP for $Q|f_i|C_{min}$}
+Suppose we are given $m$ machines $M$ with cardinality constraints $f_1,\ldots,f_m$, and $n$ types of  jobs $J$ with capacities $c_1 \geq \cdots \geq c_n$. 
+Let $(s_1,\ldots, s_n)$ be a supply vector, that is, there are $s_j$ copies of job $j$. 
+Suppose there exists a feasible solution to the following LP.
+\begin{alignat}{4}
+	&& \quad \forall j\in J,  &\quad  \textstyle \sum_{i\in M} z_{ij} \leq s_j \label{eq:asslp1} \\
+	&& \quad \forall i\in M,  &\quad  \textstyle \sum_{j\in J} c_jz_{ij}  \geq D_i \label{eq:asslp2}\\
+	&&\quad \forall i\in M, & \quad \textstyle \sum_{j\in J} z_{ij}  \leq  f_i \label{eq:asslp3}\\
+	&& \quad \forall i\in \calS, j\in J_{res} ~\textrm{with}~ c_j \geq C_i, & \quad z_{ij}   =  0   \label{eq:asslp4}
+\end{alignat}
+\def\zz{z^{\mathsf{int}}}
+%For the correct guess, the above LP is feasible. If so, using the fact that $c_p \leq T_i$ for all $i\sim p$, we can get a feasible solution with a slight hit in the demand.
+\begin{theorem}\label{thm:shmoystardos}
+	If \eqref{eq:asslp1}-\eqref{eq:asslp4} is feasible, then there is an integral assignment $\zz_{ij}$ which satisfies \eqref{eq:asslp1}, \eqref{eq:asslp3} and \eqref{eq:asslp4}, and 
+	$\quad \forall i\in M, ~~ \sum_{j\in J} c_j\zz_{ij}  \geq D_i - C_i$.
+\end{theorem}
+\begin{proof} {\large NEEDS BETTER WRITING} We repeat the argument of Shmoys and Tardos~\cite{bibid}.
+Form $\floor{\sum_{j\in J} z_{ij}} \le f_i$ copies of every machine; let $N_i$ be the copies of machine $i$. Order the jobs with multiplicities s.t. $c_1 \geq c_2 \geq \cdots \geq c_N$ where $N = \sum_j s_j$.
+Modify $z_{ij}$ to get an assigment $z_{ij}$ for $i\in \cup N_i$ and $j\in [N]$ as follows. We do this for one machine $i$.
+
+Given $z_{ij}$'s we form $|N_i| + 1$ groups $S_1,\ldots, S_{|N_i|},S_{|N_i|+1}$ with $\sum_{j\in S_t} z_{ij} =1$ for all $1\leq t\leq |N_i|$ and $\sum_{j\in S_t} z_{ij} < 1$ for $t = |N_i|+1$.
+Note that $\sum_{j\in S_t} z_{ij}c_j < c_{j'}$ for $j'\in S_{t-1}$. When we do this modification for all machines, we get a fractional matching solution where all the $N_i$ copies get fractional value $1$ but the jobs are at most $1$.
+So, there is an integral matching. The total integral load on machine $i$ is at least $\sum_{t>1} \sum_{j\in S_t} z_{ij}c_j \geq D_i - C_i$ since $z_{ij} = 0$ for $c_j > C_i$.
+	
+	Cardinality constraint vacuously satisfied.
+\end{proof}
