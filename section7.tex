@@ -359,3 +359,74 @@ So, there is an integral matching. The total integral load on machine $i$ is at 
 	
 	Cardinality constraint vacuously satisfied.
 \end{proof}
+
+\subsection{Lower Bound}
+We show that the configuration LP for the problem of allocating jobs to machines of different speeds to maximize the minimum processing time has super-constant integrality gap.
+\begin{theorem}
+	The integrality gap of CLP is $\Omega(\log n/\log\log n)$.
+\end{theorem}
+\begin{proof}
+	\def\M{\mathcal{M}}
+	Fix $K$. We present an instance $\calI_K$ for which configuration LP is feasible but any integral allocation must violate the demand of some machine by factor $K$.
+	
+	First we describe the machines in $\calI_K$.
+	\begin{enumerate}
+		\item There is $1$ machine $M_0$ with $D(M_0) = 1$ and $f(M_0) = 1$.
+		\item There are $K$ machines $M_1,\ldots,M_K$ with $D(M_i) = K^{-i}$ and $f_i := f(M_i) = K^{2K + 1}\cdot K^{-2i}$.
+		\item There are $K$ {\bf classes} of machines $\M_1,\M _2,\ldots, \M _K$. Machines in the same class are equivalent. 
+		There are $f_i$ machines in $\M_i$ and they are numbered $N^{(i)}_1,\ldots,N^{(i)}_{f_i}$.
+		Each machine $N$  in class $i$ has $D(N) = \frac{1}{f_iK^i} = K^{-(2K+ 1)}\cdot K^i$ and $f(N) = 1$.
+	\end{enumerate}
+	Now we describe the jobs.
+	\begin{enumerate}
+		\item There are $K$ ``big jobs'' $J_1,\ldots,J_K$ with $c(J_i) = 1$.
+		\item There are $K$ other types of jobs of the same capacity. Job $J$ of type $i$ has capacity $c(J) = c_i :=  \frac{1}{f_iK^i} = K^{-(2K+1)}K^i$  and there are $n_i := f_i (1+1/K) = (K+1)K^{2K}K^{-2i}$ of them.
+		We divide these $n_i$ jobs into two sets $S_i \cup T_i$ where $|S_i| = f_i$ and $|T_i| = f_i/K$. We order the jobs in $S_i$ arbitrarily and call them $P^{(i)}_1,\cdots,P^{(i)}_{f_i}$.
+	\end{enumerate}
+	So, the total number of machines in $\calI_K$ are $1 + K + \sum_{i=1}^K f_i  \leq K^{2K}$ and the number of jobs is $K + (1+1/K)\sum_{i=1}^K f_i \approx K^{2K}$. 
+	
+	\begin{lemma}
+		The Configuration LP is feasible.
+	\end{lemma}
+	\begin{proof}
+		We describe a fractional solution.
+		\begin{enumerate}
+			\item For machine $M_0$ we satisfy as follows: set  $y(M_0,J_i) = 1/K$ for $i=1,\ldots,K$. Note $c(J_i) \geq D(M_0)$ and $|J_i| = 1 = f(M_0)$. 
+			\item For machine $M_i$ we satisfy as follows: set $y(M_i,J_i) = 1-1/K$ and $y(M_i,S_i) = 1/K$. Recall $S_i$ are the $f_i$ jobs of type $i$. 
+			\begin{itemize}
+				\item Note $c(J_i) = 1 \geq D(M_i) = K^{-i}$ and 	$|J_i| = 1 \leq f(M_i) = K^{2K+1}K^{-2i}$ since $i\leq K$.
+				\item Note $c(S_i) = |S_i|\cdot \frac{1}{f_iK^i} = \frac{1}{K^i} = D(M_i)$. Note $|S_i| = f_i = f(M_i)$.
+			\end{itemize}
+			\item For $1\leq i\leq K$, for a machine $N^{(i)}_j$ in class $i$, where $1\leq j\leq f_i$, we satisfy it as follows: $y(N^{(i)}_j, P^{(i)}_j) = 1-1/K$ and $y(N^{(i)}_j, t) = 1/f_i$ for all $t\in T_i$.
+			Since $|T_i| = f_i/K$, the total fractional $y$-amount that $N^{(i)}_j$ gets is $1$. Also note that $N^{(i)}_j$ gets singleton jobs of type $i$ whose capacity is $\frac{1}{f_iK_i} = D(N^{(i)}_j)$.
+		\end{enumerate}
+		We need to show that no job is over allocated.
+		\begin{enumerate}
+			\item The big jobs $J_i$ is given $1/K$ to $M_0$ and $(1-1/K)$ to $M_i$.
+			\item For $1\leq i\leq K$, $1\leq j\leq f_i$, job $P^{(i)}_j \in S_i$ is given $1/K$ to $M_i$ and $(1-1/K)$ to $N^{(i)}_j\in \M_i$.
+			\item For $1\leq i\leq K$, job $t\in T_i$ is given $1/f_i$ to the $f_i$ machines of $\M_i$.
+		\end{enumerate}
+		This completes the description of the feasible solution.
+	\end{proof}
+	\begin{lemma}
+		The integral optimum must violate some machine by factor $\Omega(K)$.
+	\end{lemma}
+	\begin{proof}
+		Lets take machines in $\M_i$. Recall all machines here have demand of $\frac{1}{f_iK^i}$ and cardinality constraint of $1$.
+		Thus in the integral optimum, they {\bf must} get one job which is either big, or of type $i$ or larger. 
+		Now, the total number of jobs of type $j > i$ are 
+		\[
+		\sum_{j>i} f_j(1+1/K) = (K+1)K^{2K} \sum_{j > i} K^{-2j} \leq  (K+1)K^{2K}K^{-2i} \sum_{\ell=1}^\infty K^{-2\ell} = O\left(f_i/K\right)
+		\]
+		So, at least $(1 - \Theta(1/K))f_i$ of the machines in $\M_i$ get a job of type $i$ (or a big job but lets assume for now this don't happen -- can be ma).
+		Therefore, the number of type $i$ jobs left after satisfying machines $(M_0,\ldots,M_K)$ are only $\Theta(f_i/K)$.
+		
+		
+		Now take a machine $M_i$. We have $f(M_i) = f_i$ and $D(M_i) = 1/K^i$. 
+		First note that jobs of type $j < i$ are ``useless'' for $M_i$. Any $f_i$ of them (best to take them of type $(i-1)$)  gives capacity $f_i\cdot c_{i-1}  = \frac{f_i}{f_{i-1}K^{i-1}} = \frac{1}{K^{i+1}} =  \frac{1}{K}\cdot D(M_i)$. So any subset of these jobs that can fit in $M_i$ gives capacity $\leq D(M_i)/K$.
+		On the other hand, the total capacity of jobs remaining from type $j \geq i$ is  $\sum_{j\geq i} \Theta(f_j/K)\cdot \frac{1}{f_jK^j} = \Theta(1/K)\sum_{j\geq i} \frac{1}{K^j} = \Theta(D(M_i)/K)$.
+		
+		Therefore, any machine $M_i$ can't get more than $D(M_i)/K$ from the ``small'' jobs. But then they all can't get big jobs. 
+	\end{proof}
+	The above two lemmas prove the theorem after noting that $K = \Theta(\log n/\log\log n)$ where $n$ is either the number of machines of jobs.
+\end{proof}
