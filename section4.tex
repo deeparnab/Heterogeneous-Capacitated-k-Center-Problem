@@ -393,7 +393,7 @@ From the definition of $\effc(\cdot)$, we get $\effc(i,p)y_{ip} = \sum_{j\in C} 
 \begin{eqnarray}
 D := \sum_{j\in C} d_j \sum_{i\in S_k,p\in [P]} \x_{ijp} & = &  \sum_{i\in S_k,p\in [P]} \effc(i,p)y_{i,p}	\  \leq \ \sum_{u\leq U} \Delta^{u+1} \sum_{(i,p)\in A_u} y_{ip} \\
 	& \leq & (1/\epsilon)\sum_{u\le U: \textrm{ bad }} \Delta^{u+1} + \sum_{u\le U: \textrm{ good}} \Delta^{u+1} \alpha_u\\
-	&	  \leq & \  (1/\epsilon) \cdot \frac{\Delta^{U+2}}{\Delta - 1} + (1+\epsilon) \sum_{u: \textrm{good}}\Delta^{u+1} \floor{\alpha_u}  \\
+	&	  \leq & \  (1/\epsilon) \cdot \frac{\Delta^{U+2}}{\Delta - 1} + (1+\epsilon)\Delta \sum_{u: \textrm{good}}\Delta^{u} \floor{\alpha_u}  \\
 																				& \leq & \frac{(1+\epsilon)^2}{\epsilon^2}\Delta^U + (1+\epsilon)^2 \sum_{i\in S,p\in [P]}c_p\y_{ip} \\
 																				& \leq & \epsilon(1+\epsilon)^2 D + (1+\epsilon)^2 \sum_{i\in S,p\in [P]}c_p\y_{ip} 
 \end{eqnarray}
