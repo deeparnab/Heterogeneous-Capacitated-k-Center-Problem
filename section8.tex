@@ -79,7 +79,7 @@ The remaining copies of jobs must satisfy the residual demand. For this we simpl
 	& \quad \forall i\in [m] ,  &&\quad  \textstyle \sum_{p\sim i} c_pz_{ip}  \geq T'_i \label{eq:assgnlp2}\\
 	& \quad \forall i\in [m], && \quad \textstyle \sum_{p\sim i} z_{ip}  \leq  k'_i \label{eq:assgnlp3}
 \end{alignat}
-\def\zz{z^{\mathsf{int}}}
+
 For the correct guess, the above LP is feasible. If so, using the fact that $c_p \leq T_i$ for all $i\sim p$, we can get a feasible solution with a slight hit in the demand.
 \begin{lemma}\label{lem:iter}
 If \eqref{eq:asslp1}-\eqref{eq:asslp3} is feasible, then there is an integral assignment $\zz_{ip}$ which satisfies \eqref{eq:assgnlp1} and \eqref{eq:assgnlp3}, and 

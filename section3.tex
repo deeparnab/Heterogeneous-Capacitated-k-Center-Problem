@@ -1,12 +1,52 @@
 \newpage
-\section{Preliminaries: LP Relaxations and Supply Polyhedra}
+\section{Max-Min Allocation Problems and Supply Polyhedra}\label{sec:regiongrowing}
+An instance of the non-uniform max-min allocation problem $Q||C_{min}$, is described  $m$ machines $M$ with demands $D_1,\ldots,D_m$ and $n$  types of jobs $J$ with capacities $c_1,\ldots,c_n$. 
+In the version with cardinality constraints, that is $Q|f_i|C_{min}$ we are also given positive integers $f_1,\ldots, f_m$.
+
+A {\em supply vector} $(s_1,\ldots,s_n)$ where each $s_j$ is a non-negative integer
+is called {\em feasible} for instances of these problems if the ensemble formed by $s_j$ copies of jobs of capacity $c_j$ can be allocated feasibly to satisfy all the demands.
+The {\em supply polyhedra} of these instances desire to capture these feasible supply vectors.
+
+\begin{definition}[Supply Polyhedron]
+	Given an instance $\calI$ for a max-min allocation problem, a polyhedron $\calP(\calI)$ is called an $\alpha$-approximate supply polyhedron if 
+	(a) all feasible supply vectors lie in $\calP(\calI)$, and (b) given any non-negative integer vector $(s_1,\ldots,s_n)\in \calP(\calI)$ there exists an assignment
+	of the $s_j$ jobs of capacity $c_j$ to the machines such that machine $i$ receives a total capacity of $\geq D_i/\alpha$.
+\end{definition}
+
+Ideally, we would like {\em exactly} supply polyhedra. One guess would be the convex hull of all the supply vectors; indeed this is the tightest polytope satisfying condition (a).
+Unfortunately, there are instances of $Q||C_{min}$ (and even for the uniform case $P||C_{min}$), the convex hull of supply vectors contain infeasible integer points. This instance is
+motivated by integrality gap examples for machine scheduling~\cite{bibid}.
+\begin{theorem}
+	There cannot exist $\alpha$-approximate supply polyhedra (or convex sets) for $\alpha < 1.001$ for all  $Q||C_{min}$ instances.
+\end{theorem}
+\begin{proof}
+\comment{	Needs to be written }.
+\end{proof}
+\begin{remark}\emph{
+At this point, we should underscore the difference between supply polyhedra and say LP relaxations for solving  these allocation problems.
+Given an instance of say $Q||C_{max}$ {\em along with} the supply vector (which is one standard way the problems are stated), there does exist a polytope capturing all the feasible allocations. It is the integer hull.
+However, in general, the description of this integer hull uses the supply vector in describing these constraints and therefore are non-linear when the supplies are variables. Nevertheless, as we discuss below, many LP relaxations
+studied in the literature imply supply polyhedra, and their integrality gaps imply the approximation factor for the polyhedra as well.
+}
+\end{remark}
+
+For our purposes, we need more technical conditions from the supply polyhedra. The first is a natural condition which states if one moves the supply to higher capacity jobs, then feasibility remains.
+The second is related to polynomial time algorithms.
+
+\begin{definition}
+	An supply polyhedra $\calP(\calI)$ for is said to be {\em useful} if it satisfies the following two conditions.
+	\begin{asparaitem}
+		\item[\emph{(Upward Feasibility.)}] Reorder the jobs so that $c_1\le c_2 \le \cdots \le c_n$.
+		If $(s_1,\ldots,s_n)\in \calP$ and $(\bar{s}_1,\ldots,\bar{s}_n)$ is a vector satisfying $\sum_{k\geq i} \bar{s}_k \geq \sum_{k\geq i} s_k$, then $(\bar{s}_1,\ldots,\bar{s}_n)\in \calP$ as well.
+		\item[\emph{($\beta$-Approximate Separation.)}] Given any $y\in \R^n_{\geq 0}$,  there is a polynomial time procedure which either returns a hyperplane separating $y$ from $\calP$, or asserts that 
+		$y\in \calP(\calI')$ for the supply polyhedra of the instance $\calI'$ where all demands have been reduced by a factor $\beta$.
+	\end{asparaitem}
+\end{definition}
+
 \begin{itemize}[noitemsep]
 	\item Re-state natural LP for \mckc.
-	\item Definition of Supply Polyhedra.
-	\item Technical Conditions -- running sums and separation oracle.
 	\item Supply Polyhedra for $Q||C_{min}$.
 	\item Supply Polyhedra for $Q|f_i|C_{min}$.
-	\item No $(1+\epsilon)$-supply polyhedra possible.
 	\item Connection to Integrality Gaps ... how $\alpha$-appx supply polyhedra imply $\alpha$-approximation.
 	\item Rounding Assignment  for Small Jobs.
 \end{itemize}

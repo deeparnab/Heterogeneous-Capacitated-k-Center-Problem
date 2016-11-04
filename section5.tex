@@ -1,2 +1,80 @@
-\newpage \section{LP-Based Reduction to Max-Min Allocation}
-Ellipsoid, Round and Cut, 
+\newpage \section{\mckc via Supply Polyhedra}
+In this section, we prove the following theorem.
+\begin{theorem}\label{thm:reduction}
+Suppose there exists $\alpha$-approximate supply polyhedra  for all instances of $Q|f_i|C_{min}$ (respectively, $Q||C_{min}$) which are useful with $\beta$-approximate separation oracles .
+Then for any $\epsilon> 0$, there is an $\left(\tilde{O}(1/\epsilon),\alpha\beta(1+\eps)\right)$-bicriteria approximation algorithm for the \mckc problem (respectively, with soft capacities).
+\end{theorem}
+\begin{proof}{\bf deepc: write about graph etc. somewhere it has been written.}\smallskip
+	
+\noindent
+Recall the natural LP relaxation for the \mckc problem.
+
+\begin{minipage}{0.45\textwidth}
+	\begin{alignat}{4}
+		& \quad \forall j\in C,   &&\quad  \textstyle \sum_{i\in F} \sum_{p\in [P]}  x_{ijp} \geq 1 \label{eq:lp1} \\
+		& \quad \forall i\in F,p\in [P] ,  &&\quad  \textstyle \sum_{j\in C}  x_{ijp} \leq c_py_{ip} \label{eq:lp2} \\
+		& \quad \forall p\in [P], && \quad \textstyle \sum_{q \geq p} \sum_{i\in F} y_{iq}   \leq \sum_{q\geq p} k_q \label{eq:lp3}  
+	\end{alignat}
+\end{minipage}
+~\vline~
+\begin{minipage}{0.45\textwidth}
+	\begin{alignat}{4}
+		& \quad \forall i\in F, j\in C,p\in [P],  && \quad x_{ijp} \leq y_{ip}\label{eq:lp4}   \\
+		& \quad \forall i\in F, && \quad \textstyle\sum_{p\in [P]} y_{ip} \leq 1 \label{eq:lp5}  \\
+		& \quad \forall i\in F,j\in C,p\in [P], && \quad x_{ijp},y_{ip} \geq 0\label{eq:lp6}
+	\end{alignat}
+\end{minipage}
+\smallskip
+
+\noindent
+For the version with soft capacities, we do not have the constraint \eqref{eq:lp5}. \smallskip
+
+For the \mckc problem, as stated, the above LP has unbounded integrality gap. We strengthen the LP as follows.
+Recall Definition~\ref{def:comp-nbr} of complete neighborhoods: a subset $T\subseteq F$ is a complete neighborhood 
+if there exists $J\subseteq C$ with $\Gamma(J) \subseteq T$. We add a constraint for every collection $\calT := (T_1,\ldots,T_L)$ of $L$ disjoint complete neighborhood sets. 
+
+\def\yy{\bar{y}}
+Given $\calT$, we define an instance $\calI_\calT$ of the $Q|f_i|C_{min}$ problem as follows. There are $L$ machines with demand $D_\ell := |J_\ell|$ for $1\leq\ell\leq L$ where $J_\ell$ is the subset of $C$ responsible for $T_\ell$.
+The cardinality constraint for this demand is $f_\ell := |T_\ell|$. The capacities available are $c_1\leq \cdots \leq c_P$.
+Define  $\yy_p := \sum_{i\in \calT} y_{ip}$ for all $1\le p\le P$. If the \mckc instance is feasible, then there is an integral solution where $(\yy_1,\ldots,\yy_n)$ is a feasible supply vector for $\calI_\calT$.
+This is the constraint we add.
+
+\begin{equation}\label{eq:lp7}
+\forall \calT := (T_1,\ldots,T_L) \textrm{ disjoint neighborhood subsets}, \quad \yy \in \calP(\calI_\calT)
+\end{equation}
+\noindent
+We don't know how (and don't expect) to check feasibility of  \eqref{eq:lp7} for all collections $\calT$. However, we can still run ellipsoid method using the ``round-and-cut'' framework of \cite{bibid}.
+To begin with, we start with the LP\eqref{eq:lp1}-\eqref{eq:lp6} and obtain feasible solution $(x,y)$. Subsequently, we apply the decomposition Theorem~\ref{thm:decomp} to obtain the collection $\calT = (T_1,\ldots,T_L)$.
+We then check if $\yy \in \calP(\calI_\calT)$ or not. Since we have a $\beta$-approximate separation oracle for $\calP(\calI_\calT)$, we either are guaranteed that $\yy \in \calP(\calI'_\calT)$ where the $\ell$th demand is now 
+$D_\ell/\beta$. Or we get a hyperplane separating $\yy$ from $\calP(\calI_\calT)$ which also gives us a
+hyperplane separating $y$ from  LP\eqref{eq:lp1}-\eqref{eq:lp7}. This can be fed to the ellipsoid algorithm to obtain a new iterate $(x,y)$ and the above process repeated. The analysis of the ellipsoid algorithm\comment{deepc: need to be careful and correct here}
+tells us that in polynomial time we either prove infeasibility of the system \eqref{eq:lp1}-\eqref{eq:lp7} (implying the $\opt$  guess for \mckc is infeasible), or we obtain a solution  $(x,y)$ such that for the $\calS, \calT$ obtained via Decomposition Theorem~\ref{thm:decomp}
+and the instance $\calI_\calT$ so obtained, the solution  $\yy \in \calP(\calI'_\calT)$ for the $\beta$-shaded instance.
+
+Suppose the latter occurs. From this we can obtain the bicriteria solution to the \mckc problem as follows. 
+Recall the notation in the Decomposition Theorem~\ref{thm:decomp}. Since every set $S_k, 1\leq k\leq K$ is $(\tilde{O}(\frac{1}{\eps}),(1+\eps))$-roundable, there exists a rounding $Y_{ip}$ for $i\in S_k$  such that
+\begin{equation}\label{eq:repeat}
+\textstyle \sum_{q\geq p} \sum_{i\in S_k} Y_{iq} \leq \floor{\sum_{q\geq p} \sum_{i\in S_k} y_{iq}} 
+\end{equation}
+Install a capacity of $c_p$ wherever $Y_{ip} = 1$, and assign all the clients in $j\in C_\mathsf{blue}$ to a facility $\psi(j) \in \calS$ such that $d(j,\psi(j)) \leq \tilde{O}(\frac{1}{\eps})$. This can be done because each $S_k$ is a locally roundable set.
+Furthermore, if any $j\in \Cd$ has $\phi(j) \in \Cb$, then assign $j$ to $\psi(\phi(j))$. Therefore, we have taken care of clients in $\Cb$ and some clients of $\Cd$ violating capacities by $(1+\epsilon)^2$-factor.
+Let $k^{(S)}_p := \sum_{i\in \calS} Y_{ip}$ be the number of facilities of type $p$ opened, and let $k^{(T)}_p := k_p - k^{(S)}_p$.
+
+Now we come to $\calT$. Note that $\yy_p := \sum_{i\in \calT} y_{ip}$, and we have $\yy \in \calP(\calI'_\calT)$. Recall that $\calI'_\calT$ has $L$ machines with demands $D_\ell := |J_\ell|/\beta$ and $f_\ell := |T_\ell|$.
+\begin{claim}
+	$(k^{(T)}_1,\ldots, k^{(T)}_P) \in \calP(\calI'_\calT)$
+\end{claim}
+%	We now use the upward-feasibility property of $\calP$ to prove that the integral vector $(k^{(T)}_1,\ldots, k^{(T)}_P)$ also lies in $\calP(\calI'_\calT)$. 
+\begin{proof}To see this note that for all $p$, from \eqref{eq:repeat} and \eqref{eq:lp3}
+\[
+\textstyle \sum_{q\ge p} \sum_{i\in \calS} y_{iq} - \sum_{q\geq p} k^{(S)}_q \geq 0 ~~~\textrm{and} ~~~~ \sum_{q\geq p} k_q - \sum_{q\ge p}\sum_{i\in F} y_{iq} \geq 0
+\]
+which upon adding gives for all $p$, $\sum_{q\geq p} k^{(T)}_q \geq \sum_{q\ge p} \sum_{i\in \calT} y_{iq} = \sum_{q\geq p} \yy_q$.
+By the upward-feasibility property of $\calP$, we get the claim.
+\end{proof}
+Since $\calP(\calI'_\calT)$ is $\alpha$-approximate, we can find an allocation of the $k^{(T)}_p$ copies of jobs of capacity $c_p$ to the $L$ machines such that machine $\ell$ gets at most $f_\ell$ jobs
+and total capacity $\geq D_\ell/\alpha = |J_\ell|/\alpha\beta$. We install these capacities on the facilities of $T_\ell$. Since the diameter of each $T_\ell$ is $\tilde{O}(1/\epsilon)$, we can find an assignment $\psi$ 
+of $\Cbb$ to these open facilities such that $d(j,\psi(j)) = \tilde{O}(1/\epsilon)$ and capacity violation is at most $\alpha\beta$. Furthermore, when we assign $j\in \Cd$ for which $\phi(j) \in \Cbb$ to $\psi(\phi(j))$, 
+the total capacity violation is at most $(1+\eps)\alpha\beta$. 
+This completes the proof of Theorem~\ref{thm:reduction}.
+\end{proof}
