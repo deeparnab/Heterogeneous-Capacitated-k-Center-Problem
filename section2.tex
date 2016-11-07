@@ -1,41 +1,57 @@
-\newpage 
-\section{Reduction to Max-Min Allocation via Region Growing}
-In this section, we give a reduction to $Q|k_i|C_{min}$ when we allow logarithmic approximations. The main technique is region growing which was first used in the context of sparsest and multi cut problems~\cite{LeightonRao,GVY}.
-\begin{theorem}\label{thm:red}
-	Given an $\alpha$-approximation algorithm for $Q|k_i|C_{min}$, for any $\epsilon>0$ there exists an \\ $\left(O(\log n/\epsilon), \alpha(1+\epsilon)\right)$-approximate algorithm for the \mckc problem.
+%\newpage 
+\section{Reduction to Max-Min Allocation via Region Growing}\label{sec:regiongrowing}
+In this section, we give a reduction to \cckp  when we allow logarithmic approximations. As a corollary we obtain the proof of Theorem~\ref{thm:1}.
+\begin{theorem}\label{thm:weakred}
+	Given an $\beta$-approximation algorithm for \cckp (respectively, $Q||C_{min}$), for any $\epsilon>0$ there exists an $\left(O(\log n/\epsilon), \beta(1+\epsilon)\right)$-approximate algorithm for the \mckc problem (respectively, for the \mckc problem with soft capacities).
+\end{theorem}
+
+The main crux of the above proof is the following decomposition theorem obtained by the technique of region growing which was first used in the context of sparsest and multi cut problems~\cite{LeightonRao,GVY}.
+
+\begin{theorem}\label{thm:weakdecomp}
+	Given a guess $\opt$ for \mckc problem and any $\epsilon>0$,  there is an algorithm which partitions the facilities $F$ into a collection $\calT = (T_1,\ldots,T_L)$ of 
+	$O(\log n/\epsilon)$-complete neighborhoobd sets with $J_\ell$ responsible for $T_\ell$, and the client set $C = \Cd \cup \bigcup_{\ell=1}^L J_\ell$ such that
+	$\Cd$ is an $(O(\log n/\epsilon),\epsilon)$-deletable set.
 \end{theorem}
 \begin{proof}
-	We start with a guess of $\opt$ and the $\opt$-induced graph $G$. We assume this is a correct guess.
-	Given $G$ we given an algorithm construct an instance $\calI$ of $Q|k_i|C_{min}$.
-	Initially $\calI$ is empty. We maintain a set of alive clients $C'$ which is initially $C$. We maintain a working graph $H$ which is initialized to $G$ and is always a subgraph of $G$.
-	Given a client $j$ and an integer $t$, let $N_t(j)$ denote all the clients $j'$ s.t. $d_H(j,j') < 2t$ and $\Gamma_t(j)$ denote all the clients $j'$ with $d_H(j,j')  = 2t$.\smallskip
+Recall $G$ is the graph with $d(i,j) \leq \opt$ for $(i,j)\in G$. %	We start with a guess of $\opt$ and the $\opt$-induced graph $G$. We assume this is a correct guess.
+%	Given $G$ we given an algorithm construct an instance $\calI$ of $Q|k_i|C_{min}$.
+	Initially $\calT$ and $\Cd$ are empty. We maintain a set of alive clients $C'$ which is initially $C$. We maintain a working graph $H$ which is initialized to $G$ and is always a subgraph of $G$.
+	Given a node $j$ and an integer $t$, let $N^{(t)}_H(j)$ denote all the modes $j'$ s.t. $d_H(j,j') < t$ and $\Gamma^{(t)}_H(j)$ denote all the nodes $j'$ with $d_H(j,j')  = t$.
+	Note that for even $t$, we have $\Gamma^{(t)}_H(j) \subseteq C$.
+	\smallskip
 	
 	
 	Till $C'$ is empty, we perform the following operation.
-	Select an arbitrary active client $j\in C'$. Find the smallest $t$ such that $|\Gamma_t(j)| < \eps\cdot |N_t(j)|$. Since for all $s < t$ we have $|N_{s+1}(j)|\geq (1+\epsilon)|N_s(j)|$ which implies $|N_{s+1}(j)| > (1+\epsilon)^s$, 
-	we get  $t \leq (\ln n)/\epsilon$ where $n=|C'|$. Let us use $A_j$ to denote $N_t(j)$ and $B_j$ to denote $\Gamma_{t}(j)$. Also let us use $F_j$ to denote all the facilities neighboring any client in $A_j$. Note that any facility $i\in F_j$ has neighbors in $A_j \cup B_j$.
-	We now add a machine to $\calI$ and attribute it to the client $j$. Abusing notation, we call the machine $j$ as well.
-	We add the  cardinality constraint $k_j = |F_j|$. The speed of the machine is set to be $s_j := 1/|A_j|$.
-	Finally,  we delete $A_j\cup B_j$ from $C'$ and $A_j\cup B_j\cup F_j$ from $H$ and repeat. \smallskip
-	
-	At the end of the above operation, we have an instance $\calI$ where the machines and their cardinality constraints have been specified.
-	We are given $P$ jobs where the processing time of the $p$th job is $c_p$. This completes the description of the $Q|k_i|C_{min}$ instance.
-	
-	\begin{claim}
-		There exists an allocation where the total processing time of each machine is at least $1$.
-	\end{claim}
-	\begin{proof}
-		In the optimal solution to \mckc, a total capacity of $|A_j|$ must be installed among the facilities $F_j$. 
-		We mimic this solution for $\calI$, and since the speed of machine $j$ is $1/|A_j|$, the claim follows.
-	\end{proof}
-	\begin{claim}
-		Given an allocation to $\calI$ where each machine gets processing time $\geq \alpha$, we can construct a solution for the \mckc problem
-		which is $O(\log n/\epsilon)$-approximate and violates the capacities by at most $(1+\epsilon)/\alpha$-factor.
-	\end{claim}
-	\begin{proof}
-		For machine $j$ in $\calI$, let $S_j$ be the jobs allocated; we have $\sum_{p\in S_j} c_p \ge \alpha\cdot |A_j|$ and $|S_j| \leq k_j = |F_j|$.
-		We arbitrarily open $|S_j|$ facilities in $F_j$ to which we assign all the clients in $A_j \cup B_j$. Since $|B_j|<\eps |A_j|$, we have the total capacity opened is at least $\alpha/(1+\epsilon)$ times 
-		the total number of clients in $A_j\cup B_j$. Furthermore, every client in $A_j\cup B_j$ is at most $O(\log n/\epsilon)$-away from any facility in $F_j$. This implies the assignment.
-	\end{proof}	
+	Select an arbitrary active client $j\in C'$. Find the smallest even $t$ such that $|\Gamma^{(t)}_H(j)| < \eps\cdot |N^{(t)}_H(j)\cap C|$. Since for all $s < t$ we have $|N^{(s+2)}(j)\cap C|\geq (1+\epsilon)|N^{(s)}_H(j)\cap C|$ which implies $|N^{(s+2)}(j)\cap C| > (1+\epsilon)^{\frac{s}{2}}$, 
+	we get  $t \leq (2\ln n)/\epsilon$ where $n=|C'|$. Let us use $A_j$ to denote $N_t(j)$ and $B_j$ to denote $\Gamma_{t}(j)$. 
+	We define $T_\ell := N^{(t)}_H(j) \cap F$ and $J_\ell := N^{(t)}_H \cap C$; note that this is an $O(\log n/\epsilon)$-complete neighborhood. Furthermore, we add $J_\mathsf{ext} := \Gamma^{(t)}_H(j)$ to $\Cd$, and since
+	$|J_\mathsf{ext}| < \eps |J_\ell|$ and $\diam(J_\ell) = O(\log n/\epsilon)$, there exists a mapping $\phi_{j,j'}$ for $j\in J_\mathsf{ext}$ and $j'\in J_\ell$ such that $\sum_{j'\in J_\ell} \phi_{j,j'} = 1$ for all $j\in J_\mathsf{ext}$, and 
+	$\sum_{j\in J_\mathsf{ext}} \phi_{j,j'} \leq \epsilon$ for all $j\in J_\ell$, and $\phi_{j,j'} > 0$ only if $d(j,j') = O(\log n/\epsilon)$. That is, $J_\mathsf{ext}$ is a valid $(O(\log n/\epsilon),\epsilon)$-deletable set.
+	Finally, we delete $T_\ell \cup J_\ell \cup J_\mathsf{ext}$ from $H$ and $J_\ell \cup J_\mathsf{ext}$ from $C'$. We continue this procedure till $C'$ is empty. \end{proof}
+\begin{proof}[Proof of Theorem~\ref{thm:weakred}]
+	Given $\calT$ we form the instance $\calI$  of \cckp (or $Q||C_{min}$ in case of soft-capacities) described in Remark~\ref{rem:red}. We provide $k_p$ copies of job with capacity $c_p$. If $\opt$ is feasible, then there must exist a feasible solution to $\calI$. Furthermore, a $\beta$-approximate solution to $\calI$ gives an $\left(O(\log n/\epsilon),\beta\right)$-approximate solution to the clients in $C\setminus \Cd$. The theorem follows from Claim~\ref{clm:prelim3}.
+%	
+%	\begin{claim}
+%		There exists an allocation where the total processing time of each machine is at least $1$.
+%	\end{claim}
+%	\begin{proof}
+%		In the optimal solution to \mckc, a total capacity of $|A_j|$ must be installed among the facilities $F_j$. 
+%		We mimic this solution for $\calI$, and since the speed of machine $j$ is $1/|A_j|$, the claim follows.
+%	\end{proof}
+%	\begin{claim}
+%		Given an allocation to $\calI$ where each machine gets processing time $\geq \alpha$, we can construct a solution for the \mckc problem
+%		which is $O(\log n/\epsilon)$-approximate and violates the capacities by at most $(1+\epsilon)/\alpha$-factor.
+%	\end{claim}
+%	\begin{proof}
+%		For machine $j$ in $\calI$, let $S_j$ be the jobs allocated; we have $\sum_{p\in S_j} c_p \ge \alpha\cdot |A_j|$ and $|S_j| \leq k_j = |F_j|$.
+%		We arbitrarily open $|S_j|$ facilities in $F_j$ to which we assign all the clients in $A_j \cup B_j$. Since $|B_j|<\eps |A_j|$, we have the total capacity opened is at least $\alpha/(1+\epsilon)$ times 
+%		the total number of clients in $A_j\cup B_j$. Furthermore, every client in $A_j\cup B_j$ is at most $O(\log n/\epsilon)$-away from any facility in $F_j$. This implies the assignment.
+%	\end{proof}	
 \end{proof}
 
+As a corollary to Theorem~\ref{thm:weakred}, and using the fact that $Q||C_{min}$ has a PTAS ~\cite{azar epstein approx 98},  and our result (Theorem~\ref{thm:q}) that \cckp has a  quasipolynomial time approximation scheme (QPTAS), we get Theorem~\ref{thm:1}.\medskip
+
+
+In Section~\ref{sec:o1} we state a much stronger decomposition theorem than Theorem~\ref{thm:weakdecomp} which exploits the LP solution. 
+To exploit it for \mckc problem, however, and prove an analogous theorem as Theorem~\ref{thm:weakred}, we need to understand certain polyhedra with respect to the \cckp problem.
+We first do this in the next section.

@@ -1,81 +1,83 @@
-\newpage
-\section{The Decomposition Theorem}
+%\newpage
+\section{Proof of Decomposition Theorem~\ref{thm:decomp}}
 \def\F{F_\mathsf{tentative}}
-In the previous section, we found non-expanding balls around active clients to build the decomposition. These balls were based on the underlying graph $G$. We now give a more 
-delicate region growing procedure which uses an LP fractional solution as a guide. Recall the LP relaxation mentioned in Section~\ref{sec:introLP}. 
-We had variables $x_{ijp}$ to denote that a client $j$ gets assigned to location $i$ where a type $p$ facility has been opened, and $y_{ip}$ to denote that a facility of type $p$ has been opened at location $i$. 
-For the purpose of our rounding algorithm, we assume that we are given a feasible solution $(x,y)$ to this LP relaxation. 
-Our first step is to formalize the two notions described in Section~\ref{sec:introLP}, where
-%Of course, we will not be able to
-we wanted to get  a decomposition into a collection of complete neighborhoods (which correspond to \cckp instances)  and locally roundable pieces. 
-Of course, we will not be able to get such a clean decomposition. Indeed, as we iteratively identify pieces which are either locally roundable or a 
-complete neighborhood, the neighborhood structure of the remaining clients and facilities changes, and what may have been originally a locally roundable neighborhood piece may cease to be one subsequently. Our final algorithm then combines the above two ideas in a dynamic manner: we iteratively decompose the clients and facilities into three parts: the first being clients which are supported in the LP solution by locally-roundable neighborhoods, along with the facilities in these neighborhoods, the second is the clients and facilities which are isolated from each other and hence form the a complete neighborhood, and a third kind of clients (which we refer to as the deleted clients), which are in the proximity of the clients of the first two kinds, and their total demand can be charged to the demands in the first two kinds.
-%In fact, it is only the second kind of clients and facilities which causes the natural LP to have an unbounded integrality gap, and forces us to use a stronger configuration LP.
+%In the previous section, we found non-expanding balls around active clients to build the decomposition. These balls were based on the underlying graph $G$. We now give a more 
+%delicate region growing procedure which uses an LP fractional solution as a guide. Recall the LP relaxation mentioned in Section~\ref{sec:introLP}. 
+%We had variables $x_{ijp}$ to denote that a client $j$ gets assigned to location $i$ where a type $p$ facility has been opened, and $y_{ip}$ to denote that a facility of type $p$ has been opened at location $i$. 
+%For the purpose of our rounding algorithm, we assume that we are given a feasible solution $(x,y)$ to this LP relaxation. 
+%Our first step is to formalize the two notions described in Section~\ref{sec:introLP}, where
+%%Of course, we will not be able to
+%we wanted to get  a decomposition into a collection of complete neighborhoods (which correspond to \cckp instances)  and locally roundable pieces. 
+%Of course, we will not be able to get such a clean decomposition. Indeed, as we iteratively identify pieces which are either locally roundable or a 
+%complete neighborhood, the neighborhood structure of the remaining clients and facilities changes, and what may have been originally a locally roundable neighborhood piece may cease to be one subsequently. Our final algorithm then combines the above two ideas in a dynamic manner: we iteratively decompose the clients and facilities into three parts: the first being clients which are supported in the LP solution by locally-roundable neighborhoods, along with the facilities in these neighborhoods, the second is the clients and facilities which are isolated from each other and hence form the a complete neighborhood, and a third kind of clients (which we refer to as the deleted clients), which are in the proximity of the clients of the first two kinds, and their total demand can be charged to the demands in the first two kinds.
+%%In fact, it is only the second kind of clients and facilities which causes the natural LP to have an unbounded integrality gap, and forces us to use a stronger configuration LP.
+%
+%
+%% Ideas 1 and 2 described in~\Cref{sec:idea1,sec:idea2}. 
+%Towards that end, we first define the condition which implies that a subset of facilities $S$ can be rounded integrally while (approximately) preserving the total demand they were serving fractionally.
+%
+%\begin{definition}\label{def:rnding-mkc}
+%	A set of facilities $S\subseteq F$ is said to be $(a,b)$-roundable w.r.t feasible solution $(x,y)$ if
+%	\begin{itemize}%[noitemsep]
+%		\item[(a)] $\diam_G(S) \leq a$
+%		\item[(b)] there exists a rounding $Y_{ip} \in \{0,1\}$ for all $i \in S, p$ such that
+%		\begin{enumerate}
+%			\item $\sum_{q \geq p} \sum_{i\in S} Y_{iq} ~\leq~ \floor{\frac{1}{2} \cdot \sum_{q \geq p}\sum_{i\in S} y_{iq}}$ for all $p$, and
+%			\item $\sum_{j\in C} d_j \sum_{i\in S,p\in [P]} x_{ijp} \leq b\cdot \sum_{i\in S} \sum_{p\in [t]} c_p Y_{ip}$
+%		\end{enumerate}
+%	\end{itemize}
+%\end{definition}
+%The idea behind the above definition should be clear -- suppose $S$ is a set of facilities and consider a subset of demands $J$ which are being assigned (fractionally) by
+%the solution $(x,y)$ to $S$. If $S$ is $(a,b)$-roundable wrt $(x,y)$, then we can open facilities in $S$ integrally and reassign the demands in $J$ to these integral
+%facilities. By doing so, we shall increase the connection cost of demands in $J$ by an additive factor of $a$, and then we may violate the capacities of the integrally open
+%facilities by at most a factor $b$. Note that the rounding in each such piece locally preserves the bounds on the number of centers the integral solution opens as compared to the fractional LP solution -- in fact we only use half of the fractionally open facilities\footnote{The factor $1/2$ here is only needed for our rounding algorithm. The decomposition theorem can be proved even if we do not allow this factor.}.
+%% This corresponds to Idea~2 in~\Cref{sec:idea2}.
+%
+%
+%\begin{definition} \label{def:comp-nbr}
+%	A subset $S\subseteq F$ of facilities is called a {\em complete neighborhood} if there exists a client-set $J\subseteq C$ such that $\Gamma(J) \subseteq S$.
+%	In this case the subset $J$ is said to be {\em responsible} for $S$. Additionally, a complete neighborhood $S$ is said to be an $a$-complete neighborhood if $\diam(S) \leq a$.
+%\end{definition}
+%The idea behind this definition should also be clear -- indeed, if we find a complete neighborhood $S$ of facilities with say a set $J$ of clients responsible for it, then we know that the optimal solution must satisfy all the demand in $J$ by suitably opening facilities of sufficient capacity in $S$. Moreover, if we can find a disjoint collection of such complete neighborhoods, then the overall problem resembles the \cckp problem. % described in Idea 1.
+%
+%\medskip \noindent
+%As described earlier, our algorithm tries to \emph{partition} the set of facilities into a disjoint collection of sets of small diameter, such that each set is either a \emph{complete neighborhood} of some clients, or is a roundable set with $a$ and $b$ being small constants.
+%However, since the client-facility connections in the LP could be pretty complex, it will not be possible to achieve such a clean partition. Our algorithm therefore may \emph{delete some clients}, and \emph{charge} the total demand of deleted clients to the demands of undeleted nearby clients.
+%%A complete partition in this form is not always possible.
+%%However, in such a  case, we can massage the fractional client assignments for the remaining clients in such a way that the facilities
+%%can be partitioned into roundable sets.
+%This is encapsulated in the following (rather verbose) theorem. 
+%%To understand the formal definition, we first provide some intuition: the clients in $\Cb$ are satisfied by locally rounding the facilities in $\calS$;
+%%using idea~$2$;
+% %the clients in $\Cbb$ are satisfied by solving a suitably-defined instance of \cckp using only the locations in $\calT$; and finally the deleted clients $\Cd$ are charged to nearby clients in $\Cbb \cup \Cb$.
+%
+%\begin{theorem}\label{thm:decomp}
+%	Given a feasible solution $(x,y)$ and $\delta > 0$, there exists a polynomial time algorithm which finds a solution $\x$ satisfying \eqref{} and\eqref{}, and a 
+%	decomposition with the following properties.
+%	\begin{enumerate}%[noitemsep]
+%		\item The client set $C$ is partitioned into three disjoint subsets $C = \Cd \cup \Cbb \cup \Cb$, and the facility set $F$ is partitioned into two families $\calS = (S_1, S_2, \ldots, S_K)$ and $\calT = (T_1, T_2, \ldots, T_L)$ of mutually disjoint subsets.
+%
+%\item Each $T_\ell$ is a $\tilde{O}(1/\delta)$-complete neighborhood with a corresponding set $J_\ell$ of clients responsible for it, and $\Cbb = \cup_{\ell = 1}^L J_\ell$.	
+%
+%		\item Each $S_k \in \calS$ is $(\tilde{O}(1/\delta),(1+\delta))$-roundable with respect to $(\x,y)$, and moreover, each client in $\Cb$ satisfies $\sum_{i \in \calS, p} \x_{ijp} \geq 1 - \frac{\delta}{100}$.
+%
+%\item For the deleted clients $\Cd$, there is a mapping $\phi:\Cd \to \Cbb \cup \Cb$ such that
+%(a) $d(j,\phi(j)) \leq 4$ for all $j\in \Cd$, and
+%(b)	for all $j\in \Cbb \cup \Cb$, we have $\sum_{j' \in \Cd: \phi(j') = j} d_{j'} \leq (1+\delta)\cdot d_j$, i.e., the total demand mapped to $j$ is small.
+%
+%\end{enumerate}
+%\end{theorem}
+%
+%Before we prove the theorem, let us interpret each of the conditions above (note that we have abused notation in the third statement by using $\calS$ to
+%denote the set of locations in $S_1, \ldots, S_k$). $\Cd$ is the set of deleted clients. The fourth statement above argues that each such  client can be charged to a nearby client, and  the total charge to a client does not exceed its own demand by a constant factor. Therefore, given a feasible assignments of clients which are not in $\Cd$, we can easily extend this to all the clients with a constant increase in the connection cost and constant factor violation of capacities. The second and the third statements give two different ways of forming partitions as mentioned earlier. 
+%%in which we will round the remaining clients.
 
-
-% Ideas 1 and 2 described in~\Cref{sec:idea1,sec:idea2}. 
-Towards that end, we first define the condition which implies that a subset of facilities $S$ can be rounded integrally while (approximately) preserving the total demand they were serving fractionally.
-
-\begin{definition}\label{def:rnding-mkc}
-	A set of facilities $S\subseteq F$ is said to be $(a,b)$-roundable w.r.t feasible solution $(x,y)$ if
-	\begin{itemize}%[noitemsep]
-		\item[(a)] $\diam_G(S) \leq a$
-		\item[(b)] there exists a rounding $Y_{ip} \in \{0,1\}$ for all $i \in S, p$ such that
-		\begin{enumerate}
-			\item $\sum_{q \geq p} \sum_{i\in S} Y_{iq} ~\leq~ \floor{\frac{1}{2} \cdot \sum_{q \geq p}\sum_{i\in S} y_{iq}}$ for all $p$, and
-			\item $\sum_{j\in C} d_j \sum_{i\in S,p\in [P]} x_{ijp} \leq b\cdot \sum_{i\in S} \sum_{p\in [t]} c_p Y_{ip}$
-		\end{enumerate}
-	\end{itemize}
-\end{definition}
-The idea behind the above definition should be clear -- suppose $S$ is a set of facilities and consider a subset of demands $J$ which are being assigned (fractionally) by
-the solution $(x,y)$ to $S$. If $S$ is $(a,b)$-roundable wrt $(x,y)$, then we can open facilities in $S$ integrally and reassign the demands in $J$ to these integral
-facilities. By doing so, we shall increase the connection cost of demands in $J$ by an additive factor of $a$, and then we may violate the capacities of the integrally open
-facilities by at most a factor $b$. Note that the rounding in each such piece locally preserves the bounds on the number of centers the integral solution opens as compared to the fractional LP solution -- in fact we only use half of the fractionally open facilities\footnote{The factor $1/2$ here is only needed for our rounding algorithm. The decomposition theorem can be proved even if we do not allow this factor.}.
-% This corresponds to Idea~2 in~\Cref{sec:idea2}.
-
-
-\begin{definition} \label{def:comp-nbr}
-	A subset $S\subseteq F$ of facilities is called a {\em complete neighborhood} if there exists a client-set $J\subseteq C$ such that $\Gamma(J) \subseteq S$.
-	In this case the subset $J$ is said to be {\em responsible} for $S$. Additionally, a complete neighborhood $S$ is said to be an $a$-complete neighborhood if $\diam(S) \leq a$.
-\end{definition}
-The idea behind this definition should also be clear -- indeed, if we find a complete neighborhood $S$ of facilities with say a set $J$ of clients responsible for it, then we know that the optimal solution must satisfy all the demand in $J$ by suitably opening facilities of sufficient capacity in $S$. Moreover, if we can find a disjoint collection of such complete neighborhoods, then the overall problem resembles the \cckp problem. % described in Idea 1.
-
-\medskip \noindent
-As described earlier, our algorithm tries to \emph{partition} the set of facilities into a disjoint collection of sets of small diameter, such that each set is either a \emph{complete neighborhood} of some clients, or is a roundable set with $a$ and $b$ being small constants.
-However, since the client-facility connections in the LP could be pretty complex, it will not be possible to achieve such a clean partition. Our algorithm therefore may \emph{delete some clients}, and \emph{charge} the total demand of deleted clients to the demands of undeleted nearby clients.
-%A complete partition in this form is not always possible.
-%However, in such a  case, we can massage the fractional client assignments for the remaining clients in such a way that the facilities
-%can be partitioned into roundable sets.
-This is encapsulated in the following (rather verbose) theorem. 
-%To understand the formal definition, we first provide some intuition: the clients in $\Cb$ are satisfied by locally rounding the facilities in $\calS$;
-%using idea~$2$;
- %the clients in $\Cbb$ are satisfied by solving a suitably-defined instance of \cckp using only the locations in $\calT$; and finally the deleted clients $\Cd$ are charged to nearby clients in $\Cbb \cup \Cb$.
-
-\begin{theorem}\label{thm:decomp}
-	Given a feasible solution $(x,y)$ and $\delta > 0$, there exists a polynomial time algorithm which finds a solution $\x$ satisfying \eqref{} and\eqref{}, and a 
-	decomposition with the following properties.
-	\begin{enumerate}%[noitemsep]
-		\item The client set $C$ is partitioned into three disjoint subsets $C = \Cd \cup \Cbb \cup \Cb$, and the facility set $F$ is partitioned into two families $\calS = (S_1, S_2, \ldots, S_K)$ and $\calT = (T_1, T_2, \ldots, T_L)$ of mutually disjoint subsets.
-
-\item Each $T_\ell$ is a $\tilde{O}(1/\delta)$-complete neighborhood with a corresponding set $J_\ell$ of clients responsible for it, and $\Cbb = \cup_{\ell = 1}^L J_\ell$.	
-
-		\item Each $S_k \in \calS$ is $(\tilde{O}(1/\delta),(1+\delta))$-roundable with respect to $(\x,y)$, and moreover, each client in $\Cb$ satisfies $\sum_{i \in \calS, p} x_{ijp} \geq 1 - \frac{\delta}{100}$.
-
-\item For the deleted clients $\Cd$, there is a mapping $\phi:\Cd \to \Cbb \cup \Cb$ such that
-(a) $d(j,\phi(j)) \leq 4$ for all $j\in \Cd$, and
-(b)	for all $j\in \Cbb \cup \Cb$, we have $\sum_{j' \in \Cd: \phi(j') = j} d_{j'} \leq (1+\delta)\cdot d_j$, i.e., the total demand mapped to $j$ is small.
-
-\end{enumerate}
-\end{theorem}
-
-Before we prove the theorem, let us interpret each of the conditions above (note that we have abused notation in the third statement by using $\calS$ to
-denote the set of locations in $S_1, \ldots, S_k$). $\Cd$ is the set of deleted clients. The fourth statement above argues that each such  client can be charged to a nearby client, and  the total charge to a client does not exceed its own demand by a constant factor. Therefore, given a feasible assignments of clients which are not in $\Cd$, we can easily extend this to all the clients with a constant increase in the connection cost and constant factor violation of capacities. The second and the third statements give two different ways of forming partitions as mentioned earlier. 
-%in which we will round the remaining clients.
-
-\vspace*{0.1 in}
+%\vspace*{0.1 in}
 %\begin{proof}[
 \noindent
-{\bf Proof of Theorem~\ref{thm:decomp}}\ 
+%{\bf Proof of Theorem~\ref{thm:decomp}}\ 
+\comment{\bf \large Need to provide a sketch-paragraph. }\\
+
 Throughout, we let $\epsilon := \min(1/12,\delta/100)$.
 We prove this theorem by describing an algorithm which constructs these partitions.
 The algorithm is written formally in Algorithm~1. We describe it in detail first.
@@ -145,7 +147,7 @@ such that $(i,j) \in G$. Therefore, the algorithm branches into two sub-cases.
     we add $J_\mathsf{int}$ to $\Cbb$. One of the invariants of our algorithm is that in later stages when we again encounter this case ($\t \leq t^\star$), any client $j\in J_\mathsf{int}$ at that stage {\em cannot} be a neighbor in $G$ to a facility $i\in \calT$.
     \end{itemize}
 
-This completes the description of the algorithm. We now show that the decomposition has the desired properties.
+This completes the description of the algorithm. We now show that the decomposition has the desired properties; in particular it satisfies the conditions in Theorem~\ref{thm:decomp}.
  %{\bf Maybe want to define this for $i\notin S$ and fix it for those going in...} \bigskip
 
 \begin{algorithm}
@@ -185,7 +187,7 @@ This completes the description of the algorithm. We now show that the decomposit
 \State $\F \gets N_H^{(\t)}(i^\star) \cap F$ \Comment{\emph{$\F$ are the ball's facilities.}}
 \State $J_\mathsf{ext} \gets \Gamma_H^{(\t)}(i^\star)$ \Comment{\emph{Ball's boundary clients}}
 \State $J_\mathsf{int} \gets N_H^{(\t)}(i^\star) \cap C$. \Comment{\emph{Ball's internal clients}}
-\State $\Cd \gets \Cd \cup J_\mathsf{ext}$ and augment $\phi$ appropriately \Comment{\emph{delete $J_\mathsf{ext}$ and charge to $J_\mathsf{int}$}} \label{alg:phi1}\label{alg:phi2}
+\State $\Cd \gets \Cd \cup J_\mathsf{ext}$ and define $\phi$ appropriately \Comment{\emph{delete $J_\mathsf{ext}$ and charge to $J_\mathsf{int}$}} \label{alg:phi1}\label{alg:phi2}
 \State $H \gets H \setminus J_\mathsf{ext} $ \Comment{\emph{remove deleted clients from $H$}}
 \If{$\dist_G(i^\star, R(\calS)) \leq \frac{16}{\eps}\ln\left(\frac{1}{\eps}\right)$} \Comment{\emph{$i^\star$ is close to some root in $R(\calS)$}} \label{alg:case2}
 
@@ -210,7 +212,9 @@ This completes the description of the algorithm. We now show that the decomposit
 \end{algorithmic}
 \end{algorithm}
 \subsection{Algorithm Analysis}
-In this section, we analyze the algorithm.
+%In this section, we analyze the algorithm.
+Firstly, the statement of the algorithm implies the partition $\calS, \calT$ and $\Cb\cup\Cbb\cup \Cd$.
+We analyze the algorithm to prove the properties needed.
 \medskip \noindent
 At the beginning of each iteration, we want to show that the algorithm maintains the following invariants:
 \begin{framed}
@@ -235,14 +239,17 @@ Indeed, consider any client $j \in J_\mathsf{int}$: by definition, it was in $H$
 added to $\Cb$ in~\Cref{alg:case2ac}.
 \end{proof}
 
-We now show that the deleted clients, $\Cd$ can be charged to $\Cb$ and $\Cbb$.
+We now show that the deleted clients $\Cd$ can be charged to $\Cb$ and $\Cbb$.
 \begin{claim} \label{cl:phi-augment}
-In~\Cref{alg:phi1}, $\phi$ can be augmented so that the Property~(4) of~\Cref{thm:decomp} is satisfied.
+$\Cd$ is a $(\tilde{O}(1/\delta),\delta)$-deletable set.
+%In~\Cref{alg:phi1}, $\phi$ can be augmented so that the Property~(4) of~\Cref{thm:decomp} is satisfied.
 \end{claim}
 \begin{proof}
-Note that whenever the algorithm executes~\cref{alg:phi1}, it must be that $|J_\mathsf{ext}| \leq \eps\cdot |J_\mathsf{int}|$. So indeed we are justified in deleting the clients in $J_\mathsf{ext}$ and ``charging'' them to $J_\mathsf{int}$. More precisely, we augment the
-mapping function $\phi:J_\mathsf{ext} \to J_\mathsf{int}$ such that for all $j\in J_\mathsf{int}, \sum_{k:\phi(k) = j} d_k \leq \eps d_j$. Again, this is possible since $|J_\mathsf{ext}| < \eps|J_\mathsf{int}|$. Also note for any $j\in J_\mathsf{ext}$ and $k\in J_\mathsf{int}$,
-we have $d(j,k) \leq \tilde{O}(1/\epsilon)$.
+	We add vertices to $\Cd$ only in~\cref{alg:phi1}, and at that point it must be that $|J_\mathsf{ext}| \leq \eps\cdot |J_\mathsf{int}|$. 
+	As in the proof of Theorem~\ref{thm:weakdecomp}, we can define the assignment $\phi_{j,j'}$ for $j\in J_\mathsf{ext}$ and $j' \in \mathsf{int}$.
+%	So indeed we are justified in deleting the clients in $J_\mathsf{ext}$ and ``charging'' them to $J_\mathsf{int}$. More precisely, we augment the
+%mapping function $\phi:J_\mathsf{ext} \to J_\mathsf{int}$ such that for all $j\in J_\mathsf{int}, \sum_{k:\phi(k) = j} d_k \leq \eps d_j$. Again, this is possible since $|J_\mathsf{ext}| < \eps|J_\mathsf{int}|$. Also note for any $j\in J_\mathsf{ext}$ and $k\in J_\mathsf{int}$,
+%we have $d(j,k) \leq \tilde{O}(1/\epsilon)$.
 Furthermore, as in the proof of Claim~\ref{cl:inv}, our algorithm makes sure that the client set $J_\mathsf{int}$ gets added to $\Cb$ or $\Cbb$ (in~\cref{alg:case2ac,alg:color2}).
 Therefore, these clients in $J_\mathsf{int}$ will never be images of $\phi$ again, thus completing the proof.
 \end{proof}
@@ -367,7 +374,7 @@ if there don't exist any.
 
 Define $\alpha_u := \sum_{(i,p) \in A_u} y_{i,p}$. For all values of $u$, 
 %Clearly, $|A_u| \geq \alpha_u$. Therefore, we can choose a subset $F_u$ of size $\floor{\alpha_u/2}$ from $A_u$.
-{\em arbitrarily} choose $\floor{\alpha_u}$ different facilities $F_u$ in $S_k$; that there are so many is implied by \eqref{} of the LP.
+{\em arbitrarily} choose $\floor{\alpha_u}$ different facilities $F_u$ in $S_k$; that there are so many is implied by \eqref{eq:lp4} of the LP.
 For each $u$ and for each $i\in F_u$, set $\y_{i\Delta^u} = 1$. For every other $(i,p)$, set $\y_{ip} = 0$. 
 Note that  $\sum_{i\in S,p\in [P]}c_p\y_{ip} = \sum_u \floor{\alpha_u}\Delta^u$.
 
@@ -403,7 +410,8 @@ The second inequality uses $\epsilon$ is small enough.
 Therefore, $S_k$ has the $\left(\tilde{O}(1/\delta),(1+\delta)\right)$-roundability property.
 \end{proof}
 \noindent
-This completes the proof of Theorem~\ref{thm:decomp}. 
+Claim~\ref{cl:phi-augment}, Lemma~\ref{lem:local}, Claim~\ref{clm:imp}, and Lemma~\ref{lem:sk} prove that the decomposition has the properties desired by 
+Theorem~\ref{thm:decomp}. 
 %\end{proof}
 
 %Because $S_k$ has $(20,16)$-roundability property, we can integrally open facilities in each of these sets to get the following result.

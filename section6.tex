@@ -1,45 +1,53 @@
-\newpage
-\section{Approximate Supply Polyhedra for $Q||C_{min}$}
+%\newpage
+\section{Supply Polyhedra of $Q||C_{min}$: Proof of Theorem~\ref{thm:asslp}}\label{sec:asslp}
 \def\pv{\mathbf{b}}
 \newcommand{\dem}{\mathsf{cap}}
-Let the instance $\calI$ of $Q||C_{min}$  have $m$ machines $M$ with demands $D_1 \geq \cdots \geq D_m$ and $n$ types of  jobs $J$ with capacities $c_1 \geq \cdots \geq c_n$. 
-A supply vector $(s_1,\ldots,s_n)$ indicates the number of jobs of each type available; a supply vector is feasible if together they can satisfy all the demands.
-We wish to find a convex set/polyhedra which captures all the feasible supply vectors. In particular, any feasible supply vector should be in the set, and given any (integer) supply vector in the set
-there should be an allocation which satisfies the demands to an $\alpha$-factor.
- \smallskip
+  Throughout the proof we fix $\calI$ to be the instance of $Q||C_{min}$ % and we rename machines and jobs so that $D_1 \geq \cdots \geq D_m$ and $n$ types of  jobs $J$ with capacities $c_1 \geq \cdots \geq c_n$.  
+  %We also fix 
+  and the supply vector $(s_1,\ldots,s_n)$. For simplicity of presentation, given the supply vector, abusing notation let $J$ denote the multiset of jobs where job $j$ appears $s_j$ times. We know that the LP\eqref{eq:asslp1}-\eqref{eq:asslp3} is feasible with the $s_j$ replaced by $1$. %Let $N = \sum_j s_j$. 
+  We want to find an assignment where machine $i$ gets at least $D_i/2$ capacity. 
+%Let  $z$ be a feasible solution to \eqref{eq:asslp1}-\eqref{eq:asslp3}. 
+%Let the instance $\calI$ of $Q||C_{min}$  have $m$ machines $M$ with demands 
+%A supply vector $(s_1,\ldots,s_n)$ indicates the number of jobs of each type available; a supply vector is feasible if together they can satisfy all the demands.
+%We wish to find a convex set/polyhedra which captures all the feasible supply vectors. In particular, any feasible supply vector should be in the set, and given any (integer) supply vector in the set
+%there should be an allocation which satisfies the demands to an $\alpha$-factor.
+% \smallskip
+%
+%\noindent
+%A feasible supply vector $(s_1,\ldots,s_n)$ must lie in the following polytope.
+%%We assume we have a guess $D$ for the optimum value which is certified by a feasible solution to the following assignment LP. Below, $D_i := Ds_i$.
+%	\begin{alignat}{4}
+%		\calP_\mathsf{ass} && = \{(s_1,\ldots,s_n):  && \notag \\
+%		&& \quad \forall j \in J,   &\quad  \textstyle \sum_{i\in M} z_{ij}  \leq  s_j \label{eq:asslp1} \\
+%		&& \quad \forall i\in M ,  &\quad  \textstyle \sum_{j\in C}  z_{ij}  \min(c_j,D_i) \geq D_i \label{eq:asslp2} \\
+%		&& \quad \forall i\in M, j\in J, & \quad z_{ij}   \geq 0 \label{eq:asslp3}  \}
+%	\end{alignat}
+%Not all integral $(s_1,\ldots,s_n) \in \calP_\mathsf{ass}$ need be feasible; but the following theorem shows given such a supply vector, there exists an assignment satisfying the demands up to a factor $2$.
+%%The following theorem shows that $\calP_\mathsf{ass}$ captures the 
+%%the assignment LP has integrality $\leq 2$.
+%\begin{theorem}\label{thm:asslprounding}
+%Given $(s_1,\ldots,s_n) \in \calP_\mathsf{ass}$, there is an of assignment $\phi$ of the $s_j$ jobs of capacity $c_j$  to the machines such that for all $i\in M$, 
+%$\sum_{j:\phi(j) = i} c_j \geq D_i/2$.
+%\end{theorem}
+%\begin{proof}
+%For simplicity, given the supply vector, abusing notation let $J$ denote the multiset of jobs where job $j$ appears $s_j$ times. We know that the LP\eqref{eq:asslp1}-\eqref{eq:asslp3} is feasible with the $s_j$ replaced by $1$. Let $N = \sum_j s_j$. 
+%
 
-\noindent
-A feasible supply vector $(s_1,\ldots,s_n)$ must lie in the following polytope.
-%We assume we have a guess $D$ for the optimum value which is certified by a feasible solution to the following assignment LP. Below, $D_i := Ds_i$.
-	\begin{alignat}{4}
-		\calP_\mathsf{ass} && = \{(s_1,\ldots,s_n):  && \notag \\
-		&& \quad \forall j \in J,   &\quad  \textstyle \sum_{i\in M} z_{ij}  \leq  s_j \label{eq:asslp1} \\
-		&& \quad \forall i\in M ,  &\quad  \textstyle \sum_{j\in C}  z_{ij}  \min(c_j,D_i) \geq D_i \label{eq:asslp2} \\
-		&& \quad \forall i\in M, j\in J, & \quad z_{ij}   \geq 0 \label{eq:asslp3}  \}
-	\end{alignat}
-Not all integral $(s_1,\ldots,s_n) \in \calP_\mathsf{ass}$ need be feasible; but the following theorem shows given such a supply vector, there exists an assignment satisfying the demands up to a factor $2$.
-%The following theorem shows that $\calP_\mathsf{ass}$ captures the 
-%the assignment LP has integrality $\leq 2$.
-\begin{theorem}\label{thm:asslprounding}
-Given $(s_1,\ldots,s_n) \in \calP_\mathsf{ass}$, there is an of assignment $\phi$ of the $s_j$ jobs of capacity $c_j$  to the machines such that for all $i\in M$, 
-$\sum_{j:\phi(j) = i} c_j \geq D_i/2$.
-\end{theorem}
-\begin{proof}
-For simplicity, given the supply vector, abusing notation let $J$ denote the multiset of jobs where job $j$ appears $s_j$ times. We know that the LP\eqref{eq:asslp1}-\eqref{eq:asslp3} is feasible with the $s_j$ replaced by $1$. Let $N = \sum_j s_j$. 
-
-The algorithm is a  very simple greedy algorithm which doesn't look at the LP solution.  Order the jobs (with multiplicities) in decreasing order of capacities $c_1\geq c_2 \geq \cdots \geq c_N$, and order the machines in decreasing order of $D_i$'s, that is, $D_1 \geq D_2 \geq \ldots \geq D_m$. 
+The algorithm is a  very simple greedy algorithm which doesn't look at the LP solution , and the feasibility of LP\eqref{eq:asslp1}-\eqref{eq:asslp3} is only used for analysis.  
+Rename the jobs (with multiplicities) in decreasing order of capacities $c_1\geq c_2 \geq \cdots \geq c_N$, and rename  the machines in decreasing order of $D_i$'s, that is, $D_1 \geq D_2 \geq \ldots \geq D_m$. 
 Starting with machine $i=1$ and job $j=1$, assign jobs $j$ to $i$ if the total capacity filled in machine $i$ is $< D_i/2$ and move to the next job. Otherwise, call machine $i$ happy and move to the next machine. Obviously, if all machines are happy at the end we have found our assignment. 
 
 The non-trivial part is to  prove that if some machine is unhappy, then the LP\eqref{eq:asslp1}-\eqref{eq:asslp3} is infeasible (with $s_j$ replaced by $1$).
-To do so, we take the Farkas dual of the LP; the following LP is feasible iff LP\eqref{eq:asslp1}-\eqref{eq:asslp3} is infeasible.
+To do so, we take the Farkas dual of the LP; the following LP is feasible iff LP\eqref{eq:asslp1}-\eqref{eq:asslp3} is infeasible. We describe a feasible solution to the system below if we obtain some unhappy agent.
 	\begin{alignat}{4}
-		&&   & \quad \textstyle \sum_{i=1}^m \beta_i D_i > \sum_{j=1}^n\alpha_j \label{eq:assdual1}   \\
-		&& \quad \forall i\in M,j\in J & \quad \textstyle \beta_i\min(c_j,D_i) \leq \alpha_j \label{eq:assdual2}  \\
-		&& \quad \forall i\in M, &\quad  \beta_i \geq 0\label{eq:assdual3}
+		&&   & \quad \textstyle \sum_{i=1}^m \beta_i D_i > \sum_{j=1}^n\alpha_j \label{eq:assdual1}  \tag{F1} \\
+		&& \quad \forall i\in M,j\in J & \quad \textstyle \beta_i\min(c_j,D_i) \leq \alpha_j \label{eq:assdual2} \tag{F2}  \\
+		&& \quad \forall i\in M, &\quad  \beta_i \geq 0\label{eq:assdual3}\tag{F3}
 	\end{alignat}
 	\def\i{i^\star}
-Suppose machine $\i$ is the first machine which is unhappy. Let $S_1,\ldots,S_{\i-1}$ be the jobs assigned to machines $1$ to $(\i-1)$ and $S_\i$ be the remainder of jobs. 
-We have $\sum_{j\in S_\i} c_j < D_\i/2$. We also have for all $1\leq i\leq \i$, $\sum_{j\in S_i} \min(c_j,D_i) \leq D_i$.
+Suppose machine $\i$ is the first machine which is unhappy. Let $S_1,\ldots,S_{\i-1}$ be the jobs assigned to machines $1$ to $(\i-1)$ and $S_{i^\star}$ be the remainder of jobs. 
+We have $\sum_{j\in S_{\i}} c_j < D_{\i}/2$. We also have for all $1\leq i\leq \i$, $\sum_{j\in S_i} \min(c_j,D_i) \leq D_i$. If not, then the machine must receive at least two jobs and would have capacity $> D_i/2$ 
+from all but the last. 
 We now describe a feasible solution to \eqref{eq:assdual1}-\eqref{eq:assdual3}.
 %{\bf deepc: this turns out to be trickier than what meets the eye}.
 
@@ -50,7 +58,7 @@ We let $\beta_1 = 1$. For $1\leq i <\i$, we have the following three-pronged rul
 	\item If $i+1$ is overloaded, and so is $i$, then $\beta_{i+1} = \beta_i \cdot D_i/D_{i+1}$.
 	\item If $i+1$ is overloaded but $i$ is not, then $\beta_{i+1} = \beta_i \cdot c_{j_{i+1}}/D_{i+1}$, where $j_{i+1}$ is the job assigned to $i+1$.
 \end{itemize}
-For any job $j$ assigned to machine $i$, we set $\alpha_j = \beta_i \min(c_j,D_i)$. Since for any $S_i$, we have $\sum_{j\in S_i} \min(c_j,D_i) \leq D_i$ and $\sum_{j\in S_\i} c_j < D_\i/2$,  the given $(\alpha,\beta)$ solution satisfies \eqref{eq:assdual1}. We now prove that it satisfies \eqref{eq:assdual2}.
+For any job $j$ assigned to machine $i$, we set $\alpha_j = \beta_i \min(c_j,D_i)$. Since for any $S_i$, we have $\sum_{j\in S_i} \min(c_j,D_i) \leq D_i$ and $\sum_{j\in S_{\i}} c_j < D_{\i}/2$,  the given $(\alpha,\beta)$ solution satisfies \eqref{eq:assdual1}. We now prove that it satisfies \eqref{eq:assdual2}.
 From the construction of the $\beta$'s the following claims follow.
 \begin{claim}\label{clm:c1}
 $\beta_1\leq \beta_2 \leq \cdots \leq \beta_m$.
@@ -84,27 +92,41 @@ Since $c_j \leq D_{i'}$ (in case $i' < i''$), we need to upper bound $\beta_{i'}
 By Claim~\ref{clm:c1}, $\beta_{i'}c_j \leq \beta_{i''-1}c_j$. Now, if $i''-1$ were overloaded, 
 then $\beta_{i''}D_{i''} = \beta_{i''-1}D_{i''-1} \geq \beta_{i''-1}c_j$ where the last inequality follows from definition of $i''$. Together, we get $\beta_{i'}c_j \leq \beta_iD_i$.
 %For every machine $1\leq i\leq \i$, define $\beta_i := D_\i/D_i$. For every job $j\in S_i$ for $1\leq i\leq \i-1$, define $\alpha_j = \beta_i\min(c_j,D_i)$ and for $j\in S_\i$, define $\alpha_j = c_j$.
-\end{proof}
+%\end{proof}
 \def\y{\bar{y}}
 \def\z{\bar{z}}
 \def\yy{\bar{\bar{y}}}
-
-\begin{lemma}
-Suppose $(y_1,\ldots,y_n)\in \calP_\mathsf{ass}$. Let $(\y_1,\ldots,\y_n)$ be a vector such that for all $1\leq i\leq n$, $\sum_{j\leq i} \y_j \geq \sum_{j\leq i} y_i$. Then
-$(\y_1,\ldots,\y_n)\in \calP_{\mathsf{ass}}$.
+\begin{lemma}\label{lem:conf-is-uf}
+	$\calP_\mathsf{ass}$ is upward-feasible.
 \end{lemma}
 \begin{proof}
-By induction, let us assume the lemma is true for all $\y$ with $\y_1 = y_1$ which satisfies the prefix-sum condition.
-Let $\yy$ be the vector with $\yy_1 = y_1$, $\yy_2 = \y_2 + \y_1 - y_1$, and $\yy_i = \y_i$ otherwise.
-Since $\yy\in \calP_\mathsf{ass}$, there is an assignment $z_{ij}$ satisfying \eqref{eq:asslp1}-\eqref{eq:asslp3} with $s_j = \yy_j$.
-We now describe a feasible solution $\z_{ij}$ with $s_j = \y_j$.
-
-Let $\theta := \y_2/\yy_2 \le 1$ since $\y_1 \geq y_1$. Define $\z_{i2} = \theta z_{i2}$ for all $i$, and define $\z_{i1} = z_{i1} + (1-\theta)z_{i2}$.
-For $j=2$, we have $\sum_{i\in M} \z_{i2} = \theta \sum_{i\in M} z_{i2} \leq \theta \yy_2 = \y_2$.
-For $j=1$, we have $\sum_{i\in M} \z_{i1} = \sum_{i\in M} z_{i1} + (1-\theta) \sum_{i\in M} z_{i2} \leq \yy_1 + (1-\theta)\yy_2 = \yy_1 +\yy_2 - \y_2 = \y_1$. 
-Since the other $z_{ij}$'s and $\y_j$'s are untouched, $\z_{ij}$ satisfies \eqref{eq:asslp1} with $\y_j$'s.
-
-Now fix a machine $i$. The `increase' in the LHS of \eqref{eq:asslp2} is  $\sum_{j\in J} (\z_{ij} - z_{ij}) \min(c_j,D_i) = (1-\theta)z_{i2}\min(c_1,D_i) -  (1-\theta) z_{i2}\min(c_2,D_i) \geq 0$ since $c_1 \geq c_2$.
-
+	%\comment{\bf \Large Needs to be written}
+	Let $s := (s_1,\ldots,s_n)\in \calP_\mathsf{ass}$ for a certain instance of $Q||C_{min}$ where the jobs have been renamed so that $c_1\leq \cdots \leq c_n$. We need to prove any non-negative vector $t := (t_1,\ldots,t_n)$ s.t. $t\succeq_\suff s$also lies in $\calP_\mathsf{ass}$. 
+	By the ``hybridization argument'', it suffices to prove the lemma for  $s$ and $t$ differing only in coordinates $\{j-1,j\}$ and $ t_j\ge s_j$ and $t_{j-1} \geq \max(0,s_{j-1} + (s_j - t_j))$.
+	Given that, we can move from $s$ to $t$ by changing pairs of coordinates each time maintaining feasibility in $\calP_\mathsf{ass}$.
+	
+	Let $z$ be the solution for the supply vector $s$; we construct a solution $\z$  for the supply vector $t$ starting with $\z = z$.
+	If $\z$ is not already feasible, then it must be because $s_{j-1} \geq \sum_{i\in M} \z_{i,j-1} > t_{j-1}$.
+	We select an arbitrary $i\in M$ with $\z_{i,j-1} > 0$ and increase $\z_{ij}$ and decrease $\z_{i,j-1}$ by $\delta$. Since $c_j \geq c_{j-1}$, \eqref{eq:asslp2} remains valid.
+	Since the total increase of fractional load of job $j$ is exactly the same as the decrease in that of job $j-1$, and we only need total  decrease $(s_{j-1} -t_{j-1}) \leq t_j - s_j$, at the end we get that $\z$ is feasible wrt supply vector $t$.
+	
 \end{proof}
-
+%\begin{lemma}
+%Suppose $(y_1,\ldots,y_n)\in \calP_\mathsf{ass}$. Let $(\y_1,\ldots,\y_n)$ be a vector such that for all $1\leq i\leq n$, $\sum_{j\leq i} \y_j \geq \sum_{j\leq i} y_i$. Then
+%$(\y_1,\ldots,\y_n)\in \calP_{\mathsf{ass}}$.
+%\end{lemma}
+%\begin{proof}
+%By induction, let us assume the lemma is true for all $\y$ with $\y_1 = y_1$ which satisfies the prefix-sum condition.
+%Let $\yy$ be the vector with $\yy_1 = y_1$, $\yy_2 = \y_2 + \y_1 - y_1$, and $\yy_i = \y_i$ otherwise.
+%Since $\yy\in \calP_\mathsf{ass}$, there is an assignment $z_{ij}$ satisfying \eqref{eq:asslp1}-\eqref{eq:asslp3} with $s_j = \yy_j$.
+%We now describe a feasible solution $\z_{ij}$ with $s_j = \y_j$.
+%
+%Let $\theta := \y_2/\yy_2 \le 1$ since $\y_1 \geq y_1$. Define $\z_{i2} = \theta z_{i2}$ for all $i$, and define $\z_{i1} = z_{i1} + (1-\theta)z_{i2}$.
+%For $j=2$, we have $\sum_{i\in M} \z_{i2} = \theta \sum_{i\in M} z_{i2} \leq \theta \yy_2 = \y_2$.
+%For $j=1$, we have $\sum_{i\in M} \z_{i1} = \sum_{i\in M} z_{i1} + (1-\theta) \sum_{i\in M} z_{i2} \leq \yy_1 + (1-\theta)\yy_2 = \yy_1 +\yy_2 - \y_2 = \y_1$. 
+%Since the other $z_{ij}$'s and $\y_j$'s are untouched, $\z_{ij}$ satisfies \eqref{eq:asslp1} with $\y_j$'s.
+%
+%Now fix a machine $i$. The `increase' in the LHS of \eqref{eq:asslp2} is  $\sum_{j\in J} (\z_{ij} - z_{ij}) \min(c_j,D_i) = (1-\theta)z_{i2}\min(c_1,D_i) -  (1-\theta) z_{i2}\min(c_2,D_i) \geq 0$ since $c_1 \geq c_2$.
+%
+%\end{proof}
+%
