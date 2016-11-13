@@ -4,7 +4,7 @@
 In this section, we prove the following theorem. One of the main engines will be a strong decomposition theorem (\Cref{thm:decomp}) which we will state here but will prove in the next section.
 \begin{theorem}\label{thm:reduction}
 Suppose there exists $\beta$-approximate, upward feasible supply polyhedra  for all instances of $Q|f_i|C_{min}$ (respectively, $Q||C_{min}$) which have $\gamma$-approximate separation oracles.
-Then for any $\delta\in(0,1)$, there is an $\left(\tilde{O}(1/\delta),\alpha\beta(1+5\delta)\right)$-bicriteria approximation algorithm for the \mckc problem (respectively, with soft capacities).
+Then for any $\delta\in(0,1)$, there is an $\left(\tilde{O}(1/\delta),\gamma\beta(1+5\delta)\right)$-bicriteria approximation algorithm for the \mckc problem (respectively, with soft capacities).
 \end{theorem}
 \noindent
 	
@@ -97,9 +97,9 @@ Note that this is a feasible constraint to add to LP\eqref{eq:lp1}-\eqref{eq:lp6
 \end{claim}
 
 \noindent
-We don't know how (and don't expect) to check feasibility of  \eqref{eq:lp7} for all collections $\calT$. However, we can still run ellipsoid method using the ``round-and-cut'' framework of \cite{carr et al, an et al, shi li}.
+We don't know how (and don't expect) to check feasibility of  \eqref{eq:lp7} for all collections $\calT$. However, we can still run ellipsoid method using the ``round-and-cut'' framework of \cite{CarrFLP00, AnSS14, Li15}.
 To begin with, we start with the LP\eqref{eq:lp1}-\eqref{eq:lp6} and obtain feasible solution $(x,y)$. Subsequently, we apply the decomposition Theorem~\ref{thm:decomp} to obtain the collection $\calT = (T_1,\ldots,T_L)$.
-We then check if $\yy \in \calP(\calI_\calT)$ or not. Since we have a $\gamma$-approximate separation oracle for $\calP(\calI_\calT)$, we either are guaranteed that $\yy \in \calP(\calI'_\calT)$ where the $\ell$th demand is now  $D_\ell/\gamma$. Or we get a hyperplane separating $\yy$ from $\calP(\calI_\calT)$ which also gives us a
+We then check if $\yy \in \calP(\calI_\calT)$ or not. Since we have a $\gamma$-approximate separation oracle for $\calP(\calI_\calT)$, we  are either guaranteed that $\yy \in \calP(\calI'_\calT)$ where the $\ell^{th}$ demand is now  $D_\ell/\gamma$; or we get a hyperplane separating $\yy$ from $\calP(\calI_\calT)$ which also gives us a
 hyperplane separating $y$ from  LP\eqref{eq:lp1}-\eqref{eq:lp7}. This can be fed to the ellipsoid algorithm to obtain a new iterate $(x,y)$ and the above process is repeated. The analysis of the ellipsoid algorithm\comment{deepc: need to be careful and correct here}
 tells us that in polynomial time we either prove infeasibility of the system \eqref{eq:lp1}-\eqref{eq:lp7} (implying the $\opt$  guess for \mckc is infeasible), or we 
 are have $(x,y)$ satisfying the premise of the following lemma. 
@@ -115,7 +115,7 @@ are have $(x,y)$ satisfying the premise of the following lemma.
 \begin{proof}
 %Suppose the latter occurs. From this we can obtain the bicriteria solution to the \mckc problem as follows. 
 %Recall the notation in the Decomposition Theorem~\ref{thm:decomp}. 
-Since every set $S_k, 1\leq k\leq K$ is $(\tilde{O}(1/\delta),(1+\delta))$-roundable, there exists a rounding $\y_{ip}$ for $i\in S_k$  such that
+Since every set $S_k, 1\leq k\leq K,$ is $(\tilde{O}(1/\delta),(1+\delta))$-roundable, there exists a rounding $\y_{ip}$ for $i\in S_k$  such that
 \begin{equation}\label{eq:repeat}
 \textstyle \forall p, ~~~ \sum_{q\geq p} \sum_{i\in S_k} \y_{iq} \leq \floor{\sum_{q\geq p} \sum_{i\in S_k} y_{iq}} 
 \end{equation}
@@ -158,7 +158,7 @@ Define, for $p\in [P]$,  $t_p := k_p - \s_p$, the number of facilities of capaci
 Since $\calP(\calI'_\calT)$ is $\beta$-approximate, we can find an allocation of the $t_p$ copies of jobs of capacity $c_p$ to the $L$ machines of $\calI'_\calT$ such that machine $\ell$ gets at most $f_\ell$ jobs and total capacity $\geq D_\ell/\beta = |J_\ell|/\beta\gamma$. We install these capacities on the facilities of $T_\ell$. Since the diameter of each $T_\ell$ is $\tilde{O}(1/\delta)$, we can find an $x_{ijp}$ assignment of $\Cbb$-clients  to these such that $\sum_{i\in \calT,p\in [P]} x_{ijp} \geq 1$ and $x_{ijp} > 0$ iff $d(i,j) = \tilde{O}(1/\delta)$, such that the capacity violation is at most $\alpha\beta$. This takes care of the clients in $\Cbb$. Finally, Claim~\ref{clm:prelim3} takes care of all the deleted clients $\Cd$ with an extra hit of $(1+\delta)$ on the capacity and additive $\tilde{O}(1/\delta)$ on the distance.
 \end{proof}
 \noindent
-This completes the proof of Theorem~\ref{thm:reduction} for the general \mckc problem. For the problem with soft capacities, the proof is exactly the same, except in the end the instance $\calI_\calT$ is a $Q||C_{min}$ instance rather than a \cckp one.
+This completes the proof of Theorem~\ref{thm:reduction} for the general \mckc problem. For the problem with soft capacities, the proof is exactly the same, except in the end, the instance $\calI_\calT$ is a $Q||C_{min}$ instance rather than a \cckp one.
 \end{proof}
 
 We end this section by noting that for the \mckc problem with soft-capacities, if we use the assignment supply polyhedra described in Section~\ref{sec:supplypolyhedra}, then we do not need to run the ellipsoid algorithm.
