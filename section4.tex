@@ -76,11 +76,13 @@
 %\begin{proof}[
 \noindent
 %{\bf Proof of Theorem~\ref{thm:decomp}}\ 
-\comment{\bf \large Need to provide a sketch-paragraph. }\\
-
+%\comment{\bf \large Need to provide a sketch-paragraph. }\\
+We now prove the Decomposition Theorem~\ref{thm:decomp}. We first describe the algorithm which constructs the partitions into roundable and complete neighborhood sets. It is based on the following refinement of the region growing idea used in the proof of Theorem~\ref{thm:weakdecomp} -- starting 
+with an arbitrary client we first check if there is a small enough neighborhood (i.e., of small diameter)  around it which is {\em non-expanding}, i.e., the number of clients on the boundary are much smaller than the number of clients inside the neighborhood. If so, we can remove the clients on the boundary and obtain a complete neighborhood set. Otherwise, we show that the total $y$-mass of the facilities in this neighborhood is quite high, and so, we can get 
+a roundable set of facilities.   The algorithm is written formally in Algorithm~1. We  analyze the algorithm subsequently  and show that it has the desired properties.
 Throughout, we let $\epsilon := \min(1/12,\delta/100)$.
-We prove this theorem by describing an algorithm which constructs these partitions.
-The algorithm is written formally in Algorithm~1. We describe it in detail first.
+%We prove this theorem by describing an algorithm which constructs these partitions.
+%The algorithm is written formally in Algorithm~1. We describe it in detail first.
 
 \subsection{Algorithm Description}
 Our algorithm starts with the collections $\calS$ and $\calT$, and the clients sets $\Cd$, $\Cbb$, and $\Cb$ being empty. Once a facility is assigned into a set in $\calS$ or $\calT$, it is called an \emph{assigned facility}. Similarly clients are assigned once they are added to $\Cd \cup \Cbb \cup \Cb$.
@@ -106,19 +108,22 @@ Since the set of clients in $H$ only monotonically decreases, the effective capa
 effective capacity (\Cref{alg:istar}). %We let $J_1$ denote the neighbors of $i^\star$, that is, $J_1 := \Gamma_H(i^\star)$; note that by definition of $\effc(i^\star,p^\star)$ we get $|J_1| > \effc(i^\star,p^\star)$ (see Claim~\ref{clm:imp}).
 
 \def\t{\bar{t}}
-Let $t^\star$ be the smallest {\em even} integer $> \ceil{\frac{8}{\eps}\ln\left(\frac{1}{\eps}\right)}$. We set $\t$ to be the smallest odd number $t$ in $\{1,\ldots,t^\star\}$ such that $|\Gamma^{(t)}_H(i^\star)\cap C| < \eps\cdot |N^{(t)}_H(i^\star)\cap C|$ if such a number exists, otherwise we set $\t = t^\star + 1$.  That is, as in Section~\ref{sec:regiongrowing} we find the smallest distance at which the ``client ball'' stops expanding, however, we stop once we cross $t^\star$. Depending on what $\t$ is (although note it is alway an odd number), we have two cases.
+Let $t^\star$ be the smallest {\em even} integer $> \ceil{\frac{8}{\eps}\ln\left(\frac{1}{\eps}\right)}$. We set $\t$ to be the smallest odd number $t$ in $\{1,\ldots,t^\star\}$ such that $|\Gamma^{(t)}_H(i^\star)\cap C| < \eps\cdot |N^{(t)}_H(i^\star)\cap C|$ if such a number exists, otherwise we set $\t = t^\star + 1$.  That is, as in Section~\ref{sec:regiongrowing} we find the smallest distance at which the ``client ball'' stops expanding, however, we stop once we cross $t^\star$. Depending on what $\t$ is (although note that it is alway an odd number), we have two cases.
 %
 %Starting from $i^\star$, we look at nodes in $H$ at distance at most 4 from it. Since
 %$H$ is a bipartite graph, we alternate between location vertices and client vertices. We denote $J_1$ and $J_2$ as clients which are at distance 1 and 3 from $i^\star$ respectively. Similarly, let $A$ and $B$ be locations at distance 2 and 4 from $i^\star$ respectively(\Cref{alg:j1}-\Cref{alg:B}). Note that clients in $J_1$ are adjacent to $i^\star$ and locations in $A$ in $H$, and those in $J_2$ are adjacent to locations in $A$ and $B$ only. Now, let $D(J_1)$ and $D(J_2)$ denote the
 %total demand of $J_1$ and $J_2$ respectively. The algorithms branches in several cases:
 \begin{itemize}
 \item (If $\t =  t^\star + 1$):  In this case, we have always witnessed expansion. We form a new component  $S_k := N^{(t^\star)}_H(i^\star)\cap F$ to be all the facilities in the $t^\star$-ball around $i^\star$.
-Let $J_\mathsf{int} := N^{(t^\star-1)}_H(i^\star)$ be the clients whose neighbors in $H$ lie in $S_k$. Since we witness expansion at all stages, note that 
-\[\textstyle |J_\mathsf{int}| \geq \left(1+\eps\right)^{t^\star/2}\cdot |\Gamma_H(i^\star)| > \frac{1}{\eps^4}\cdot |\Gamma_H(i^\star)|\]
+Let $J_\mathsf{int} := N^{(t^\star-1)}_H(i^\star)$ be the clients whose neighbors in $H$ lie in $S_k$. Since we witness expansion at all stages, note that
+\begin{eqnarray}
+\label{eq:jint} 
+ |J_\mathsf{int}| \geq \left(1+\eps\right)^{t^\star/2}\cdot |\Gamma_H(i^\star)| > \frac{1}{\eps^4}\cdot |\Gamma_H(i^\star)|
+\end{eqnarray}
 It is not too hard to see that $|\Gamma_H(i^\star)| \ge \effc(i^\star,p^\star)$ (see Claim~\ref{clm:imp}).
 Therefore, the  (fractionally opened) facilities in $S_k$ are servicing a large enough demand, in particular, more than the effective capacity of $i^\star$ and by the greedy choice, the effective capacity of any $(i,p)$.
 This implies there will be considerable mass ($>1/\eps$)  of facilities of the same type in $S_k$ opened fractionally; opening floor-many of them violates capacity by only $(1+\eps)$. 
-So, we add $S_k$ to $\calS$, make $i^\star$ its root adding $i^\star$ to $R(\calS)$  (\Cref{alg:case1}). We remove $S_k \cup J_\mathsf{int}$ from $H$ and add $J_\mathsf{int}$ to $\Cb$. Additionally, for a technical reason, we remove from $H$ any other client $j$
+So, we add $S_k$ to $\calS$, make $i^\star$ its root and add $i^\star$ to $R(\calS)$  (\Cref{alg:case1}). We remove $S_k \cup J_\mathsf{int}$ from $H$ and add $J_\mathsf{int}$ to $\Cb$. Additionally, for a technical reason, we remove from $H$ any other client $j$
 with $\sum_{i\in \calS, p} x_{ijp} > (1-\eps)$; in this case we set $\x_{ijp} = x_{ijp}$ for all $i\in \calS, p\in [P]$ and $\x_{ijp} = 0$ for all $i\notin \calS, p\in [P]$ and add $j$ to $\Cb$~(\Cref{alg:blue}). 
 % By the greedy choice, the effective capacities of all these facilities is at most that of $i^\star$. Thus,
 %this corresponds to a situation where we have large amount of capacity generated by a set of facilities which are fractionally open, but the {\em integral} capacity of each of these is small. In this case, we will show that one can replace these fractionally open facilities by integral facilities.
@@ -130,7 +135,7 @@ with $\sum_{i\in \calS, p} x_{ijp} > (1-\eps)$; in this case we set $\x_{ijp} = 
 %    $S_k$ is now removed from $H$. We will also remove $A$ and $B$ from $H$. In fact, we remove any client which is assigned to a total fraction of more than half to the facilities in $\calS$, and add it to the set~$\Cb$
 \item (If $\t \leq t^\star$): Let $J_\mathsf{ext} := \Gamma_H^{(\t)}(i^\star)$ and let $J_\mathsf{int} := N_H^{(\t)}(i^\star) \cap C$. We know that $|J_\mathsf{ext}| < \eps\cdot |J_\mathsf{int}|$. 
 Let $\F := N_H^{(\t)}(i^\star) \cap F$ be the facilities in this ball. We delete $J_\mathsf{ext}$ from $H$ and add it to $\Cd$; we can do so since we can ``charge it'' to $J_\mathsf{int}$.
-Ideally, we would like to add $(\F,J_\mathsf{int}$ as a complete-neighborhood to $\calT$.
+Ideally, we would like to add $(\F,J_\mathsf{int})$ as a complete-neighborhood to $\calT$.
 While it is true that $\Gamma_H(J_\mathsf{int}) \subseteq \F$, the same may not be true in the original graph $G$ since we delete vertices from it. More precisely, there could be a client $j\in J_\mathsf{int}$ and a facility $i\in \calS\cup\calT$
 such that $(i,j) \in G$. Therefore, the algorithm branches into two sub-cases.
 %
@@ -264,7 +269,7 @@ Consider an iteration when a new set $T_\ell$ is added to $\calT$ in~\cref{alg:c
 Firstly, the diameter of the new set is at most $\frac{16}{\epsilon}\ln(1/\epsilon)$, since for every $i \in T_\ell$ is $d(i,i^\star) \leq t^\star$ for the  $i^\star$ facility identified in~\cref{alg:istar}. To complete the proof, we show that $T_\ell$ is supported by the set $J_\ell$ defined in~\cref{alg:color2}, which is same as $J_\mathsf{int}$. % computed in~\cref{alg:j1}.
 We establish this by showing that $\Gamma_G(J_\mathsf{int}) \subseteq T_\ell$ (recall~\cref{def:comp-nbr}).
 
-To this end, consider a client $j \in J_\mathsf{int}$. At the beginning of this iteration, $j$ is client  in $H$.
+To this end, consider a client $j \in J_\mathsf{int}$. At the beginning of this iteration, $j$ is a client  in $H$.
 We claim that at the beginning of this iteration, $\Gamma_H(j) = \Gamma_G(j)$ (i.e., no neighboring facility has already been assigned in earlier iterations). Indeed, suppose not, and let $i$ be some facility which is present in $\Gamma_G(j)$ but not in $\Gamma_H(j)$. We first observe that $i$ cannot be in $L(\calT)$ as that would violate invariant I1 at the beginning of this iteration --- $(i,j)$ would form the violated pair. Similarly, we note that $i$ cannot be added to $\calS$ in~\cref{alg:case1} in an earlier iteration --- because then the distance between $i^\star$ and $R(\calS)$ would be at most $\frac{16}{\epsilon}\ln(1/\epsilon)$ (via the path $i^\star \rightarrow j \rightarrow i \rightarrow R(\calS)$), so this is a contradiction to the fact that the algorithm is in the branch executing~\cref{alg:case2b}. Finally, we note that $i$ cannot be added to $\calS$ in~\cref{alg:case2a} in an earlier iteration, as that would violate invariant I2 at the beginning of this iteration --- again $(i,j)$ would form the violated pair.
 So we can conclude that $\Gamma_H(j) = \Gamma_G(j)$ and thus that the entire neighborhood of $j$ is contained in $\{i^\star\} \cup A$ which is added to $T_\ell$ in this iteration. Repeating this argument for all $j$ shows that $\Gamma_G(J_\mathsf{int}) \subseteq T_\ell$.
 \end{proof}
@@ -300,14 +305,14 @@ Note that the root $i^\star$ of $S_k$ lies in $S'_k$. First we prove the claim f
 By the definition of $(i^\star, p^\star)$~(\cref{alg:istar}), we know that $ \max_{i\in S'_k, p\in [P]} \effc(i,p)  = \effc(i^\star,p^\star)$.% in the iteration when $S_k$ was added to $\calS$. 
 Furthermore, by definition,
 \[\effc(i^\star,p^\star) = \sum_{j\in H\cap C} d_j \frac{\x_{i^\star jp^\star}}{y_{i^\star p^\star}} \leq \sum_{j\in \Gamma_H(i^\star)} d_j = |\Gamma_H(i^\star)|\]
-The inequality follows because we know  (a) that $\x_{ijp^\star} = x_{ijp^\star} > 0$ only for $j\in \Gamma_H(i^\star)$ (i.e., only clients which are neighboring $i^\star$ can be serviced by $i^\star$), and (b) that $x_{i^\star jp^\star} \leq y_{i^\star p^\star}$ (using inequality~\eqref{eq:mkc3}).
+The inequality follows because we know  (a) that $\x_{ijp^\star} = x_{ijp^\star} > 0$ only for $j\in \Gamma_H(i^\star)$ (i.e., only clients which are neighboring $i^\star$ can be serviced by $i^\star$), and (b) that $x_{i^\star jp^\star} \leq y_{i^\star p^\star}$ (using inequality~\eqref{eq:lp4}).
 Now note that for any $j\in J_\mathsf{int}$, since $j\in H$, we have that $\sum_{i\in L(\calS), p\in [P]} x_{ijp} \leq 1 - \eps$ (otherwise it would have been added
 to $\Cb$ in an earlier iteration and deleted from $H$), and so $\sum_{i\in S_k, p\in [P]} x_{ijp} \geq \eps$ (because $S_k$ includes all the neighbors of $j$ not already in $L(\calS)$, and $j$ has no edge to any facility in $L(\calT$) even in the original graph $G$ by invariant I1, so the fractional demand from $j$ to vertices in $L(\calT)$ is $0$).
 Therefore,
 \[
 |J_\mathsf{int}| = \sum_{j\in J_\mathsf{int}} d_j  \leq \frac{1}{\eps} \sum_{j\in J_\mathsf{int}} d_j \left(\sum_{i\in S_k, p\in [P]} x_{ijp}\right)
 \]
-Since  $|J_\mathsf{int}| \geq \frac{1}{\eps^4}\cdot |\Gamma(i^\star)| $, we have the claim for $S'_k$.
+Since  $|J_\mathsf{int}| \geq \frac{1}{\eps^4}\cdot |\Gamma(i^\star)| $~\eqref{eq:jint}, we have the claim for $S'_k$.
 
 	Subsequently, since $i^\star$ got added to $H$, $\effc(i^\star,p^\star)$ remains unchanged and since $\effc(i,p)$ can only decrease, we see $\effc(i^\star,p^\star) =  \max_{i\in S_k,p\in [P]} \effc(i,p)$.
 	Therefore, even when we add more facilities
