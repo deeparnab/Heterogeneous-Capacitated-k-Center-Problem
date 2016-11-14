@@ -54,6 +54,9 @@
 %\setcounter{page}{1}
 \input{section1}
 \input{preliminaries}
+\bibliographystyle{plain}
+\bibliography{mckc}
+\appendix
 \input{section2}
 \input{section3}
 \input{section5}
@@ -62,10 +65,9 @@
 \input{section7}
 \input{section8}
 %\section{Conclusion}
-\bibliographystyle{plain}
-\bibliography{mckc}
+
 %\newpage
-\appendix
+
 \section{Integrality Gap for Non-Uniform Santa Claus Problem}\label{sec:app-bsig}
 We reproduce the integrality gap example for the configuration LP by Bansal and Sviridenko~\cite{BansalS06} for the general max-min allocation problem, and point out how their instance is in fact a $Q|restr|C_{min}$ instance.
 Fix integer $K$. There are $K$ machines with demand $D_i = K$; these are the large machines $L = \{M_1,M_2,\ldots,M_K\}$. There are $K-1$ large jobs with $c_j = K$ which can only be assigned to the machines in $L$. 
