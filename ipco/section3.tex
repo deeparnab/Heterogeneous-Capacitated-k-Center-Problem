@@ -1,0 +1,153 @@
+%\newpage
+\section{Max-Min Allocation Problems and Supply Polyhedra}\label{sec:supplypolyhedra}
+An instance of the \cckp problem has $m$ machines $M$ with demands $D_1,\ldots,D_m$ and cardinality constraints $f_1,\ldots, f_m$, and $n$  types of jobs $J$ with capacities $c_1,\ldots,c_n$ respectively.
+In $Q||c_{min}$, there are no $f_i$'s, or equivalently $f_i = \infty$.
+%In the version with cardinality constraints, that is $Q|f_i|C_{min}$ we are also given positive integers $f_1,\ldots, f_m$.
+
+A {\em supply vector} $(s_1,\ldots,s_n)$ where each $s_j$ is a non-negative integer
+is called {\em feasible} for instances of these problems if the ensemble formed by $s_j$ copies of jobs of capacity $c_j$ can be allocated feasibly to satisfy all the demands.
+The {\em supply polyhedra} of these instances desires to capture these feasible supply vectors.
+
+\begin{definition}[Supply Polyhedron]\label{def:supp-poly}
+	Given an instance $\calI$ for a max-min allocation problem, a polyhedron $\calP(\calI)$ is called an $\alpha$-approximate supply polyhedron if
+	(a) all feasible supply vectors lie in $\calP(\calI)$, and (b) given any non-negative integer vector $(s_1,\ldots,s_n)\in \calP(\calI)$ there exists an assignment
+	of the $s_j$ jobs of capacity $c_j$ to the machines such that machine $i$ receives a total capacity of $\geq D_i/\alpha$.
+\end{definition}
+
+Ideally, we would like {\em exactly} supply polyhedra. One guess would be the convex hull of all the supply vectors; indeed this is the tightest polytope satisfying condition (a).
+Unfortunately, there are instances of $Q||C_{min}$ (and even for the uniform case $P||C_{min}$) where the convex hull of supply vectors contains infeasible integer points.
+This rules out exact or even $(1+\epsilon)$-approximate supply polyhedra.
+%This instance is motivated by integrality gap examples for machine scheduling~\cite{bibid}.
+\begin{theorem}\label{thm:no-supp}
+	There cannot exist $\alpha$-approximate supply polyhedra (or convex sets) for $\alpha < 1.001$ for all  $P||C_{min}$ instances.
+\end{theorem}
+\begin{proof}
+%\comment{\bf \Large	Needs to be written }.
+The example is almost similar to the example in \cite{KurpiszMMMVW16} which was used to show integrality gap examples for strong LP relaxations for identical machines makespan minimization problem.
+We just sketch a proof here. Recall the Petersen Graph with $10$ nodes and $15$ edges which has the following key property: it has six perfect matchings $M_1,\ldots,M_6$ such that each edge $(i,j)$ appears in exactly $2$ of these matchings; however, its edge set cannot be partitioned into $3$ perfect matchings.
+The vertices are numbered $0,1,\ldots,9$.
+
+Now we can describe the instance. Fix $k$ to be any positive integer.
+We have $15$ types of jobs $p_{ij} = 2^i + 2^j$ for every edge $(i,j)$ of the Petersen graph.
+We have $3k$ machines each with the same demand $D = \sum_{i=0}^9 2^i = 1023$.
+Consider the six supply vectors $s^{(t)}$ for $1\leq t\leq 6$,  which contains $3k$ copies of the job corresponding to edge $(i,j)$ iff $(i,j)$ is in the matching $M_t$.
+These are feasible supply vectors; indeed assign each of the $3k$ machines one jobs $p_{ij}$ for $(i,j) \in M_t$. Now any convex set (in particular polyhedra) containing these six supply vectors
+must contain any convex combination. However the vector $\frac{1}{6}\sum_{t=1}^6 s^{(t)}$ is an integer vector with $k$ copies of each $(i,j)$ for all edges of the Petersen Graph.
+This uses the fact that every edge is in exactly two perfect matchings. Since the edges of the  Petersen graph can't be partitioned into $3$ perfect matchings, any allocation of this supply vector
+must give one machine demand $\leq 1022$. Therefore, there can't be any $\alpha$-approximate supply polyhedra for $P||C_{max}$.
+\end{proof}
+\begin{remark}\emph{
+At this point, we should underscore the difference between supply polyhedra and say LP relaxations for solving  these allocation problems.
+Given an instance of say $Q||C_{max}$ {\em along with} the supply vector (which is one standard way the problems are stated), there does exist a polytope capturing all the feasible allocations. It is the integer hull.
+However, in general, the description of this integer hull uses the supply vector in describing these constraints and therefore are non-linear when the supplies are variables. Nevertheless, as we discuss below, many LP relaxations
+studied in the literature imply supply polyhedra, and their integrality gaps imply the approximation factor for the polyhedra as well.
+}
+\end{remark}
+
+For our purposes, we need more technical conditions from the supply polyhedra. The first is a natural condition which states that if one moves the supply to higher capacity jobs, then feasibility remains.
+The second is related to polynomial time algorithms.
+
+\begin{definition}
+	A supply polyhedron $\calP(\calI)$ is {\em upward-feasible} if the following condition holds.
+Reorder the jobs so that $c_1\le c_2 \le \cdots \le c_n$.
+		If $(s_1,\ldots,s_n)\in \calP$ and $(t_1,\ldots,t_n)$ is a non-negative vector satisfying $t\succeq_\suff s$, that is, $\sum_{k\geq i} t_k \geq \sum_{k\geq i} s_k$, then $(t_1,\ldots,t_n)\in \calP$ as well.
+\end{definition}
+\begin{definition}[$\gamma$-Approximate Separation.]
+A $\gamma$-approximate separation oracle for the supply polyhedron $\calP(\calI)$ is a polynomial time procedure which 	given any $y\in \R^n_{\geq 0}$,  either returns a hyperplane separating $y$ from $\calP$, or asserts that
+		$y\in \calP(\calI')$ for the supply polyhedra of the instance $\calI'$ where all demands have been reduced by a factor $\gamma$.
+%	\end{asparaitem}
+\end{definition}
+%Finally, note that if given
+\subsection{Approximate Supply Polyhedra for $Q||C_{min}$}
+\def\pv{\mathbf{b}}
+%
+%Let the instance $\calI$ of $Q||C_{min}$  have $m$ machines $M$ with demands $D_1 \geq \cdots \geq D_m$ and $n$ types of  jobs $J$ with capacities $c_1 \geq \cdots \geq c_n$.
+%A supply vector $(s_1,\ldots,s_n)$ indicates the number of jobs of each type available; a supply vector is feasible if together they can satisfy all the demands.
+%We wish to find a convex set/polyhedra which captures all the feasible supply vectors. In particular, any feasible supply vector should be in the set, and given any (integer) supply vector in the set
+%there should be an allocation which satisfies the demands to an $\alpha$-factor.
+%\smallskip
+%
+\noindent
+For $Q||C_{min}$, the following assignment LP acts as a good supply polyhedra.
+%A feasible supply vector $(s_1,\ldots,s_n)$ must lie in the following polytope.
+%We assume we have a guess $D$ for the optimum value which is certified by a feasible solution to the following assignment LP. Below, $D_i := Ds_i$.
+\begin{alignat}{4}
+	\calP_\mathsf{ass}(\calI)  && = \{(s_1,\ldots,s_n):  && \notag \\
+	&& \quad \forall j \in J,   &\quad  \textstyle \sum_{i\in M} z_{ij}  \leq  s_j \label{eq:asslp1} \tag{A1} \\
+	&& \quad \forall i\in M ,  &\quad  \textstyle \sum_{j\in J}  z_{ij}  \min(c_j,D_i) \geq D_i \label{eq:asslp2} \tag{A2}\\
+	&& \quad \forall i\in M, j\in J, & \quad z_{ij}   \geq 0 \label{eq:asslp3}  \} \tag{A3}
+\end{alignat}
+\begin{theorem}\label{thm:asslp}
+	For any instance $\calI$ of $Q||C_{min}$, $\calP_\mathsf{ass}(\calI)$ is an upward feasible, $2$-approximate supply polyhedron with exact separation oracle.
+%	Given $(s_1,\ldots,s_n) \in \calP_\mathsf{ass}$, there is an of assignment $\phi$ of the $s_j$ jobs of capacity $c_j$  to the machines such that for all $i\in M$,
+%	$\sum_{j:\phi(j) = i} c_j \geq D_i/2$.
+\end{theorem}
+\noindent
+We defer the proof of the above theorem to Section~\ref{sec:asslp}.
+
+\subsection{Approximate Supply Polyhedra for $Q|f_i|C_{min}$}
+For \cckp, a candidate supply polyhedra would be \eqref{eq:asslp1}-\eqref{eq:asslp3} along with
+\begin{equation}
+\textstyle \forall i\in M, \qquad \sum_{j\in J} z_{ij} ~\leq~ f_i \tag{A4} \label{eq:asslp4}
+\end{equation}
+which would enforce the cardinality constraint. Unfortunately, an example akin to that in Remark~\ref{rem:ig} shows that $\calP_\mathsf{ass}$ is not
+an $\alpha$-approximate supply polyhedron for \cckp instances with $\alpha = o(n)$. We define a stronger supply polyhedron.
+However, at this juncture we state a theorem regarding \eqref{eq:asslp1}-\eqref{eq:asslp4} which 
+is based on the ideas from Shmoys-Tardos rounding~\cite{ShmoysT93}. 
+%we will use at least twice.
+\begin{theorem}[Shmoys-Tardos Rounding]
+	\label{thm:shmoystardos}
+	Let \eqref{eq:asslp1}-\eqref{eq:asslp4} have a feasible solution $z$ and let $C_i := \max_{j:z_{ij}>0} c_j$. 
+There is an integral assignment $\zz_{ij}\in \{0,1\}$ which satisfies \eqref{eq:asslp1}, \eqref{eq:asslp4}, and \eqref{eq:asslp2} with the RHS replaced by $D_i - C_i$ for all $i$.
+\end{theorem}
+	\begin{proof} (Sketch) We proceed as in  the Shmoys-Tardos rounding~\cite{ShmoysT93} of the assignment LP. 
+	We convert the instance into a bipartite matching instance where on one side we have the jobs $J$ with
+		multiplicities $s_1,\ldots,s_n$, and on the other side we have the machines where we take $f'_i := \ceil{\sum_{j\in J} z_{ij}} \le f_i$ copies of each machine.
+		The solution $z$ is converted to a (fractional) solution $\z$ on this bipartite graph where each job $j$ 
+		is assigned  by $\z$ to an extent of at most $1$. Furthermore, for every machine $i$, each of its $f'_i$ copies, except perhaps for the last one, 
+		 gets $\z$-mass exactly $1$.  This assignment also has the property that for any machine $i$ and job $j$, 
+		if  $\z$ assigns (fractionally) $j$ to $\ell^{th}$ copy of $i$, then $c_j$ is at least the total fractional demand assigned by $z$ to 
+		the $(\ell+1)^{th}$ copy of this machine. 
+		 %and for any $\ell$, 
+		 %the $\ell$th copy any job $j$ which gives $\z$-mass to this has $c_j$ more than the total fractional contribution to the $\ell+1$th copy.
+		Since each copy of a machine (except for the last copy) gets $\z$-mass exactly $1$, there is an assignment of jobs to these copies such that each such copy of machine $i$ gets exactly one job. We give machine $i$ whatever its copies obtain; note that it obtains $f'_i \leq f_i$ jobs.
+		The total capacity of jobs allocated is therefore $\ge D_i - \Delta$ where $\Delta$ is the fractional capacity assigned to $i$'s first copy. Since $\Delta\leq C_1$,  this proves the theorem.
+%		
+%		{\large NEEDS BETTER WRITING} We repeat the argument of Shmoys and Tardos~\cite{bibid}.
+%	Form $\floor{\sum_{j\in J} z_{ij}} \le f_i$ copies of every machine; let $N_i$ be the copies of machine $i$. Order the jobs with multiplicities s.t. $c_1 \geq c_2 \geq \cdots \geq c_N$ where $N = \sum_j s_j$.
+%	Modify $z_{ij}$ to get an assigment $z_{ij}$ for $i\in \cup N_i$ and $j\in [N]$ as follows. We do this for one machine $i$.
+%	
+%	Given $z_{ij}$'s we form $|N_i| + 1$ groups $S_1,\ldots, S_{|N_i|},S_{|N_i|+1}$ with $\sum_{j\in S_t} z_{ij} =1$ for all $1\leq t\leq |N_i|$ and $\sum_{j\in S_t} z_{ij} < 1$ for $t = |N_i|+1$.
+%	Note that $\sum_{j\in S_t} z_{ij}c_j < c_{j'}$ for $j'\in S_{t-1}$. When we do this modification for all machines, we get a fractional matching solution where all the $N_i$ copies get fractional value $1$ but the jobs are at most $1$.
+%	So, there is an integral matching. The total integral load on machine $i$ is at least $\sum_{t>1} \sum_{j\in S_t} z_{ij}c_j \geq D_i - C_i$ since $z_{ij} = 0$ for $c_j > C_i$.
+%		
+%		Cardinality constraint vacuously satisfied.
+	\end{proof}
+	
+
+\noindent
+In other words, for instances where $c_j$'s are $\ll D_i$'s, $\calP_\mathsf{ass}$ is a good supply polyhedron. But in general we need a supply polyhedra with stronger constraints. \smallskip
+
+Let $\Supp$ be a multiset indicating infinitely many copies of jobs in $J$.
+For every machine $i$, let $\calF_i :=\{S\in \Supp: |S| \leq f_i ~\textrm{ and } \sum_{j\in S} c_j \geq D_i\}$ denote all the feasible sets that can satisfy machine $i$.
+Let $n(S,j)$ denote the number of copies of job of type $j$.
+\begin{alignat}{4}
+	\calP_\mathsf{conf}(\calI) && = \{(s_1,\ldots,s_n):  && \notag \\
+	&& \quad \forall i \in M,   &\quad  \textstyle \sum_{S} z(i,S)  =  1 \label{eq:conflp1} \tag{C1} \\
+	&& \quad \forall j\in J ,  &\quad  \textstyle \sum_{i\in M,S}  z(i,S)n(S,j) \le  s_j \label{eq:conflp2}\tag{C2} \\
+	&& \quad \forall i\in M, S\notin \calF_i, & \quad z(i,S)  = 0 \label{eq:conflp3} \} \tag{C3}
+\end{alignat}
+\begin{theorem}\label{thm:conflp}
+	For any instance $\calI$ of \cckp, $\calP_\mathsf{conf}(\calI)$ is an upward feasible, $O(\log D)$-approximate supply polyhedron with $(1+\epsilon)$-approximate separation oracle for any $\eps > 0$,
+	where $D := D_{\mathrm{max}}/D_\mathrm{min}$.
+%	Given $(s_1,\ldots,s_n) \in \calP_\mathsf{conf}$ for an instance $\calI$ of $Q|f_i|C_{min}$, there is an of assignment of the $s_j$ jobs of capacity $c_j$  to the machines such that for all $i\in M$
+%	receives a total capapcity $\geq D_i/\alpha$ for $\alpha = O(\log D)$ where $D = D_{max}/D_{min}$.
+\end{theorem}
+\noindent
+As a corollary, we get  \Cref{thm:cckp}.
+We complement this with an almost matching integrality gap.
+\begin{theorem}
+	\label{thm:conf-ig}
+	The integrality gap of $\calP_\mathsf{conf}$ is $\Omega\left(\frac{\log n}{\log\log n}\right)$. More precisely, there exists an instance $\calI$ of \cckp and a supply vector $(s_1,\ldots,s_n) \in \calP_\mathsf{conf}(\calI)$, but in any feasible allocation of $s_j$ jobs of capacity $c_j$ to the machines, there exists some machine  $i$ receiving $\leq O\left( D_i\frac{\log\log n}{\log n}\right)$.
+\end{theorem}
+We defer the proofs of \Cref{thm:conflp} and \Cref{thm:conf-ig} to Section~\ref{sec:conflp}.
