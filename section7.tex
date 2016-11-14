@@ -491,7 +491,7 @@ We run the ellipsoid algorithm to check feasibility of the stronger system \eqre
 At any point, we have a running iterate $(\alpha,\beta)$. %The non-trivial part is to find a separation oracle for \eqref{eq:d2}.
 %That is, we need to find $i\in M$, and  a set $S\in \calF_i$ such that $\sum_j \alpha_jn(S,j) < \beta_i$. Unfortunately this is an NP-hard problem and we need to resort to approximation as follows.
 For every $i\in M$, maximize $\sum_j \cc_j n(S,j)$ over all subsets $S$ with $|S|\leq f_i$ and $\sum_{j\in J} \alpha_j n(S,j) < \beta_i$.
-There is a PTAS for this problem~\comment{Cite or Prove}. If the maximum value returned by the approximation scheme is {\em smaller} than $D_i$, then 
+There is an FPTAS for this problem~\cite{CapraraKPP00}.  If the maximum value returned by the approximation scheme is {\em smaller} than $D_i$, then 
 we know that the true optimum is $\leq D_i(1+\epsilon)$. That is, for every $S$ with $|S| \leq f_i$ and $\sum_{j\in J}\alpha_j n(S,j) < \beta_i$, we have $\sum_{j\in J} \cc_jn(S,j) \le D_i(1+\epsilon)$.
 Which in turn implies $\sum_{j\in J} c_jn(S,j) \leq D_i$. Contrapositively, for every $S\in \calF_i$, we must have $\sum_{j\in J} \alpha_j n(S,j) \geq \beta_i$. %implying $(\alpha,\beta)$. 
 That is $(\alpha,\beta)$ satisfies \eqref{eq:d3}-\eqref{eq:d2} and we exit.
