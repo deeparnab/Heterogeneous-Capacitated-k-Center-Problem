@@ -65,6 +65,8 @@ of the \mckc problem, even with soft capacities.
 	Furthermore, for $1\leq i\leq m$, $|F_i| = f_i$ and $|C_i| = D_i$. Observe that the \mckc instance has a $0$-cost, capacity-preserving solution iff $\calI$ has a feasible assignment.
 %	When there are soft capacities, the above reduction is from $Q||C_{min}$.
 \end{remark}
+\rknote{Are we allowing demands at clients, or all unit demands?}
+\rknote{Remark 1 only talks about hard capacities, right? We need to reduce from Q||C to get soft-capacities, right?}
 The $Q||C_{min}$ problem, and therefore the $Q|f_i|C_{min}$ problem,  is strongly NP-hard. Therefore, no non-trivial approximation to \mckc, even the soft-version, exists unless we {\em violate} the capacities.
 This observation, which is in contrast to the homogeneous version, motivates us to look at bicriteria approximation algorithms.
 %
@@ -130,7 +132,7 @@ We end the section by stating what we believe was the frontier of knowledge for 
 Clearly $Q|restr|C_{min}$  is a special case of the general max-min allocation problem~\cite{ChakrabartyCK09} and therefore for any $\epsilon>0$, there are $n^{O(1/\epsilon)}$-time algorithms
 achieving $O(n^\epsilon)$-approximation. We do not know of any better approximations for $Q|restr|C_{min}$. The so-called Santa Claus problem is the {\em uniform} version $P|restr|C_{min}$ where all demands are the same~\cite{BansalS06}. This has a $O(1)$-approximation algorithm~\cite{Feige08, AsadpourFS12, PolacekS16}. However all these algorithms use the configuration LP; unfortunately for the non-uniform version $Q|restr|C_{min}$, the configuration LP has an integrality gap of $\Omega(\sqrt{n})$ (this example is in fact the same example of~\cite{BansalS06} proving the gap for general max-min allocation -- see Appendix~\ref{sec:app-bsig}.)}
 \end{remark}
-
+\rknote{Do we also mention the log k integrality gap of conf. LP? for our max-min problem?}
 %%Although the violation in the capacities is large (although bounded by a constant), it already implies $O(1)$-approximations for the machine placement problem alluded to in the first paragraph.
 %%This maybe of independent interest.
 %\begin{theorem}\label{thm:mpp}
