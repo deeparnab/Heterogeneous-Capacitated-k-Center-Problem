@@ -1,6 +1,6 @@
 \section{Introduction}
 The capacitated $k$-center problem is a classic optimization problem where a finite metric space $(X,d)$ needs to be partitioned into $k$ clusters so that  every  cluster has cardinality at most
-some specified value $L$, and the objective is to minimize the maximum intra-cluster distance. This problem introduced by Bar-Ilan et al~\cite{Bar-IlanKP93} has many applications~\cite{LuptonMY98, MorganL77, Murthy1983AnAA}. %see khuller-sussmann paper for these refs.
+some specified value $L$, and the objective is to minimize the maximum intra-cluster distance. This problem introduced by Bar-Ilan et al~\cite{Bar-IlanKP93} has many applications~\cite{LuptonMY98,MorganL77,Murthy1983AnAA}. %see khuller-sussmann paper for these refs.
 One application is deciding placement of machine locations (centers of clusters) in a network scheduling environment where jobs arise in a metric space and the objective function has a  job-communication (intra-cluster distance) and machine-load (cardinality)
 component~\cite{PSW97}. %\mcomment{Add Venkat's References?}
 
@@ -29,10 +29,10 @@ For instance in the network scheduling application above, suppose we had machine
 \end{definition}
 \noindent
 Note that when all $c_p = L$ and $\sum_p k_p = k$, we get back the usual capacitated $k$-center problem.
-The \mckc problem is relevant in many applications where the resources available are heterogenous. The machine placement problem was one example which has applications in network scheduling~\cite{QiuSZ15, ImM15a} and distributed databases~\cite{MorganL77,SKRN15}. Another example is that of  vehicle routing problems with  fleets of different speeds~\cite{GortzMN016}. A third relevant application may be clustering; often clusters of equal sizes are undesirable~\cite{GuhaRS01} and explicitly introducing heterogeneous constraints might lead to desirable clusters.
+The \mckc problem is relevant in many applications where the resources available are heterogenous. The machine placement problem was one example which has applications in network scheduling~\cite{QiuSZ15,ImM15a} and distributed databases~\cite{MorganL77,SKRN15}. Another example is that of  vehicle routing problems with  fleets of different speeds~\cite{GortzMN016}. A third relevant application may be clustering; often clusters of equal sizes are undesirable~\cite{GuhaRS01} and explicitly introducing heterogeneous constraints might lead to desirable clusters.
 In this paper, we investigate the worst-case complexity of the \mckc problem. %\smallskip
 
-Bar-Ilan et al~\cite{Bar-IlanKP93} gave a $10$-approximation for the homogeneous capacitated $k$-center problem which was improved to a $6$-factor approximation by Khuller and Sussmann~\cite{KhullerS00}. One cannot get a better than $3$-approximation even for the {\em uncapacitated} $k$-center problem~\cite{HochbaumS85}. More recently, the {\em non-uniform} capacitated $k$-center problem was considered~\cite{CyganHK12, AnBCGMS14} in the literature:~in this problem every facility $v\in F$ has a pre-determined capacity $c_v$ if opened (and $0$ otherwise). We remark that the non-uniform version and our heterogeneous version seem unrelated in the sense that none is a special case of the other.
+Bar-Ilan et al~\cite{Bar-IlanKP93} gave a $10$-approximation for the homogeneous capacitated $k$-center problem which was improved to a $6$-factor approximation by Khuller and Sussmann~\cite{KhullerS00}. One cannot get a better than $3$-approximation even for the {\em uncapacitated} $k$-center problem~\cite{HochbaumS85}. More recently, the {\em non-uniform} capacitated $k$-center problem was considered~\cite{CyganHK12,AnBCGMS14} in the literature:~in this problem every facility $v\in F$ has a pre-determined capacity $c_v$ if opened (and $0$ otherwise). We remark that the non-uniform version and our heterogeneous version seem unrelated in the sense that none is a special case of the other.
 Cygan et al~\cite{CyganHK12} gave an $O(1)$-approximation for the problem which was improved to a $11$-approximation by An et al~\cite{AnBCGMS14}.
 %Cygan and Kociumura~\cite{CKstacs14} look at the capacitated $k$-center with outliers problem where some $z$ clients need not be assigned; note that this  is a special case of the \mckc problem with $P=1$ where we allow $z$ clients with capacity $1$.
 
@@ -65,8 +65,6 @@ of the \mckc problem, even with soft capacities.
 	Furthermore, for $1\leq i\leq m$, $|F_i| = f_i$ and $|C_i| = D_i$. Observe that the \mckc instance has a $0$-cost, capacity-preserving solution iff $\calI$ has a feasible assignment.
 %	When there are soft capacities, the above reduction is from $Q||C_{min}$.
 \end{remark}
-\rknote{Are we allowing demands at clients, or all unit demands?}
-\rknote{Remark 1 only talks about hard capacities, right? We need to reduce from Q||C to get soft-capacities, right?}
 The $Q||C_{min}$ problem, and therefore the $Q|f_i|C_{min}$ problem,  is strongly NP-hard. Therefore, no non-trivial approximation to \mckc, even the soft-version, exists unless we {\em violate} the capacities.
 This observation, which is in contrast to the homogeneous version, motivates us to look at bicriteria approximation algorithms.
 %
@@ -130,9 +128,9 @@ We end the section by stating what we believe was the frontier of knowledge for 
 
 \emph{
 Clearly $Q|restr|C_{min}$  is a special case of the general max-min allocation problem~\cite{ChakrabartyCK09} and therefore for any $\epsilon>0$, there are $n^{O(1/\epsilon)}$-time algorithms
-achieving $O(n^\epsilon)$-approximation. We do not know of any better approximations for $Q|restr|C_{min}$. The so-called Santa Claus problem is the {\em uniform} version $P|restr|C_{min}$ where all demands are the same~\cite{BansalS06}. This has a $O(1)$-approximation algorithm~\cite{Feige08, AsadpourFS12, PolacekS16}. However all these algorithms use the configuration LP; unfortunately for the non-uniform version $Q|restr|C_{min}$, the configuration LP has an integrality gap of $\Omega(\sqrt{n})$ (this example is in fact the same example of~\cite{BansalS06} proving the gap for general max-min allocation -- see Appendix~\ref{sec:app-bsig}.)}
+achieving $O(n^\epsilon)$-approximation. We do not know of any better approximations for $Q|restr|C_{min}$. The so-called Santa Claus problem is the {\em uniform} version $P|restr|C_{min}$ where all demands are the same~\cite{BansalS06}. This has a $O(1)$-approximation algorithm~\cite{Feige08,AsadpourFS12,PolacekS16}. However all these algorithms use the configuration LP; unfortunately for the non-uniform version $Q|restr|C_{min}$, the configuration LP has an integrality gap of $\Omega(\sqrt{n})$ (this example is in fact the same example of~\cite{BansalS06} proving the gap for general max-min allocation -- see Appendix~\ref{sec:app-bsig}.)}
 \end{remark}
-\rknote{Do we also mention the log k integrality gap of conf. LP? for our max-min problem?}
+
 %%Although the violation in the capacities is large (although bounded by a constant), it already implies $O(1)$-approximations for the machine placement problem alluded to in the first paragraph.
 %%This maybe of independent interest.
 %\begin{theorem}\label{thm:mpp}
@@ -209,7 +207,7 @@ Both these reductions proceed via {\em decomposing} the given instance of the \m
 The weaker decomposition theorem (Theorem~\ref{thm:weakdecomp}) states that we can delete a subset $\Cd$ of clients and partition the residual instance into portions we call {\em complete neighborhood sets} (Definition~\ref{def:comp-nbr}) of $O(\log n/\epsilon)$ diameter.
 These sets consists of subsets of facilities $T$ and clients $J$ such that the optimal solution must assign $J$-clients to facilities in $T$. This collection of complete-neighborhood sets thus lead to an instance of the \cckp problem (Remark~\ref{rem:red})
 whose solutions translate to \mckc solutions with $O(\log n/\epsilon)$ hit on the cost. Furthermore, the deleted clients $\Cd$ can be charged to clients in $C\setminus \Cd$ such that the capacity of facilities only increase by an $\epsilon$-factor.
-We use the {\em region growing technique} which have been used for cut problems~\cite{LeightonR99, GargVY96} to find the set $\Cd$; we keep on growing balls till the total external demand is at most $\epsilon$ times the internal demand.
+We use the {\em region growing technique} which have been used for cut problems~\cite{LeightonR99,GargVY96} to find the set $\Cd$; we keep on growing balls till the total external demand is at most $\epsilon$ times the internal demand.
 $O(\log n/\eps)$-radius balls suffice. %\smallskip
 
 \paragraph{\emph{Strong Decomposition.}}
@@ -226,7 +224,7 @@ The nub of the problem lies in the {\em supply} of capacities to each of these c
 The above method would be fine if the supply  prescribed by the LP to the complete-neighborhood sets in $\calT$ would satisfy (or approximately satisfy) the demands of the machines in the corresponding \cckp instance. This motivates us  to define {\em supply polyhedra} for \cckp and other related problems. Informally, the supply polyhedron (Definition~\ref{def:supp-poly}) of a \cckp instance is supposed to capture all the vectors $(s_1,\ldots,s_n)$ such that $s_j$ copies of capacity $c_j$ can satisfy the demands of all the machines. Conversely, any vector in this polyhedron should also be a feasible (or approximately feasible) supply vector for this instance.
 
  If such an object $\calP$ existed, then we could strengthen our natural LP relaxation as follows. For {\em every} collection $\calT$ of complete-neighborhood sets, we add a constraint (described as \eqref{eq:lp7}) stating that the fractional capacity allocated to the facilities in $\calT$ should
- lie in the supply polyhedron of the corresponding \cckp instance. Note that this LP has exponentially many constraints, and it is not clear how to solve it. However, we can use the ``round-and-cut'' framework exploited earlier in many papers~\cite{CarrFLP00, ChakrabartyCKK11, AnSS14, DemirciL16, Li15, Li16}. Starting with a solution $(x,y)$, we use the strong decomposition theorem to obtain the set $\calT$ and check if the restriction of $y$ to the facilities in $\calT$ lies in the supply polyhedron of the corresponding \cckp instance. If yes, then we are done.
+ lie in the supply polyhedron of the corresponding \cckp instance. Note that this LP has exponentially many constraints, and it is not clear how to solve it. However, we can use the ``round-and-cut'' framework exploited earlier in many papers~\cite{CarrFLP00,ChakrabartyCKK11,AnSS14,DemirciL16,Li15,Li16}. Starting with a solution $(x,y)$, we use the strong decomposition theorem to obtain the set $\calT$ and check if the restriction of $y$ to the facilities in $\calT$ lies in the supply polyhedron of the corresponding \cckp instance. If yes, then we are done.
  If no, then we have obtained a separating hyperplance for the super-large LP\eqref{eq:lp1}-\eqref{eq:lp7}, and we can run the ellipsoid algorithm. In sum, we obtain an algorithm which reduces the \mckc problem to obtaining good supply polyhedra for the \cckp problem (Theorem~\ref{thm:reduction}).% \smallskip
 
 \paragraph{\emph{Supply Polyhedron for \cckp and $Q||C_{min}$.}}
@@ -320,7 +318,7 @@ We have already mentioned the state of the art for capacitated $k$-center proble
 For the capacitated facility location problem a $5$-approximation is known via local search~\cite{BansalGG12}, while more recently an $O(1)$-approximate {\em LP-based} algorithm was proposed~\cite{AnSS14}.
 All these are true approximation algorithms in that they do not violate capacities. It is an outstanding open problem to obtain true approximations for the capacitated $k$-median problem.
 The best known algorithm is  the recent work of  Demirci and Li~\cite{DemirciL16} who for any $\epsilon>0$ give a $\poly(1/\epsilon)$-approximate algorithm violating the capacities by $(1+\epsilon)$-factor.
-The technique of this algorithm and its precursors~\cite{AnSS14, Li15, Li16}  are similar to ours in that they follow the round-and-cut strategy to exploit exponential sized linear programming relaxations.\smallskip
+The technique of this algorithm and its precursors~\cite{AnSS14,Li15,Li16}  are similar to ours in that they follow the round-and-cut strategy to exploit exponential sized linear programming relaxations.\smallskip
 
 The \cckp problem is a cardinality constrained max-min allocation problem. There has been some work in the scheduling literature on cardinality-constrained min-max problem.
 When all the machines are identical, the problem is called the $k_i$-partitioning problem~\cite{BabelKK98}.

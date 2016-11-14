@@ -1,0 +1,87 @@
+\documentclass{llncs}
+\usepackage{llncsdoc}
+
+\input{preamble}
+%\usepackage{times}
+
+\def\diam{\mathrm{diam}}
+\def\dist{\mathrm{dist}}
+\def\mckc{{\sffamily Heterogeneous Cap-$k$-Center}\xspace}
+%\def\cckp{{\sffamily Cardinality-Constrained Knapsack Cover}\xspace}
+\def\cckp{$Q|f_i|C_{min}$\xspace}
+\def\opt{\mathsf{OPT}}
+\def\capkc{{\sffamily Cap-$k$-Center }}
+\def\x{{\mathsf x}}
+\def\y{y^{{\mathsf{int}}}}
+\def\z{\bar{z}}
+\def\Supp{\mathsf{Supp}\xspace}
+\def\n{n^{(1)}}
+\def\nn{n^{(2)}}
+\def\effc{c_{\mathrm{eff}}}
+\def\zz{z^{\mathsf{int}}}
+\def\suff{\mathsf{suff}}
+\def\Sone{\calS_{\mathsf{round}}}
+\def\Stwo{\calS_{\mathsf{nexp}}}
+
+\def\Cb{C_{\mathsf{blue}}}
+\def\Cbb{C_{\mathsf{black}}}
+\def\Cr{C_{\mathsf{red}}}
+\def\Cp{C_{\mathsf{purple}}}
+\def\Cd{C_{\mathsf{del}}}
+
+%\newcommand{\gset}{Y}
+%\newcommand{\gcol}{{\cal Y}}
+\newcommand{\brp}{{(p)}}
+\renewcommand{\br}[1]{{(#1)}}
+\newcommand{\bc}{{\bar c}}
+\renewcommand{\epsilon}{\varepsilon}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+\begin{document}
+\title{\huge The Heterogeneous Capacitated $k$-Center Problem}
+\date{}
+\author{Deeparnab Chakrabarty\thanks{Microsoft Research India, deeparnab@gmail.com} \and Ravishankar Krishnaswamy\thanks{Microsoft Research India, ravishankar.k@gmail.com} \and Amit Kumar\thanks{Comp. Sci. \& Engg., IIT Delhi, amitk@cse.iitd.ac.in}}
+\institute{}
+\maketitle
+\begin{abstract}
+	The abstract goes here.
+\end{abstract}
+%\thispagestyle{empty}
+%\newpage
+%\setcounter{page}{1}
+\input{section1}
+\input{preliminaries}
+\bibliographystyle{plain}
+\bibliography{mckc}
+\appendix
+\input{section2}
+\input{section3}
+\input{section5}
+\input{section4}
+\input{section6}
+\input{section7}
+\input{section8}
+%\section{Conclusion}
+
+%\newpage
+
+\section{Integrality Gap for Non-Uniform Santa Claus Problem}\label{sec:app-bsig}
+We reproduce the integrality gap example for the configuration LP by Bansal and Sviridenko~\cite{BansalS06} for the general max-min allocation problem, and point out how their instance is in fact a $Q|restr|C_{min}$ instance.
+Fix integer $K$. There are $K$ machines with demand $D_i = K$; these are the large machines $L = \{M_1,M_2,\ldots,M_K\}$. There are $K-1$ large jobs with $c_j = K$ which can only be assigned to the machines in $L$. 
+Let $J_B$ be the set of large jobs. There are $K^2$ small machines each with $D_i = 1$; these machines are distributed in $K$ classes where the $i$th class $\cC_i$ contains $K$ small machines. We let $m^{(i)}_k$ denote the $k$th machine in $\cC_i$, for $1\leq k\leq K$.
+There are $K^2 + K$ small jobs with $c_j = 1$. These jobs are partitoned into $K$ classes with $i$th class $\cJ_i$ containing $K+1$ small jobs. Each class $\cJ_i$ has one ``public'' job $j^{(i)}_0$ which can be assigned to any machine $m^{(i)}_k \in \cC_i$ 
+ and $K$ ``private'' jobs $j^{(i)}_k$, $1\leq k\leq K$ where $j^{(i)}_k$ can be assigned to only $m^{(i)}_k \in \cC_i$. Furthermore all the private jobs $j^{(i)}_k\in \cJ_i$ can be assigned to the large machine $M_i \in L$. This completes the description of the instance.
+Note that the number of machines and jobs are $\Theta(K^2)$.
+
+The integral optimum solution must give one machine $i$ capacity $\leq D_i/K$. Indeed, at least one large machine $M_i$ will not receive a job in $J_B$.
+The only other jobs available to $M_i$ are the private jobs in $\calJ_i$. Suppose we allocate two such jobs to $M_i$; wlog these are $j^{(i)}_1$ and $j^{(i)}_2$. Now note
+that the machines $m^{(i)}_1$ and $m^{(i)}_2$ have only job $j^{(i)}_0$ which can be assigned to them; and so one of them would get capacity $0$. 
+Therefore, the machine $M_i$ can receive only one job $j^{(i)}_k$ giving it total capacity $\leq D_i/K$.
+
+On the other hand the configuration LP is feasible. Every large machine $M_i$ gets $z(M_i, j) = 1/K$ for all large jobs $j\in J_B$ and $z(M_i,\{j^{(i)}_1,\ldots, j^{(i)}_K\}) = 1/K$ for the set of private jobs in $\cJ_i$.
+For all $1\leq i,k\leq K$, every machine $m^{(i)}_k$ receives $z(m^{(i)}_k,j^{(i)}_k) = 1-1/K$ and $z(m^{(i)}_k,j^{(i)}_0) = 1/K$. One can check all the jobs are fractionally assigned exactly.
+
+\end{document}
