@@ -10,53 +10,53 @@
 \newcommand{\barD}{\bar{D}}
 \def\calFr{\calF^{(\alpha,\beta)}}
 %\newpage
-\section{Supply Polyhedra for \cckp: Proof of Theorem~\ref{thm:conflp}}\label{sec:conflp}
+\section{Supply Polyhedra for \cckp: Proof of Theorem~\ref{fthm:conflp}}\label{fsec:conflp}
 %Let the instance $\calI$ of $Q||C_{min}$  have $m$ machines $M$ with demands $D_1 \geq \cdots \geq D_m$ and cardinality constraints $f_1,\ldots,f_m$, and $n$ types of  jobs $J$ with capacities $c_1 \geq \cdots \geq c_n$.  We assume $D_1/D_m \leq n^C$\comment{deepc: i think this can be made wlog with some std trick}
 %A supply vector $(s_1,\ldots,s_n)$ indicates the number of jobs of each type available; a supply vector is feasible if together they can satisfy all the demands.
-%An $\alpha$-approximate supply polyhedra $\calP$ has the following properties: any feasible supply vector lies in $\calP$, and given any integral vector $(s_1,\ldots,s_n) \in \calP$ there is an allocation 
+%An $\alpha$-approximate supply polyhedra $\calP$ has the following properties: any feasible supply vector lies in $\calP$, and given any integral vector $(s_1,\ldots,s_n) \in \calP$ there is an allocation
 %of the $s_j$ jobs of capacity $c_j$ which satisfies every demand up to an $\alpha$-factor.
 %%We wish to find a convex set/polyhedra which captures all the feasible supply vectors. In particular, any feasible supply vector should be in the set, and given any (integer) supply vector in the set
 %%there should be an allocation which satisfies the demands to an $\alpha$-factor.
 %\smallskip
 %
 %\noindent
-%A feasible supply vector $(s_1,\ldots,s_n)$ must lie in the following polytope. 
+%A feasible supply vector $(s_1,\ldots,s_n)$ must lie in the following polytope.
 %Let $\Supp$ be a set indicating infinitely many copies of all jobs.
-%For every machine $i$, let $\calF_i :=\{S\in \Supp: |S| \leq f_i ~\textrm{ and } \sum_{j\in S} c_j \geq D_i\}$ denote all the feasible sets that can satisfy machine $i$. 
+%For every machine $i$, let $\calF_i :=\{S\in \Supp: |S| \leq f_i ~\textrm{ and } \sum_{j\in S} c_j \geq D_i\}$ denote all the feasible sets that can satisfy machine $i$.
 %Let $n(S,j)$ denote the number of copies of job of type $j$.
 %	\begin{alignat}{4}
 %		\calP_\mathsf{conf} && = \{(s_1,\ldots,s_n):  && \notag \\
-%		&& \quad \forall i \in M,   &\quad  \textstyle \sum_{S} z(i,S)  =  1 \label{eq:conflp1} \\
-%		&& \quad \forall j\in J ,  &\quad  \textstyle \sum_{i\in M,S}  z(i,S)n(S,j) \le  s_j \label{eq:conflp2} \\
-%		&& \quad \forall i\in M, S\notin \calF_i, & \quad z(i,S)  = 0 \label{eq:conflp3}  \}
+%		&& \quad \forall i \in M,   &\quad  \textstyle \sum_{S} z(i,S)  =  1 \label{feq:conflp1} \\
+%		&& \quad \forall j\in J ,  &\quad  \textstyle \sum_{i\in M,S}  z(i,S)n(S,j) \le  s_j \label{feq:conflp2} \\
+%		&& \quad \forall i\in M, S\notin \calF_i, & \quad z(i,S)  = 0 \label{feq:conflp3}  \}
 %	\end{alignat}
 \def\z{\bar z}
-%\begin{theorem}\label{thm:conflprounding}
+%\begin{theorem}\label{fthm:conflprounding}
 %\end{theorem}
 %\begin{proof}
-	    Throughout the proof we fix $\calI$ to be the instance of \cckp and the supply vector $(s_1,\ldots,s_n)$. 
-	    Let  $z$ be a feasible solution to \eqref{eq:conflp1}-\eqref{eq:conflp3}. The proof of Theorem~\ref{thm:conflp} follows from 
-	    Lemma~\ref{lem:conf-round}, Lemma~\ref{lem:conf-is-uf}, and Lemma~\ref{lem:conf-so}
-	    \begin{lemma}\label{lem:conf-round}
+	    Throughout the proof we fix $\calI$ to be the instance of \cckp and the supply vector $(s_1,\ldots,s_n)$.
+	    Let  $z$ be a feasible solution to \eqref{feq:conflp1}-\eqref{feq:conflp3}. The proof of Theorem~\ref{fthm:conflp} follows from
+	    Lemma~\ref{flem:conf-round}, Lemma~\ref{flem:conf-is-uf}, and Lemma~\ref{flem:conf-so}
+	    \begin{lemma}\label{flem:conf-round}
 	    	Given $z$, we can  find an of assignment of the $s_j$ jobs of capacity $c_j$  to the machines such that for all $i\in M$
 	    	receives a total capapcity $\geq D_i/\alpha$ for $\alpha = O(\log D)$ where $D = D_\mathrm{max}/D_\mathrm{min}$.
 	    \end{lemma}
 	    \begin{proof}
-%	    Our objective is to find an assignment of the $s_j$ jobs of capacity $c_j$ to the $m$ machines so that machine $i$ obtains total capacity $\geq D_i/\alpha$ for $\alpha = O(\log D)$. 	  
+%	    Our objective is to find an assignment of the $s_j$ jobs of capacity $c_j$ to the $m$ machines so that machine $i$ obtains total capacity $\geq D_i/\alpha$ for $\alpha = O(\log D)$. 	
 	    We start by classifying the demands into buckets.
-	    
-	    	\paragraph{Bucketing Demands.} We partition the demands into buckets depending on their requirement values $D_i$. By scaling data, we may assume without loss of generality that $D_\mathrm{min} = 1$. 
-	    	We say that demand $i$ belongs to \emph{bucket $t$} if $2^{t-1} \leq D_i < 2^t$. We let $B^\brt$ to denote the bucket $t$. The number of buckets $K \leq \log_2 D$. 
+	
+	    	\paragraph{Bucketing Demands.} We partition the demands into buckets depending on their requirement values $D_i$. By scaling data, we may assume without loss of generality that $D_\mathrm{min} = 1$.
+	    	We say that demand $i$ belongs to \emph{bucket $t$} if $2^{t-1} \leq D_i < 2^t$. We let $B^\brt$ to denote the bucket $t$. The number of buckets $K \leq \log_2 D$.
 	    	For any bucket $t$, we round-down all the demands for $i\in B^\brt$; define $\barD_i = 2^{t-1}$ for all $i\in B^\brt$. Note that any $\rho$-approximate feasible solution with respect to $\barD$'s is $2\rho$-approximate with respect to the original $D_i$'s. \smallskip
-	    
-	    
-	    
-	    
+	
+	
+	
+	
 \noindent
-  To this end, we modify the feasible solution $z$ to a solution $\z$  in various stages. Initially $\z \equiv z$. 
+  To this end, we modify the feasible solution $z$ to a solution $\z$  in various stages. Initially $\z \equiv z$.
 	    Our modified solution $\z$'s support will not be $\calF_i$; to this end we define $\calFr_i$ for parameters $\alpha,\beta \geq 1$.
 	    \begin{definition}
-For machine $i$ and parameters $\alpha,\beta > 1$, $\calFr_i$ contains the set $S$ if either (a) $S = \{j\}$ is a singleton with $c_j \geq \frac{\barD_i}{3\log_2 D}$, 
+For machine $i$ and parameters $\alpha,\beta > 1$, $\calFr_i$ contains the set $S$ if either (a) $S = \{j\}$ is a singleton with $c_j \geq \frac{\barD_i}{3\log_2 D}$,
 or (b) $|S|\leq f_i$, $c_j \leq \alpha \cdot \frac{\barD_i}{3\log_2 D}$, and $\sum_{j\in S} c_j \geq \frac{\barD_i}{\beta}$. 	    We say $\z$ is $(\alpha,\beta)$-feasible if for all $i$, $\z(i,S) > 0$ implies $S\in \calFr_i$.
 	    \end{definition}
 	    \noindent
@@ -65,7 +65,7 @@ or (b) $|S|\leq f_i$, $c_j \leq \alpha \cdot \frac{\barD_i}{3\log_2 D}$, and $\s
 	
 		\noindent {\bf Step 1: Partitioning Configurations.}	
 		
-		We call a job of capacity $c_j$ {\em large} for machine $i$ if $c_j \geq \frac{\barD_i}{3\log_2 D}$, otherwise we call it \emph{small} for machine $i$. 
+		We call a job of capacity $c_j$ {\em large} for machine $i$ if $c_j \geq \frac{\barD_i}{3\log_2 D}$, otherwise we call it \emph{small} for machine $i$.
 %		For a machine $i$, we define a relaxed collection of feasible sets $\calFr_i$ where $S\in \calFr_i$ if either (a) $S = \{j\}$ and $j$ is large for $i$, or (b) $c_j < \frac{D_i}{3\log_2 D}$ for all $j\in S$, $|S| \leq f_i$, and $\sum_{j\in S} c_j \geq D_i/2$.
 %	
 %		
@@ -83,8 +83,8 @@ We call such singleton configurations {\em large} for $i$; all others are {\em s
 Let $\calF^L_i$ be the collection of large configurations for $i$; the rest $\calF^S_i$ being small configurations.
 Define $\z^L(i) := \sum_{S\in \calF^L_i} \z(i,S)$ be the total large contribution to $i$, and let $\z^S(i) := \sum_{S\in \calF^S_i} \z(i,S)$ the small contribution.
 
-\begin{claim}\label{clm:step1}
-	After {\bf Step 1}, $\z$ satisfies \eqref{eq:conflp1} and \eqref{eq:conflp2} and $\z$ is $(1,1)$-feasible.
+\begin{claim}\label{fclm:step1}
+	After {\bf Step 1}, $\z$ satisfies \eqref{feq:conflp1} and \eqref{feq:conflp2} and $\z$ is $(1,1)$-feasible.
 \end{claim}
 
  	
@@ -109,32 +109,32 @@ Define $\z^L(i) := \sum_{S\in \calF^L_i} \z(i,S)$ be the total large contributio
 %	
 %	\medskip % \noindent {\bf Step 2: ``Bucketing'' Demand Requirements.}
 %	Before proceeding, we make a few definitions.
-	We partition the demands into buckets depending on their requirement values $D_i$. By scaling data, we may assume without loss of generality that $D_{min} = 1$. 
+	We partition the demands into buckets depending on their requirement values $D_i$. By scaling data, we may assume without loss of generality that $D_{min} = 1$.
 	We say that demand $i$ belongs to \emph{bucket $t$} if $2^{t-1} \leq D_i < 2^t$. We let $B^\brt$ to denote the bucket $t$. The number of buckets $K \leq \log_2 D$.
 %		Note that the number of buckets $K \leq \log_2 D$; this drives the approximation factor.
-%We make one observation. 
-%\begin{claim}\label{clm:c001}
-%	For any $t$, let $i$ and $i'$ be two machines in $B^\brt$ and let $f_i \leq f_{i'}$. 
+%We make one observation.
+%\begin{claim}\label{fclm:c001}
+%	For any $t$, let $i$ and $i'$ be two machines in $B^\brt$ and let $f_i \leq f_{i'}$.
 %	Let $z(i,T) > 0$ for some small configuration for $i$.
 %Then $T\in \calFr_{i'}$ and $\sum_{j\in T} c_j \geq D_{i'}/2$.
 %\end{claim}
 %\begin{proof}
 %Note that since $z(i,T) > 0$, we have $\sum_{j\in T} c_j \geq D_{i} \geq 2^{t-1} \ge D_{i'}/2$. Furthermore, for any $j\in T$, we have $c_j \leq \frac{D_{i}}{3\log_2 D} \le \frac{2^t}{3\log_2 D}$.
 %Therefore any other machine $i'\in B^\brt$, $T$ satisfies two conditions of being in $\calFr_{i'}$.
-%Now if $f_{i'} \geq f_i$, we get $|T| \leq f_{i'}$ as well. 
+%Now if $f_{i'} \geq f_i$, we get $|T| \leq f_{i'}$ as well.
 %\end{proof}
-%Before describing our subroutines, we make a few definitions. All of these are with respect to a solution $z$. 
+%Before describing our subroutines, we make a few definitions. All of these are with respect to a solution $z$.
 
 
 %At this stage, note that $\z^L(i) + \z^S(i) = 1$ for all machines $i$.		
 A machine $i$ is called {\em rounded} if $\z(i,S) = 1$ for some set $S$. We let $\calR$ denote the rounded machines.
-The remaining machines are of three kinds:  {\em large} ones with $\z^L(i) = 1$, {\em hybrid} ones with $\z^L(i) \in (0,1)$ and {\em small} ones with $\z^L(i) = 0$. 
+The remaining machines are of three kinds:  {\em large} ones with $\z^L(i) = 1$, {\em hybrid} ones with $\z^L(i) \in (0,1)$ and {\em small} ones with $\z^L(i) = 0$.
 Let $\calL,\calH,\calS$ denote these respectively.  \medskip
 
-   
+
 \noindent{\bf Step 2: Taking care of large machines.}
 
-The goal of this step is to modify $\z$ such that (a) the set of large machines becomes empty and (b) the set of hybrid machines is bounded. In particular, we will have at most one hybrid machine in a bucket 
+The goal of this step is to modify $\z$ such that (a) the set of large machines becomes empty and (b) the set of hybrid machines is bounded. In particular, we will have at most one hybrid machine in a bucket
 proving there are at most $K$ hybrid machines. First we need to discuss two sub-routines.
 
 \paragraph{Subroutine: {\sf FixLargeMachine}($i$).}
@@ -142,41 +142,41 @@ This takes input a large machine $i\in\calL$, that is,  $\z^L(i) = 1$. We modify
 
 Consider the jobs $j$ large for $i$ such that $\z(i,\{j\}) \in (0,1)$. Since $\z^L(i) = 1$ and $i\notin \calR$, there exists at least two such jobs.
 %
-%Since $i\notin \calR$ in the beginning and yet $\z^L(i) = 1$, there must exist at least two large configurations $z(i,\{j\}) \in (0,1)$. % and $z(i,\{j_2\}) \in (0,1)$. 
+%Since $i\notin \calR$ in the beginning and yet $\z^L(i) = 1$, there must exist at least two large configurations $z(i,\{j\}) \in (0,1)$. % and $z(i,\{j_2\}) \in (0,1)$.
 Let $j_1$ be the smallest capacity among these, and $j_2$  be any other such job. %all large configurations $(i,\{j\})$ with $z(i,\{j\}) > 0$.
 %	Wlog, assume $c_{j_1} \le c_{j_2}$.
 Two cases arise. In the simple case, there exists no $i'\notin \calR, S'\subseteq \Supp$ with $\z(i',S) > 0$ and $j_1 \in S$. That is, no other machine fractionally claims the job $j_1$.
-Since $s_{j_1}$ is an integer, we have slack in \eqref{eq:conflp2}. We round up $\z(i,\{j_1\}) = 1$, set $\z(i,T) = 0$ for all other configurations of $i$, and add $i$ to $\calR$ and terminate.
+Since $s_{j_1}$ is an integer, we have slack in \eqref{feq:conflp2}. We round up $\z(i,\{j_1\}) = 1$, set $\z(i,T) = 0$ for all other configurations of $i$, and add $i$ to $\calR$ and terminate.
 %
-%(zeroing out all other $i$'s $z(i,S)$'s ) without violating \eqref{eq:conflp2}. We then  add $(i,\{j_1\})$ to $\calR$.
+%(zeroing out all other $i$'s $z(i,S)$'s ) without violating \eqref{feq:conflp2}. We then  add $(i,\{j_1\})$ to $\calR$.
 
-Otherwise, there exists a machine $i'$ 
-%(which could be in a different bucket) 
-and a set $S$ such that $z(i',S) \in (0,1)$ and $j_1 \in S$. 
-Now define the set $T$ as follows. If $c_{j_2} > \frac{\barD_{i'}}{3\log_2 D}$, then $T = \{j_2\}$; otherwise $T = S - j_1 + j_2$. 
+Otherwise, there exists a machine $i'$
+%(which could be in a different bucket)
+and a set $S$ such that $z(i',S) \in (0,1)$ and $j_1 \in S$.
+Now define the set $T$ as follows. If $c_{j_2} > \frac{\barD_{i'}}{3\log_2 D}$, then $T = \{j_2\}$; otherwise $T = S - j_1 + j_2$.
 Note that in the second case $j_2$ could already be in $S$; $T$ then contains one more copy, that is, $n(T,j_2) = n(S,j_2) + 1$.
 %Note that in either case $T \in \calFr_{i'}$.
 %In the first case, $j_2$ is large for $i'$. In the second case, $|T| = |S|$ and $\sum_{j\in T} c_j \ge \sum_{j\in S} c_j$ since $c_{j_2} \geq c_{j_1}$ by choice of $j_1$.
-We modify $\z$-as follows. We decrease $\z(i,\{j_2\})$ and $\z(i',S)$ by $\delta$, and increase $\z(i,\{j_1\})$ and $\z(i',T)$ by $\delta$ till one of the values becomes $0$ or $1$. 
-%As before, this preserves the LHS of \eqref{eq:conflp1} and can only decrease the LHS of \eqref{eq:conflp2} (for jobs $j\in S\setminus j_1$ if $T = \{j_2\}$).
+We modify $\z$-as follows. We decrease $\z(i,\{j_2\})$ and $\z(i',S)$ by $\delta$, and increase $\z(i,\{j_1\})$ and $\z(i',T)$ by $\delta$ till one of the values becomes $0$ or $1$.
+%As before, this preserves the LHS of \eqref{feq:conflp1} and can only decrease the LHS of \eqref{feq:conflp2} (for jobs $j\in S\setminus j_1$ if $T = \{j_2\}$).
 %	Also note that $z^L(j)$ can only increase for any job; in particular no job leaves $\calL$. {\Huge NOT CORRECT}
 %This process ends with assigning $z(i,\{j_1\}) = 1$ and we add $(i,\{j_1\})$ to $\calR$.
-%If $\z(i',T)$ becomes $1$, we add $i'$ to $\calR$ 
+%If $\z(i',T)$ becomes $1$, we add $i'$ to $\calR$
 If at any point, some configuration gets $\z$ value $1$, we add the corresponding machine to $\calR$.
 We proceed till $i$ enters $\calR$.
 
-\begin{claim}\label{clm:002}
-	{\sf FixLargeMachine}($i$) terminates. Upon termination, the solution $\z$ satisfies \eqref{eq:conflp1} and \eqref{eq:conflp2}, and
+\begin{claim}\label{fclm:002}
+	{\sf FixLargeMachine}($i$) terminates. Upon termination, the solution $\z$ satisfies \eqref{feq:conflp1} and \eqref{feq:conflp2}, and
 	if $\z$ was $(\alpha,\beta)$-feasible before the subroutine, it remains $(\alpha,\beta)$-feasible afterwards.
 %	Furthermore, $i$ enters $\calR$.
 \end{claim}
 \begin{proof}
-	If at any point we are in the simpler case, then $i$ enters $\calR$ and we terminate. Since we modify $\z(i,S)$ only for machine $i$, \eqref{eq:conflp1} is satisfied by the modification.
-	\eqref{eq:conflp2} is satisfied for $j$ no other machine fractionally claims it. In the other case, note that the modification by $\delta$'s preserve the LHS of \eqref{eq:conflp1}. Furthermore, since $T\subseteq S\cup j_2$, it can only 
-	decrease the LHS of \eqref{eq:conflp2} (for jobs $j' \in S\setminus T\cup j_1$ when $T=\{j_2\}$ ). Finally, the new entry to the support of $\z$ is $\z(i',T)$ and we need to check $T\in \calFr_i$.
+	If at any point we are in the simpler case, then $i$ enters $\calR$ and we terminate. Since we modify $\z(i,S)$ only for machine $i$, \eqref{feq:conflp1} is satisfied by the modification.
+	\eqref{feq:conflp2} is satisfied for $j$ no other machine fractionally claims it. In the other case, note that the modification by $\delta$'s preserve the LHS of \eqref{feq:conflp1}. Furthermore, since $T\subseteq S\cup j_2$, it can only
+	decrease the LHS of \eqref{feq:conflp2} (for jobs $j' \in S\setminus T\cup j_1$ when $T=\{j_2\}$ ). Finally, the new entry to the support of $\z$ is $\z(i',T)$ and we need to check $T\in \calFr_i$.
 	If $T$ is a singleton (that is $j_2$), then $c_{j_2} \geq \frac{\barD_{i'}}{3\log D}$ and so $T\in \calFr_i$.
-  Otherwise, since $S\in \calFr_i$, $c_{j_2} <  \frac{\barD_{i'}}{3\log D}$, and $c_{j_2} \geq c_{j_1}$ we have $T\in \calFr_i$. 
-  So at every step $\z$ maintains \eqref{eq:conflp1} and \eqref{eq:conflp2} and is $(\alpha,\beta)$-feasible. To argue termination, note that in the second case the value of $\z(i,\{j_1\})$ strictly goes up.
+  Otherwise, since $S\in \calFr_i$, $c_{j_2} <  \frac{\barD_{i'}}{3\log D}$, and $c_{j_2} \geq c_{j_1}$ we have $T\in \calFr_i$.
+  So at every step $\z$ maintains \eqref{feq:conflp1} and \eqref{feq:conflp2} and is $(\alpha,\beta)$-feasible. To argue termination, note that in the second case the value of $\z(i,\{j_1\})$ strictly goes up.
   In the end, we must have $\z(i,\{j_1\}) = 1$.
 \end{proof}
 
@@ -184,19 +184,19 @@ We proceed till $i$ enters $\calR$.
 there is at most one hybrid machine in $t$. Recall a machine is hybrid if $\z^L(i) \in (0,1)$.
 The $\z$-value for other machines in other buckets are unaffected.
 
-%Let 
-%	{\bf Step 2: Rounding Large Demand Assignments.} In this step, we modify the LP solution 
+%Let
+%	{\bf Step 2: Rounding Large Demand Assignments.} In this step, we modify the LP solution
 % such that for each bucket $t$, there is at most one hybrid machine $i\in B^{(t)}$ with  $z^L(i) \in (0,1)$.
-%% and at most one $j$ with $c_j \geq D_i/4\Delta^2$  with $z(i,\{j\}) \in (0,1)$. 
+%% and at most one $j$ with $c_j \geq D_i/4\Delta^2$  with $z(i,\{j\}) \in (0,1)$.
 %% The flip side is that we may introduce variables $z(i,S)$ for sets $S$ where $|S|\leq f_i$ but $\sum_{j\in S} c_j \geq D_i/4\Delta^2$.
-% %\emph{at most one strictly fractional variable} $0 < y_{S,j} < 1$ over all $j \in B^\brt$ and $S \in \barcalS^L_j$. 
-% To this end, we repeatedly perform the following steps, starting from the smallest bucket $t$ onwards. 
- 
-% 
+% %\emph{at most one strictly fractional variable} $0 < y_{S,j} < 1$ over all $j \in B^\brt$ and $S \in \barcalS^L_j$.
+% To this end, we repeatedly perform the following steps, starting from the smallest bucket $t$ onwards.
+
+%
 % Before we start the steps for bucket $t$, we always maintain the following invariant holds for every bucket $t' < t$ (which is vacuously true for the smallest ($t=1$) bucket):
 %	\begin{framed}
 %		\begin{itemize}
-%			\item[({\bf I})] For each bucket $t' < t$, there is at most one  demand $i_{t'} \in B^{(t')}$ %\setminus \calR$ 
+%			\item[({\bf I})] For each bucket $t' < t$, there is at most one  demand $i_{t'} \in B^{(t')}$ %\setminus \calR$
 %			such that $z^L(i_{t'}) \in (0,1)$. Further, if such a demand $i_{t'}$ exists, then $f_{i_{t'}} \leq f_{i}$ for all $i \in B^{(t')} \setminus \calR$.
 %		\end{itemize}
 %	\end{framed}
@@ -206,41 +206,41 @@ The $\z$-value for other machines in other buckets are unaffected.
 Among the hybrid machines in $B^\brt$, let $i$  be the one with the smallest $f_i$. Let $i'$ be any other hybrid machine in this bucket. We know there is at least one more.
 %	
 %	
-%	%\medskip \noindent {\bf Step 2a: Intra-Bucket Rounding.}  
-%	Define a total order $\prec$ on $B^\brt \setminus \calR$, where $i \prec i'$ if $f_{i} \leq f_{i'}$.  
-%	%We now ensure that the demands with the smallest $f_j$ value get preference when it comes to being satisfied by large configurations. 
-%	Suppose there exists $i,i' \in B^\brt \setminus \calR$ such that the following conditions hold: (i) $i\prec i'$, (ii) $z^L(i)$ and $z^L(i')$ are both in $(0,1)$. 
+%	%\medskip \noindent {\bf Step 2a: Intra-Bucket Rounding.}
+%	Define a total order $\prec$ on $B^\brt \setminus \calR$, where $i \prec i'$ if $f_{i} \leq f_{i'}$.
+%	%We now ensure that the demands with the smallest $f_j$ value get preference when it comes to being satisfied by large configurations.
+%	Suppose there exists $i,i' \in B^\brt \setminus \calR$ such that the following conditions hold: (i) $i\prec i'$, (ii) $z^L(i)$ and $z^L(i')$ are both in $(0,1)$.
 	We now \emph{modify} $\z$ as follows.
 	Since $\z^L(i') > 0$, there exists a large configuration $\{j'\}$ for $i'$ with $\z(i',\{j'\}) > 0$. Similarly, since $\z^L(i) < 1$, there must exist a {\em small} configuration $T$ with $\z(i,T) > 0$.
-	%To this end, let $(S,j') \in \barcalS^L_{j'}$ be a large configuration  with $y(S,j') > 0$. Now, since $y^l(j) < 1$, we know that there is a small configuration $(T,j) \in \barcalS^S_j$ with $y(T,j) > 0$. 
-%	By Claim~\ref{clm:c001}, note that $T\in \calFr_{i'}$ as well.
+	%To this end, let $(S,j') \in \barcalS^L_{j'}$ be a large configuration  with $y(S,j') > 0$. Now, since $y^l(j) < 1$, we know that there is a small configuration $(T,j) \in \barcalS^S_j$ with $y(T,j) > 0$.
+%	By Claim~\ref{fclm:c001}, note that $T\in \calFr_{i'}$ as well.
 	We then perform the following change: decrease $\z(i',\{j'\})$ and $\z(i,T)$ by $\delta$, and increase $\z(i,\{j'\})$ and $\z(i',T)$ by $\delta$,  for a $\delta > 0$ such that one of the variables becomes 0 or 1.
-	Note that this keeps \eqref{eq:conflp1} and \eqref{eq:conflp2} maintained. 	%In particular, no job $j$ leaves $\calL$.
+	Note that this keeps \eqref{feq:conflp1} and \eqref{feq:conflp2} maintained. 	%In particular, no job $j$ leaves $\calL$.
 	
-	We keep performing the above step till bucket $t$ contains at most one hybrid machine. 
+	We keep performing the above step till bucket $t$ contains at most one hybrid machine.
 	If at any point, some configuration gets $\z$ value $1$, we add the corresponding machine to $\calR$.
-%	We keep on performing this process as long as possible; since we always transfer large configuration assignments to demands which appear earlier in the total order, this process will stop at some point. At this point, we add whichever demands are integrally assigned by large configurations to 
+%	We keep on performing this process as long as possible; since we always transfer large configuration assignments to demands which appear earlier in the total order, this process will stop at some point. At this point, we add whichever demands are integrally assigned by large configurations to
 %	the set $\calR$, i.e., all $i \in B^\brt$ for which   $z(i,S) = 1$ for some $S\in \calFr_i$ are added to $\calR$.
 %	
-%	\begin{claim} \label{cl:swap1}
+%	\begin{claim} \label{fcl:swap1}
 %		The modified solution above is feasible for the relaxed LP where support $z(i,S)$ is allowed for $S\in \calFr_i$.
 %	\end{claim}
 %	\begin{proof}
-%		Since $i$ and $i'$ are in the same bucket, $c_{j'} \geq D_i/4\Delta^2$ as well, and so $\{j'\} \in \calFr_i$. Similartly, $\sum_{j\in T} c_j \geq D_{i'}/\Delta$. Furthermore, since $i\prec i'$, we have $|T| \leq f_{i} \leq f_{i'}$. Thus, the support of $z$ stays in the relaxed support. Finally, the LHS of \eqref{eq:conflp2} remains unchanged in the above operation for all jobs.
+%		Since $i$ and $i'$ are in the same bucket, $c_{j'} \geq D_i/4\Delta^2$ as well, and so $\{j'\} \in \calFr_i$. Similartly, $\sum_{j\in T} c_j \geq D_{i'}/\Delta$. Furthermore, since $i\prec i'$, we have $|T| \leq f_{i} \leq f_{i'}$. Thus, the support of $z$ stays in the relaxed support. Finally, the LHS of \eqref{feq:conflp2} remains unchanged in the above operation for all jobs.
 %%		
 %%		
-%%		To see why the modified solution is feasible for the relaxed configuration LP, observe that $(S,j)$ is also a valid relaxed large configuration because $j$ and $j'$ are of the same bucket $t$ and hence have the same rounded demand requirement of $\Delta^t$. Similarly, observe that $(T,j')$ is a valid small configuration for $j'$ because $|T| \leq f_{j} \leq f_{j'}$, and the remaining constraints for being a small configuration (i.e., the total capacity of items in $T$ should exceed the $\barD_{j'}/\Delta$, and the numbers $n(T,p) \leq n_p$ for all types) are satisfied trivially since they enforce the same constraints for $j$ and $j'$. As a result, since we increase $y(S,j)$ and decrease $y(T,j)$ at the same rate, constraint~\cref{eq:config1} is satisfied for $j$. Similarly, since we increase $y(T,j')$ and decrease $y(S,j')$ at the same rate, constraint~\cref{eq:config1} is satisfied for $j'$. Likewise, since we increase $y(S,j)$ and decrease $y(S,j')$ at the same rate, constraint~\cref{eq:config2} is satisfied for the item type corresponding to the large item in $S$. Finally, since we increase $y(T,j')$ and decrease $y(T,j)$ at the same rate, constraints~\cref{eq:config2} are satisfied for all item types corresponding to items in $T$.
+%%		To see why the modified solution is feasible for the relaxed configuration LP, observe that $(S,j)$ is also a valid relaxed large configuration because $j$ and $j'$ are of the same bucket $t$ and hence have the same rounded demand requirement of $\Delta^t$. Similarly, observe that $(T,j')$ is a valid small configuration for $j'$ because $|T| \leq f_{j} \leq f_{j'}$, and the remaining constraints for being a small configuration (i.e., the total capacity of items in $T$ should exceed the $\barD_{j'}/\Delta$, and the numbers $n(T,p) \leq n_p$ for all types) are satisfied trivially since they enforce the same constraints for $j$ and $j'$. As a result, since we increase $y(S,j)$ and decrease $y(T,j)$ at the same rate, constraint~\cref{feq:config1} is satisfied for $j$. Similarly, since we increase $y(T,j')$ and decrease $y(S,j')$ at the same rate, constraint~\cref{feq:config1} is satisfied for $j'$. Likewise, since we increase $y(S,j)$ and decrease $y(S,j')$ at the same rate, constraint~\cref{feq:config2} is satisfied for the item type corresponding to the large item in $S$. Finally, since we increase $y(T,j')$ and decrease $y(T,j)$ at the same rate, constraints~\cref{feq:config2} are satisfied for all item types corresponding to items in $T$.
 %	\end{proof}
 %	
-\begin{claim}\label{clm:step2}
-	{\sf FixBucket}($t$) terminates. Upon termination, the solution $\z$ satisfies \eqref{eq:conflp1} and \eqref{eq:conflp2}, and
+\begin{claim}\label{fclm:step2}
+	{\sf FixBucket}($t$) terminates. Upon termination, the solution $\z$ satisfies \eqref{feq:conflp1} and \eqref{feq:conflp2}, and
 	if $\z$ was $(\alpha,\beta)$-feasible before the subroutine, it remains $(\alpha,\beta)$-feasible afterwards.
 \end{claim}
 	\begin{proof}
 The possibly new entry to the support of $\z$ is $\z(i',T)$. Note that $|T| \leq f_i$ since $\z$ was $(\alpha,\beta)$-feasible to begin with,  and therefore $|T|\leq f_{i'}$ as well.
 The other conditions of $(\alpha,\beta)$-feasibility are satisfied since $\barD_i = \barD_{i'}$, both being in the same bucket.
-Also note that the LHS of both \eqref{eq:conflp1} and \eqref{eq:conflp2} remain unchanged.
-To argue termination, till bucket $t$ contains more than one hybrid machine, note that $\z^L(i)$ increases for the hybrid machine $i$ with the smallest $f_i$. 
+Also note that the LHS of both \eqref{feq:conflp1} and \eqref{feq:conflp2} remain unchanged.
+To argue termination, till bucket $t$ contains more than one hybrid machine, note that $\z^L(i)$ increases for the hybrid machine $i$ with the smallest $f_i$.
 	\end{proof}
 
 
@@ -248,7 +248,7 @@ To argue termination, till bucket $t$ contains more than one hybrid machine, not
 
 %	The following claim encapsulates the state of affairs after taking care of the $t$th bucket.
 %	
-%	\begin{claim} \label{cl:step3a}
+%	\begin{claim} \label{fcl:step3a}
 %		Let $\alpha := z^L(B^\brt \setminus \calR)$ denote the total fractional assignment of large configurations to the non-integrally rounded demands in $B^\brt$. Then the following condition holds at the termination of the above iterative process: suppose we arrange the demands in $B^\brt \setminus \calR$ according to the order $\prec$. Let this ordering be $i_1, i_2, \ldots,i_r$, and let $k$ denote $\lfloor \alpha \rfloor$. Then we have that $z^L(i_u) = 1$ for $u=1, \ldots, k$, $z^L(i_u) = 0$ for $u > k+1$, and lastly, $z^l(i_{k+1})$ is equal to the fractional part of $\alpha = \alpha - \floor{\alpha}$.
 %	\end{claim}
 %	
@@ -270,11 +270,11 @@ To argue termination, till bucket $t$ contains more than one hybrid machine, not
 %	
 %	
 	%{\Huge NEED TO FIX BELOW}
-%   Note that Fix Large Machine can make a small machine $i'$ hybrid or large for its bucket since $z^L(i')$ could potentially increase.  
+%   Note that Fix Large Machine can make a small machine $i'$ hybrid or large for its bucket since $z^L(i')$ could potentially increase.
 \noindent
 Now we have the two subroutines to describe {\bf Step 2} of the algorithm. It is the following while loop.
    \begin{itemize}[noitemsep]
-   	\item[{}] While $\calL$ is non-empty: 
+   	\item[{}] While $\calL$ is non-empty:
    	\begin{itemize}[noitemsep]
    		\item If $i\in \calL$, then {\sf FixLargeMachine}($i$). Note that $i$ enters $\calR$ after this. This can increase the number of hybrid machines across buckets.
    		\item For all $1\leq t\leq K$, if $B^\brt$ contains more than one hybrid machine, then {\sf FixBucket}($t$). This can increase the number of machines in $\calL$.
@@ -282,20 +282,20 @@ Now we have the two subroutines to describe {\bf Step 2} of the algorithm. It is
    \end{itemize}
 
 %   If there are more than one hybrid in any bucket, we apply Step 2 again. Since Step 3 moves machines to $\calR$, this process can go on for at most $m$ steps. After doing this sequence of steps, we have the following scenario.
-%   
-	  Since the {\sf FixLargeMachine} adds a new machine to $\calR$, it cannot run more than $m$ times. Therefore, the while loop terminates. Furthermore, before the loop $\z$ is $(1,1)$-feasible satisfying \eqref{eq:conflp1} and \eqref{eq:conflp2} (Claim~\ref{clm:step1}), therefore Claim~\ref{clm:002} and Claim~\ref{clm:step2} imply that it satisfies after the while loop. We encapsulate the above discussion in the following claim about Step 2.
-   \begin{claim}\label{clm:003}
-   	{\bf Step 2} terminates. Upon termination, the modified LP solution $\z$ is $(1,1)$-feasible, satisfies \eqref{eq:conflp1} and \eqref{eq:conflp2}, and furthermore
+%
+	  Since the {\sf FixLargeMachine} adds a new machine to $\calR$, it cannot run more than $m$ times. Therefore, the while loop terminates. Furthermore, before the loop $\z$ is $(1,1)$-feasible satisfying \eqref{feq:conflp1} and \eqref{feq:conflp2} (Claim~\ref{fclm:step1}), therefore Claim~\ref{fclm:002} and Claim~\ref{fclm:step2} imply that it satisfies after the while loop. We encapsulate the above discussion in the following claim about Step 2.
+   \begin{claim}\label{fclm:003}
+   	{\bf Step 2} terminates. Upon termination, the modified LP solution $\z$ is $(1,1)$-feasible, satisfies \eqref{feq:conflp1} and \eqref{feq:conflp2}, and furthermore
    	$\calL$ is empty and for every bucket $t$ we have at most one hybrid machine $i\in B^\brt\setminus\calR$.
-%   	At the end of {\bf Step 1}, we have for every bucket $t$, at most one  $i\in B^\brt\setminus\calR$ has $z^L(i) \in (0,1)$ and the rest have $z^S(i) = 1$. Furthermore, for every $i\in \calS$ and $z(i,S) > 0$, 
+%   	At the end of {\bf Step 1}, we have for every bucket $t$, at most one  $i\in B^\brt\setminus\calR$ has $z^L(i) \in (0,1)$ and the rest have $z^S(i) = 1$. Furthermore, for every $i\in \calS$ and $z(i,S) > 0$,
 %   	we have $\sum_{j\in S} c_j \geq D_i/2$.
    	\end{claim}
    	\smallskip
    	
 
-   
-   
-%	We need to make sure that $S - j_1 + j_2$  lies in 
+
+
+%	We need to make sure that $S - j_1 + j_2$  lies in
 %	Note that $S$ could already have one (or more) copies of $j_2$; we have just increases $n(S,j_2)$ by additive $1$. Since $c_{j_1} \leq c_{j_2}$, the total capacity of $S-j_1+j_2$ exceeds that of $S$. The cardinality of both sets are the same. Therefore, they are valid sets to put $z$-mass on. We keep doing this modification till one of the fractional values become integral. Since for $i$, mass moves from large configurations $(i,\{j\})$ of larger $c_j$-capacity to smaller $c_j$-capacity, this process terminates at one point. At this point, we must have $z(i,\{j_1\}) = 1$; we add $(i,\{j_1\})$ to $\calR$.
 %	
 	%We perform Step 3 for all large machines. After Step 3, every bucket $B^\brt\setminus \calR$ contains at most one hybrid machine $i_t$ with $z^L(i_t) \in (0,1)$ and small machines $i$ with $z^S(i) = 1$.
@@ -310,26 +310,26 @@ Now we have the two subroutines to describe {\bf Step 2} of the algorithm. It is
 %	In this case, we have at least $1$ free capacity of item type $p_1$, and so we set $y(\{p_1\},j)= 1$ and all other $y(S,j) = 0$ for $S \neq \{i_1\}$. We add $j$ to the rounded set $\calR$ and repeat this step (3b).
 %	
 %	
-%	\begin{claim} \label{cl:step3b}
+%	\begin{claim} \label{fcl:step3b}
 %		If $\{y(S,j)\}$ is a feasible to the relaxed configuration LP, then after a single execution of either case 3b(i) or case 3b(ii), the modified solution remains feasible for the relaxed configuration LP, and moreover, invariant~(I) continues holds for all buckets $\leq t-1$.
 %	\end{claim}
 %	\begin{proof}
-%		Again, it is easy to check the feasibility of LP solution much like~\Cref{cl:swap1}. We also claim that the invariant~[(I1)] continues to hold (for bucket $t-1$) during this process. Indeed, we only need to be worried for the case when $j'$ is of bucket less than $t$, as otherwise we are not modifying the configurations in lower buckets. In this case it will be the unique fractional demand of this bucket guaranteed by invariant~[I1]. Further $(T',j')$ will also be a large configuration for this demand $j'$. Therefore, $y^l(j')$ does not change, and so, the invariant still holds.
+%		Again, it is easy to check the feasibility of LP solution much like~\Cref{fcl:swap1}. We also claim that the invariant~[(I1)] continues to hold (for bucket $t-1$) during this process. Indeed, we only need to be worried for the case when $j'$ is of bucket less than $t$, as otherwise we are not modifying the configurations in lower buckets. In this case it will be the unique fractional demand of this bucket guaranteed by invariant~[I1]. Further $(T',j')$ will also be a large configuration for this demand $j'$. Therefore, $y^l(j')$ does not change, and so, the invariant still holds.
 %	\end{proof}
 %	
-%	To summarize, when the process ends, all demands $j \in B^\brt$  except perhaps for one demand satisfy the property that $y^l(j)$ is either 0 or 1. Further, for any demand $j$, there is at most one large configuration $(S,j)$ with positive $y(S,j)$ value. If a large configuration $(\{i\},j)$ satisfies $y(\{i\},j)=1$, then we include $j$ in $\calR$. Thus, for bucket $t$, there is at most one large configuration $(S,j), j \in B^\brt \setminus \calR$  such that $y(S,j)$ strictly between $0$ and $1$. Moreover, since this fractional demand is the demand $j_{k+1}$ identified in Claim~\ref{cl:step3a}, it has the smallest $f$ among all $j \in B^\brt \setminus \calR$. Thus, we satisfy the invariant for bucket $t$ as well. Observe that right there is exactly one large configuration with positive $y$ value serving $j_k$. However, when we carry out the step (3b) for a bucket larger than $t$, we may redistribute the large assignment of $j$ over several large configurations, but $y^l(j)$ will remain unchanged.
+%	To summarize, when the process ends, all demands $j \in B^\brt$  except perhaps for one demand satisfy the property that $y^l(j)$ is either 0 or 1. Further, for any demand $j$, there is at most one large configuration $(S,j)$ with positive $y(S,j)$ value. If a large configuration $(\{i\},j)$ satisfies $y(\{i\},j)=1$, then we include $j$ in $\calR$. Thus, for bucket $t$, there is at most one large configuration $(S,j), j \in B^\brt \setminus \calR$  such that $y(S,j)$ strictly between $0$ and $1$. Moreover, since this fractional demand is the demand $j_{k+1}$ identified in Claim~\ref{fcl:step3a}, it has the smallest $f$ among all $j \in B^\brt \setminus \calR$. Thus, we satisfy the invariant for bucket $t$ as well. Observe that right there is exactly one large configuration with positive $y$ value serving $j_k$. However, when we carry out the step (3b) for a bucket larger than $t$, we may redistribute the large assignment of $j$ over several large configurations, but $y^l(j)$ will remain unchanged.
 %	
 
 %	\paragraph{Step 2:} This takes input a hybrid machine $i\in B^\brt\setminus \calR$ with the property there exists at least two jobs $j_1$ and $j_2$
 %	which are large for $i$, $z(i,\{j_1\}) > 0$ and $z(i,\{j_2\}) > 0$, and neither $j_1$ or $j_2$ are in $\calL$. This subroutine, which is very similar to Fix Large Machine, modifies the LP solution and at the end at least one new job enters $\calL$.
 %	
 %Let $j_1$ be the smallest capacity job among jobs $j$ with $z(i,\{j\}) > 0$ and $j\notin \calL$. Let $j_2$ be another such job which is guaranteed to exist.
-%		%Pick any hybrid  machine $i$ and, after renaming, let $j_1,j_2,\ldots,j_r $ be the jobs in non-decreasing capacity order,  with $z(i,\{j_t\})>0$ for all $1\leq t\leq r$. 
+%		%Pick any hybrid  machine $i$ and, after renaming, let $j_1,j_2,\ldots,j_r $ be the jobs in non-decreasing capacity order,  with $z(i,\{j_t\})>0$ for all $1\leq t\leq r$.
 %%	Starting with $j_1$, we check if there exists any other machine $i'$ (small or hybrid) and {\em small} configuration $S$ for $i'$ containing $j_1$.
-%Since $j_1\notin \calL$, there must exist some machine $i'$  with $z(i',S) > 0$ and $j_1\in S$ for some small configuration $S$. We now move mass precisely as in Step 3. 
+%Since $j_1\notin \calL$, there must exist some machine $i'$  with $z(i',S) > 0$ and $j_1\in S$ for some small configuration $S$. We now move mass precisely as in Step 3.
 %Define a set $T$ as follows. If $c_{j_2} > D_{i'}/4\log n$, then $T = \{j_2\}$; otherwise $T = S - j_1 + j_2$. Note that in either case $T \in \calFr_{i'}$.
-%	In the first case, $j_2$ is large for $i'$. In the second case, $|T| = |S|$ and $\sum_{j\in T} c_j \ge \sum_{j\in S} c_j$ since $c_{j_2} \geq c_{j_1}$ by choice of $j_1$. We decrease $z(i,\{j_2\})$ and $z(i',S)$ by $\delta$ and increase $z(i,\{j_1\})$ and $z(i',T)$ by $\delta$ till one of the values becomes $0$ or $1$. 
-%	As before, this preserves the LHS of \eqref{eq:conflp1} and can only decrease the LHS of \eqref{eq:conflp2} (for jobs $j\in S\setminus j_1$ if $T = \{j_2\}$).
+%	In the first case, $j_2$ is large for $i'$. In the second case, $|T| = |S|$ and $\sum_{j\in T} c_j \ge \sum_{j\in S} c_j$ since $c_{j_2} \geq c_{j_1}$ by choice of $j_1$. We decrease $z(i,\{j_2\})$ and $z(i',S)$ by $\delta$ and increase $z(i,\{j_1\})$ and $z(i',T)$ by $\delta$ till one of the values becomes $0$ or $1$.
+%	As before, this preserves the LHS of \eqref{feq:conflp1} and can only decrease the LHS of \eqref{feq:conflp2} (for jobs $j\in S\setminus j_1$ if $T = \{j_2\}$).
 %	Unlike Step 3, once we are done with job $j_1$, we won't have $z(i,\{j_1\}) = 1$; either $j_1$ enters $\calL$ or all other jobs enter $\calL$.
 %	
 %	We keep performing this procedure; once again this procedure increases large-configuration mass on lower capacity configurations, and therefore it will terminate.
@@ -340,11 +340,11 @@ Now we have the two subroutines to describe {\bf Step 2} of the algorithm. It is
 %	Let $i_1,\ldots,i_{K'}$ be the hybrid machines that remain with $K' \leq K$. Let $J'$ be the jobs which are large for machine in $K'$.
 %	Note that $|J'| \geq K'$.
 
-\noindent{\bf Step 3: Taking care of hybrid machines.} 
+\noindent{\bf Step 3: Taking care of hybrid machines.}
 
 Let $\calH$ be the set of hybrid machines at this point. We know that $|\calH| \leq K \leq \log_2 D$ since each bucket has at most one hybrid machine.
 For any machine $i\in \calH$ with $\z^L(i) \le 1-1/K$, we zero-out all its large contribution. More precisely, for all $j$ large for $i$ we set $\z(i,\{j\})= 0$.
-Note that \eqref{eq:conflp1} no longer holds, but it holds with RHS $\geq 1/K$. Note that these machines now leave $\calH$ and enter $\calS$.
+Note that \eqref{feq:conflp1} no longer holds, but it holds with RHS $\geq 1/K$. Note that these machines now leave $\calH$ and enter $\calS$.
 
 At this point, for every $i\in \calH$ has $z^L(i) > 1-1/K$. Let $K' := |\calH|$. Let $J'$ be the set of jobs $j$ which are large for some machine $i\in \calH$ and $\z(i,\{j\}) > 0$.
 Let $s'_j := s_j - \sum_{i\in \calR} \sum_S \z(i,S)n(S,j)$ be the remaining copies of $j$. Note that it is an integer since $s_j$ was an integer and for all $i\in \calR$, $\z(i,S) \in \{0,1\}$.
@@ -354,28 +354,28 @@ Let $G$ be a bipartite graph with $\calH$ on one side and $J'$ on the other with
 \end{claim}
 \begin{proof}
 Pick a subset $\calH' \subseteq \calH$ and let $J''$ be its neighborhood in $G$. We need to show $\sum_{j\in J''} s'_j \geq \calH'$.
-Since $z$ satisfies \eqref{eq:conflp2}, we get
+Since $z$ satisfies \eqref{feq:conflp2}, we get
 \[
 \sum_{j\in J''} s'_j \geq \sum_{j\in J''} \sum_{i\in \calH'} z(i,\{j\}) = \sum_{i\in \calH'} \sum_{j\in J''} z(i,\{j\})  > (1-1/K)|\calH'| \geq |\calH'| - 1
 \]
-The first inequality follows since $\z$ satisfies \eqref{eq:conflp2}.
+The first inequality follows since $\z$ satisfies \eqref{feq:conflp2}.
 The strict inequality follows since $J''$ is the neighborhood of $\calH'$ and the fact that $z^L(i) > 1-1/K$ for all $i\in \calH$.
 The claim follows since $s'_j$'s are integers.
 \end{proof}
-If machine $i\in \calH$ is matched to job $j$, then we assign $i$ a copy of this job, that is,  set $\z(i,\{j\}) = 1$ and $\z(i,S) = 0$ for all other $S$, 
+If machine $i\in \calH$ is matched to job $j$, then we assign $i$ a copy of this job, that is,  set $\z(i,\{j\}) = 1$ and $\z(i,S) = 0$ for all other $S$,
 and add $i$ to $\calR$. Let $J_M \subseteq J'$ be the sub(multi)set of jobs allocated; note $|J_M| \leq K \leq \log_2 D$.
 After this point all machines outside $\calR$ are small. For every $i\in \calS$ and every small configuration $S$ with $\z(i,S) > 0$, we move this mass to $\z(i,S\setminus J_M)$.
-More precisely, $\z(i,S\setminus J_M) = \z(i,S)$ and $\z(i,S) = 0$ for all $i$ and $S$. Note that \eqref{eq:conflp2} is satisfied at this point. Furthermore,
+More precisely, $\z(i,S\setminus J_M) = \z(i,S)$ and $\z(i,S) = 0$ for all $i$ and $S$. Note that \eqref{feq:conflp2} is satisfied at this point. Furthermore,
 since $\z$ was $(1,1)$-feasible, we know that $\sum_{j\in S} c_j \geq \barD_i$ and for every $j\in S\cap J_M$ we have $c_j \leq \frac{\barD_i}{3\log_2 D}$.
 \[
 \sum_{j\in S\setminus J_M} c_j \geq  \sum_{j\in S} c_j - |J_M|\cdot \frac{\barD_i}{3\log_2 D} \geq \frac{2\barD_i}{3}
 \]
 Therefore, we have proved the following claim.
-\begin{claim}\label{clm:007}
+\begin{claim}\label{fclm:007}
 At the end of {\bf  Step 3}, we have a solution $\z$ with (a) $\z^L(i) = 0$ for all $i\notin \calR$, (b) $\z$ is $(1,3/2)$-feasible,
-(c) $\z$ satisfies \eqref{eq:conflp2}, and satisfies \eqref{eq:conflp1} replaced by $\frac{1}{K} \leq \sum_S \z(i,S) \leq 1$.
+(c) $\z$ satisfies \eqref{feq:conflp2}, and satisfies \eqref{feq:conflp1} replaced by $\frac{1}{K} \leq \sum_S \z(i,S) \leq 1$.
 %
-%we have a set of residual machines $\calS$ and a set of residual jobs $J_{res}$  and a solution $z(i,S)$ where 
+%we have a set of residual machines $\calS$ and a set of residual jobs $J_{res}$  and a solution $z(i,S)$ where
 %\begin{enumerate} [noitemsep]
 %	\item For all $i\in \calS$ we have $z(i,S) > 0$ iff $|S| \leq f_i$, $\sum_{j\in S} c_j \geq 3D_i/8$, and $c_j < \frac{D_i}{3\log_2 D}$ for all $j\in S$.
 %	\item $\forall i \in \calS, ~ \textstyle 1 \ge \sum_{S} z(i,S)  \geq   1/K \geq \frac{1}{\log_2 D}$.
@@ -386,20 +386,20 @@ At the end of {\bf  Step 3}, we have a solution $\z$ with (a) $\z^L(i) = 0$ for 
 \smallskip
 
 \noindent
-{\bf Step 4: Taking care of Small Machines.} 
+{\bf Step 4: Taking care of Small Machines.}
 \def\zz{z^{\mathsf{int}}}
 \def\2z{\mathsf z}
 We now convert the solution $\z$  to a solution $\2z$ of the assignment LP in the following standard way.
 As before, let $s'_j = s_j - \sum_{i\in \calR}\sum_S \z(i,S)n(S,j)$ be the number of jobs remaining.
 For every $i\notin \calR$ and $j\in J$ define $\2z_{ij} = \sum_{S}\z(i,S)n(S,j)$.  Note that this satisfies the constraint of the assignment LP:
 	\begin{alignat}{4}
-		&& \quad \forall j \in J,   &\quad  \textstyle \sum_{i\in \calS} \2z_{ij}  \leq  s'_j \label{eq:1} \\
-		&& \quad \forall i\in \calS ,      &\quad  \textstyle \sum_{j\in J}  \2z_{ij}c_j \geq \frac{2\barD_i}{3\log_2 D} \label{eq:2} \\
-	&& \quad \forall i\in \calS ,      &\quad  \textstyle \sum_{j\in J}  \2z_{ij} \leq f_i \label{eq:3} \\ 
-		&& \quad \forall i\in \calS, j\in J~\textrm{with}~ \textstyle c_j \geq \frac{\barD_i}{3\log_2 D}, & \quad \2z_{ij}   =  0  \label{eq:4} 
+		&& \quad \forall j \in J,   &\quad  \textstyle \sum_{i\in \calS} \2z_{ij}  \leq  s'_j \label{feq:1} \\
+		&& \quad \forall i\in \calS ,      &\quad  \textstyle \sum_{j\in J}  \2z_{ij}c_j \geq \frac{2\barD_i}{3\log_2 D} \label{feq:2} \\
+	&& \quad \forall i\in \calS ,      &\quad  \textstyle \sum_{j\in J}  \2z_{ij} \leq f_i \label{feq:3} \\
+		&& \quad \forall i\in \calS, j\in J~\textrm{with}~ \textstyle c_j \geq \frac{\barD_i}{3\log_2 D}, & \quad \2z_{ij}   =  0  \label{feq:4}
 	\end{alignat}
 	The last equality follows since $\z$ was $(1,8/15)$-feasible and so $\z(i,S) = 0$ for any set $S$ containing a job $j$ with $c_j \geq \frac{\barD_i}{3\log_2 D}$.
-The first inequality follows  since $\z$ satisfies \eqref{eq:conflp2}. To see the second and third point, note 
+The first inequality follows  since $\z$ satisfies \eqref{feq:conflp2}. To see the second and third point, note
 that for any $i\in \calS$,
 \[
 \sum_{j\in J} \2z_{ij}c_j = \sum_j \sum_S \z(i,S)n(S,j)c_j = \sum_S \z(i,S) \sum_j n(S,j)c_j \geq \frac{1}{\log_2 D}\cdot \frac{2\barD_i}{3}
@@ -409,48 +409,48 @@ that for any $i\in \calS$,
 \sum_{j\in J} \2z_{ij} = \sum_j \sum_S \z(i,S)n(S,j) = \sum_S \z(i,S) \sum_j n(S,j) \leq f_i
 \]
 since for any $S$, $\sum_{j\in S} n(S,j) \leq f_i$ and $\sum_S \z(i,S) \leq 1$.
-Now we use Theorem~\ref{thm:shmoystardos} to find an integral allocation $\zz$ of the jobs $J$ to machines in $\calS$ satisfying \eqref{eq:1},\eqref{eq:3}, and $\sum_{j\in J} \zz_{ij}c_j \geq \frac{\barD_i}{3
+Now we use Theorem~\ref{fthm:shmoystardos} to find an integral allocation $\zz$ of the jobs $J$ to machines in $\calS$ satisfying \eqref{feq:1},\eqref{feq:3}, and $\sum_{j\in J} \zz_{ij}c_j \geq \frac{\barD_i}{3
 \log_2 D}$. \medskip
 
 The final integral assignment is as follows. For every $i\in \calR$, we assign the configuration $S$ with $\z(i,S) = 1$.
 Since $\z$ is $(1,3/2)$-feasible, every such machine $i$ gets a total capacity of at least $\frac{\barD_i}{3\log_2 D}$. % \geq \frac{\barD_i}{16\log_2 D}$.
 All the remaining machines $i\in \calS$ obtain a set of jobs giving them capacity $\geq \frac{\barD_i}{3\log_2 D}$. %\geq \frac{3D_i}{3\log_2 D}$.
-This completes the proof of Lemma~\ref{lem:conf-round}.
+This completes the proof of Lemma~\ref{flem:conf-round}.
 \end{proof}
 
-\begin{lemma}\label{lem:conf-is-uf}
+\begin{lemma}\label{flem:conf-is-uf}
 $\calP_\mathsf{conf}$ is upward-feasible.
 \end{lemma}
 \begin{proof}
 %\comment{\bf \Large Needs to be written}
-Let $s := (s_1,\ldots,s_n)\in \calP_\mathsf{conf}$ for a certain instance of \cckp where the jobs have been renamed so that $c_1\leq \cdots \leq c_n$. We need to prove any non-negative vector $t := (t_1,\ldots,t_n)$ s.t. $t\succeq_\suff s$also lies in $\calP_\mathsf{conf}$. 
+Let $s := (s_1,\ldots,s_n)\in \calP_\mathsf{conf}$ for a certain instance of \cckp where the jobs have been renamed so that $c_1\leq \cdots \leq c_n$. We need to prove any non-negative vector $t := (t_1,\ldots,t_n)$ s.t. $t\succeq_\suff s$also lies in $\calP_\mathsf{conf}$.
 By the ``hybridization argument'',it suffices to prove the lemma for  $s$ and $t$ differing only in coordinates $\{j-1,j\}$ and $ t_j\ge s_j$ and $t_{j-1} \geq \max(0,s_{j-1} + (s_j - t_j))$.
 Given that, we can move from $s$ to $t$ by changing pairs of coordinates each time maintaining feasibility in $\calP_\mathsf{conf}$.
 
 Let $z$ be the solution for the supply vector $s$; we construct a solution $\z$  for the supply vector $t$ starting with $\z = z$.
 If $\z$ is not already feasible, then it must be because $s_{j-1} \ge \sum_{i,S} z(i,S)n(S,j-1) > t_{j-1}$.
 Therefore, we need to decrease the fractional utilization of job $(j-1)$ by $s_{j-1} - t_{j-1} \leq t_j - s_j$.
-For any machine $i$ and any set $S\in \calF_i$ with $z(i,S) > 0$ and $n(S,j-1) \geq 1$ (and this must exist since $t_{j-1}\geq 0$), 
+For any machine $i$ and any set $S\in \calF_i$ with $z(i,S) > 0$ and $n(S,j-1) \geq 1$ (and this must exist since $t_{j-1}\geq 0$),
 define $T := S - \{j-1\} + \{j\}$. Note that $T$ could already have a copy of job $j$; we have $n(T,j) = n(S,j) + 1$. Also note since $c_j \geq c_{j-1}$, if $S\in \calF_i$ then so is $T\in \calF_i$.
 We let $\z(i,S) = z(i,S) - \delta$ and $\z(i,T) = z(i,T) + \delta$ till
 either $\z(i,S) = 0$ or $\z(i,T) = 1$. Since the total increase of fractional load of job $j$ is exactly the same as the decrease in that of job $j-1$, and we only need total  decrease $(s_{j-1} -t_{j-1}) \leq t_j - s_j$, at the end we get that $\z$ is feasible wrt supply vector $t$.
 \end{proof}
-\begin{lemma}\label{lem:conf-so}
+\begin{lemma}\label{flem:conf-so}
 	$\calP_\mathsf{conf}$ has an $(1+\epsilon)$-approximate separation oracle.
 \end{lemma}
 \begin{proof}
 	Fix $\epsilon> 0$.
 	Given a supply vector $s = (s_1,\ldots,s_n)$, we give a polynomial time algorithm which either returns a hyperplane separating $s$ and $\calP_\mathsf{conf}$, or we can assert that
-	$s\in \calP_\mathsf{conf}(\calI')$, where $\calI'$ is an instance where machine $i$ has demand $D_i/(1+\epsilon)$. To this end, for every machine $i$, define $\calF^{(\epsilon)}_i := \{S: |S| \leq f_i,  \sum_j c_jn(S,j)\geq D_i/(1+\epsilon) \}$. To prove $s\in \calP_\mathsf{conf}(\calI')$, we need to find $z(i,S)$ defined for all $i\in M, S\in \calF^{(\epsilon)}_i$ satisfying \eqref{eq:conflp1}-\eqref{eq:conflp2}.
+	$s\in \calP_\mathsf{conf}(\calI')$, where $\calI'$ is an instance where machine $i$ has demand $D_i/(1+\epsilon)$. To this end, for every machine $i$, define $\calF^{(\epsilon)}_i := \{S: |S| \leq f_i,  \sum_j c_jn(S,j)\geq D_i/(1+\epsilon) \}$. To prove $s\in \calP_\mathsf{conf}(\calI')$, we need to find $z(i,S)$ defined for all $i\in M, S\in \calF^{(\epsilon)}_i$ satisfying \eqref{feq:conflp1}-\eqref{feq:conflp2}.
 	For every $j\in J$, define $\cc_j := (1+\epsilon)c_j$. Note for every $S\in \calF^{(\epsilon)}_i$ iff $|S| \leq f_i$ and  $\sum_{j\in S} \cc_j n(S,j) \geq D_i$.
 	
 %Let $\cC$ be empty.
 Consider the following system of inequalities.
-%In this section we show how to solve the LP relaxation given in Section~\ref{sec:lp}. The set of constraints specify a feasible region for the set of variables $(x_{ijp}, y_{ip})$, which is convex. Therefore, we can invoke the ellipsoid algorithm to solve the LP as long as we can find a separating hyperplane for any infeasible solution. So let $(x_{ijp}, y_{ip})$ be a tentative solution. Since the  constraints in~\eqref{eq:mkc1-full}-\eqref{eq:mkc3-full} are polynomial in number, we can check feasibility for these constraints easily. 
+%In this section we show how to solve the LP relaxation given in Section~\ref{fsec:lp}. The set of constraints specify a feasible region for the set of variables $(x_{ijp}, y_{ip})$, which is convex. Therefore, we can invoke the ellipsoid algorithm to solve the LP as long as we can find a separating hyperplane for any infeasible solution. So let $(x_{ijp}, y_{ip})$ be a tentative solution. Since the  constraints in~\eqref{feq:mkc1-full}-\eqref{feq:mkc3-full} are polynomial in number, we can check feasibility for these constraints easily.
 %
 %
 %Consider a {\em fixed} set  of clients $J$.
-%We show how to check the constraints~\eqref{eq:proj} for $J$. We re-write the constraints~\eqref{eq:conflpnew} for $J$ below:
+%We show how to check the constraints~\eqref{feq:proj} for $J$. We re-write the constraints~\eqref{feq:conflpnew} for $J$ below:
 %\begin{eqnarray*}
 %	\sum_{S \in \calF_J} z_{S,J} & \geq & 1 \\
 %	\sum_{S\in \calF_{J}} z_{S,J}\cdot n(S,p) &\leq  & \sum_{i\in \Gamma(J)} y_{ip}  \ \ \ \forall p \in [P] \\
@@ -462,82 +462,82 @@ Consider the following system of inequalities.
 %the above constraints, or there is a feasible solution to the following set of constraints (where the variables are $\alpha_p, p \in [P]$),
 %which we call dual LP:
 \begin{alignat}{4}
-	& \quad \forall j \in J,   &&\quad  \textstyle \alpha_j  \geq 0 \label{eq:d3} \tag{D1} \\
-	& \quad  &&\quad  \textstyle \sum_{j\in J}  s_j\cdot \alpha_j  < \sum_{i\in M}\beta_i \label{eq:d1} \tag{D2}\\
-	& \quad \forall i\in M, S\in\calF_i, && \quad \textstyle \sum_{j\in J} \alpha_j n(S,j)  \geq \beta_i  \label{eq:d2}  \tag{D3}
+	& \quad \forall j \in J,   &&\quad  \textstyle \alpha_j  \geq 0 \label{feq:d3} \tag{D1} \\
+	& \quad  &&\quad  \textstyle \sum_{j\in J}  s_j\cdot \alpha_j  < \sum_{i\in M}\beta_i \label{feq:d1} \tag{D2}\\
+	& \quad \forall i\in M, S\in\calF_i, && \quad \textstyle \sum_{j\in J} \alpha_j n(S,j)  \geq \beta_i  \label{feq:d2}  \tag{D3}
 \end{alignat}
 %\begin{eqnarray}
-%\textstyle \sum_{j \in J} s_j \cdot  \alpha_j & < & \textstyle \sum_{i\in M} \beta_i 
-%\label{eq:d1}\\
-%\textstyle \sum_{j \in J} n(S,j) \cdot \alpha_j & \geq & \beta_i \ \ \ \forall i\in M, \forall S \in \calF_i  
-%\label{eq:d2}\\
-%\textstyle \alpha_j & \geq & 0 \label{eq:d3} % \tag{D3}
+%\textstyle \sum_{j \in J} s_j \cdot  \alpha_j & < & \textstyle \sum_{i\in M} \beta_i
+%\label{feq:d1}\\
+%\textstyle \sum_{j \in J} n(S,j) \cdot \alpha_j & \geq & \beta_i \ \ \ \forall i\in M, \forall S \in \calF_i
+%\label{feq:d2}\\
+%\textstyle \alpha_j & \geq & 0 \label{feq:d3} % \tag{D3}
 %\end{eqnarray}
 We also need a stronger set of 	inequalities.
-\begin{equation}\label{eq:d4}
+\begin{equation}\label{feq:d4}
  \textstyle \forall i\in M, S\in\calF^{(\epsilon)}_i, \quad \sum_{j\in J} \alpha_j n(S,j)  \geq \beta_i  \tag{D4}
 \end{equation}
-If there exists a feasible solution $(\alpha,\beta)$ to \eqref{eq:d3}-\eqref{eq:d2}, then this forms the hyperplane separating $s$ and $\calP_\mathsf{conf}$ as follows.
-This is because for all $t\in \calP_\mathsf{conf}$, if  $z(i,S)$ is the solution feasible for $\calP_\mathsf{conf}$ with $t_j$'s in the RHS of \eqref{eq:conflp2}, 
+If there exists a feasible solution $(\alpha,\beta)$ to \eqref{feq:d3}-\eqref{feq:d2}, then this forms the hyperplane separating $s$ and $\calP_\mathsf{conf}$ as follows.
+This is because for all $t\in \calP_\mathsf{conf}$, if  $z(i,S)$ is the solution feasible for $\calP_\mathsf{conf}$ with $t_j$'s in the RHS of \eqref{feq:conflp2},
 then $\sum_{i\in M}\beta_i = \sum_{i\in M} \sum_{S\in \calF_i} \beta_i z(i,S) \leq \sum_{i\in M,S\in \calF_i} z(i,S) \sum_{j\in J} \alpha_jn(S,j) \leq \sum_{j\in J} \alpha_j t_j$.
 The following claim proves the lemma.\smallskip
 
 \begin{claim}
-In polynomial time, we can either find $(\alpha,\beta)$ feasible for \eqref{eq:d3}-\eqref{eq:d2}, or we can find variables $z(i,S)$ for $i\in M,S\in \calF^{(\epsilon)}_i$ satisfying
-\eqref{eq:conflp1}-\eqref{eq:conflp2}.
+In polynomial time, we can either find $(\alpha,\beta)$ feasible for \eqref{feq:d3}-\eqref{feq:d2}, or we can find variables $z(i,S)$ for $i\in M,S\in \calF^{(\epsilon)}_i$ satisfying
+\eqref{feq:conflp1}-\eqref{feq:conflp2}.
 \end{claim}
 \begin{proof}
-We run the ellipsoid algorithm to check feasibility of the stronger system \eqref{eq:d3},\eqref{eq:d1}, and \eqref{eq:d4}.
-At any point, we have a running iterate $(\alpha,\beta)$. %The non-trivial part is to find a separation oracle for \eqref{eq:d2}.
+We run the ellipsoid algorithm to check feasibility of the stronger system \eqref{feq:d3},\eqref{feq:d1}, and \eqref{feq:d4}.
+At any point, we have a running iterate $(\alpha,\beta)$. %The non-trivial part is to find a separation oracle for \eqref{feq:d2}.
 %That is, we need to find $i\in M$, and  a set $S\in \calF_i$ such that $\sum_j \alpha_jn(S,j) < \beta_i$. Unfortunately this is an NP-hard problem and we need to resort to approximation as follows.
 For every $i\in M$, maximize $\sum_j \cc_j n(S,j)$ over all subsets $S$ with $|S|\leq f_i$ and $\sum_{j\in J} \alpha_j n(S,j) < \beta_i$.
-There is an FPTAS for this problem~\cite{CapraraKPP00}. If the maximum value returned by the approximation scheme is {\em smaller} than $D_i$, then 
+There is an FPTAS for this problem~\cite{CapraraKPP00}. If the maximum value returned by the approximation scheme is {\em smaller} than $D_i$, then
 we know that the true optimum is $\leq D_i(1+\epsilon)$. That is, for every $S$ with $|S| \leq f_i$ and $\sum_{j\in J}\alpha_j n(S,j) < \beta_i$, we have $\sum_{j\in J} \cc_jn(S,j) \le D_i(1+\epsilon)$.
-Which in turn implies $\sum_{j\in J} c_jn(S,j) \leq D_i$. Contrapositively, for every $S\in \calF_i$, we must have $\sum_{j\in J} \alpha_j n(S,j) \geq \beta_i$. %implying $(\alpha,\beta)$. 
-That is $(\alpha,\beta)$ satisfies \eqref{eq:d3}-\eqref{eq:d2} and we exit.
-%satisfies \eqref{eq:d1}-\eqref{eq:d3} and we can exit. 
+Which in turn implies $\sum_{j\in J} c_jn(S,j) \leq D_i$. Contrapositively, for every $S\in \calF_i$, we must have $\sum_{j\in J} \alpha_j n(S,j) \geq \beta_i$. %implying $(\alpha,\beta)$.
+That is $(\alpha,\beta)$ satisfies \eqref{feq:d3}-\eqref{feq:d2} and we exit.
+%satisfies \eqref{feq:d1}-\eqref{feq:d3} and we can exit.
 
-Otherwise, the PTAS  returns a set $S^\star$ with $|S^\star|\le f_i$ and $\sum_{j\in J}\cc_j n(S,j) \geq D_i$, that is $S^\star \in \calF^{(\epsilon)}_i$, for which 
-$\sum_{j\in J}\alpha_j n(S^\star,j) < \beta_i$. We add $(i,S^\star)$ to $\cC$, and return $(\alpha,\beta)$ to the separation oracle for \eqref{eq:d4}.
+Otherwise, the PTAS  returns a set $S^\star$ with $|S^\star|\le f_i$ and $\sum_{j\in J}\cc_j n(S,j) \geq D_i$, that is $S^\star \in \calF^{(\epsilon)}_i$, for which
+$\sum_{j\in J}\alpha_j n(S^\star,j) < \beta_i$. We add $(i,S^\star)$ to $\cC$, and return $(\alpha,\beta)$ to the separation oracle for \eqref{feq:d4}.
 %We also add $(i,S^\star)$ to $\calC$.
-The ellipsoid algorithm states than in polynomial time we either find an $(\alpha,\beta)$ feasible for \eqref{eq:d3}-\eqref{eq:d2}, or the polynomially many hyperplanes
-in $\calC$ prove \eqref{eq:d3},\eqref{eq:d1}, and \eqref{eq:d4} is infeasible.
-More precisely, there exists a solution $z$ satisfying \eqref{eq:conflp1}-\eqref{eq:conflp2} with $z(i,S)$ defined for $(i,S)\in \calC$. 
-Since $|\cC|$ is bounded by a polynomial, we can explicitly find $z$ by solving the LP \eqref{eq:conflp1}-\eqref{eq:conflp2} with variables $z(i,S)$ for $(i,S)\in \calC$.
+The ellipsoid algorithm states than in polynomial time we either find an $(\alpha,\beta)$ feasible for \eqref{feq:d3}-\eqref{feq:d2}, or the polynomially many hyperplanes
+in $\calC$ prove \eqref{feq:d3},\eqref{feq:d1}, and \eqref{feq:d4} is infeasible.
+More precisely, there exists a solution $z$ satisfying \eqref{feq:conflp1}-\eqref{feq:conflp2} with $z(i,S)$ defined for $(i,S)\in \calC$.
+Since $|\cC|$ is bounded by a polynomial, we can explicitly find $z$ by solving the LP \eqref{feq:conflp1}-\eqref{feq:conflp2} with variables $z(i,S)$ for $(i,S)\in \calC$.
 \end{proof}\end{proof}
 %Now, if there is no feasible solution to the above set of constraints, then we know that the solution $y \in \calP(J)$. Otherwise, if there is a
 %feasible solution, then the first constraint  gives a separating hyperplane. Thus, it is enough to find a solution to the above set of constraints, or
 %declare that it is infeasible. We check the above constraints again by the ellipsoid algorithm. Thus, given $\alpha_p$ values we need to check that
 %for all $S \in \calF_J$, $\sum_{p \in [P]} n(S,p) \cdot \alpha_p \leq 1$. We can restate the  problem as a general version of the knapsack cover
-%problem. We are given a knapsack of capacity 1. We are also given $n_p$ items of size $\alpha_p$ and profit $c_p$ each. We would like to 
-%select at most $|\Gamma(J)|$ items which cover  the knapsack, i.e., whose total $\alpha_p$ values add up to at least $1$, and maximize the 
-%total profit. If we can get profit at least $D(J)$, we know that there is a violating constraint (given by the set of items $S$)  to the above set 
-%of constraints; otherwise the values $\alpha_p$ are feasible. This general version of knapsack cover can be solved exactly using dynamic programming. 
+%problem. We are given a knapsack of capacity 1. We are also given $n_p$ items of size $\alpha_p$ and profit $c_p$ each. We would like to
+%select at most $|\Gamma(J)|$ items which cover  the knapsack, i.e., whose total $\alpha_p$ values add up to at least $1$, and maximize the
+%total profit. If we can get profit at least $D(J)$, we know that there is a violating constraint (given by the set of items $S$)  to the above set
+%of constraints; otherwise the values $\alpha_p$ are feasible. This general version of knapsack cover can be solved exactly using dynamic programming.
 %Using standard rounding techniques, we can give an FPTAS for this problem (\textcolor{red}{Do we need a reference here?}). Thus, we can give a polynomial
-%time algorithm which given the values $\alpha_p$ either (i) declares that the dual LP is infeasible (and so, $y \in \calP(J)$), or (ii) declares that 
-%$\alpha_p$ values are feasible even if  we relax the  set $\calF_J$ to a set $\calF_J^\varepsilon$ defined as : $\{S\in \Supp: |S| \leq |\Gamma(J)|, \sum_{p\in S} c_p \geq (1- \varepsilon) D(J)\}$, where $\varepsilon$ is an arbitrarily small constant. Thus, in terms of the primal LP, 
-%we get an algorithm which either declares (i) $y \in \calP(J)$, or (ii) finds a separating hyperplane with respect to $\calP(J)$ where we modify $\calF_J$ to 
-%$\calF_J^\varepsilon$. Running the ellipsoid algorithm (and assuming that the configuration LP is feasible), we can ensure that for a fixed $J$, 
-%we get a solution $y$ which lies in $\calP(J)$ provided we change $\calF_J$ to $\calF_J^\varepsilon$. 
+%time algorithm which given the values $\alpha_p$ either (i) declares that the dual LP is infeasible (and so, $y \in \calP(J)$), or (ii) declares that
+%$\alpha_p$ values are feasible even if  we relax the  set $\calF_J$ to a set $\calF_J^\varepsilon$ defined as : $\{S\in \Supp: |S| \leq |\Gamma(J)|, \sum_{p\in S} c_p \geq (1- \varepsilon) D(J)\}$, where $\varepsilon$ is an arbitrarily small constant. Thus, in terms of the primal LP,
+%we get an algorithm which either declares (i) $y \in \calP(J)$, or (ii) finds a separating hyperplane with respect to $\calP(J)$ where we modify $\calF_J$ to
+%$\calF_J^\varepsilon$. Running the ellipsoid algorithm (and assuming that the configuration LP is feasible), we can ensure that for a fixed $J$,
+%we get a solution $y$ which lies in $\calP(J)$ provided we change $\calF_J$ to $\calF_J^\varepsilon$.
 
 
 %\end{proof}
 
 
 %\subsection{Assignment LP for $Q|f_i|C_{min}$}
-%Suppose we are given $m$ machines $M$ with cardinality constraints $f_1,\ldots,f_m$, and $n$ types of  jobs $J$ with capacities $c_1 \geq \cdots \geq c_n$. 
-%Let $(s_1,\ldots, s_n)$ be a supply vector, that is, there are $s_j$ copies of job $j$. 
+%Suppose we are given $m$ machines $M$ with cardinality constraints $f_1,\ldots,f_m$, and $n$ types of  jobs $J$ with capacities $c_1 \geq \cdots \geq c_n$.
+%Let $(s_1,\ldots, s_n)$ be a supply vector, that is, there are $s_j$ copies of job $j$.
 %Suppose there exists a feasible solution to the following LP.
 %\begin{alignat}{4}
-%	&& \quad \forall j\in J,  &\quad  \textstyle \sum_{i\in M} z_{ij} \leq s_j \label{eq:asslp1} \\
-%	&& \quad \forall i\in M,  &\quad  \textstyle \sum_{j\in J} c_jz_{ij}  \geq D_i \label{eq:asslp2}\\
-%	&&\quad \forall i\in M, & \quad \textstyle \sum_{j\in J} z_{ij}  \leq  f_i \label{eq:asslp3}\\
-%	&& \quad \forall i\in \calS, j\in J_{res} ~\textrm{with}~ c_j \geq C_i, & \quad z_{ij}   =  0   \label{eq:asslp4}
+%	&& \quad \forall j\in J,  &\quad  \textstyle \sum_{i\in M} z_{ij} \leq s_j \label{feq:asslp1} \\
+%	&& \quad \forall i\in M,  &\quad  \textstyle \sum_{j\in J} c_jz_{ij}  \geq D_i \label{feq:asslp2}\\
+%	&&\quad \forall i\in M, & \quad \textstyle \sum_{j\in J} z_{ij}  \leq  f_i \label{feq:asslp3}\\
+%	&& \quad \forall i\in \calS, j\in J_{res} ~\textrm{with}~ c_j \geq C_i, & \quad z_{ij}   =  0   \label{feq:asslp4}
 %\end{alignat}
 %\def\zz{z^{\mathsf{int}}}
 %%For the correct guess, the above LP is feasible. If so, using the fact that $c_p \leq T_i$ for all $i\sim p$, we can get a feasible solution with a slight hit in the demand.
-%\begin{theorem}\label{thm:shmoystardos}
-%	If \eqref{eq:asslp1}-\eqref{eq:asslp4} is feasible, then there is an integral assignment $\zz_{ij}$ which satisfies \eqref{eq:asslp1}, \eqref{eq:asslp3} and \eqref{eq:asslp4}, and 
+%\begin{theorem}\label{fthm:shmoystardos}
+%	If \eqref{feq:asslp1}-\eqref{feq:asslp4} is feasible, then there is an integral assignment $\zz_{ij}$ which satisfies \eqref{feq:asslp1}, \eqref{feq:asslp3} and \eqref{feq:asslp4}, and
 %	$\quad \forall i\in M, ~~ \sum_{j\in J} c_j\zz_{ij}  \geq D_i - C_i$.
 %\end{theorem}
 %\begin{proof} {\large NEEDS BETTER WRITING} We repeat the argument of Shmoys and Tardos~\cite{bibid}.
@@ -551,8 +551,8 @@ Since $|\cC|$ is bounded by a polynomial, we can explicitly find $z$ by solving 
 %	Cardinality constraint vacuously satisfied.
 %\end{proof}
 
-\subsection{Integrality Gap}\label{sec:conf-ig}
-In this section we prove Theorem~\ref{thm:conf-ig}.
+\subsection{Integrality Gap}\label{fsec:conf-ig}
+In this section we prove Theorem~\ref{fthm:conf-ig}.
 %We show that the configuration LP for the problem of allocating jobs to machines of different speeds to maximize the minimum processing time has super-constant integrality gap.
 %\begin{theorem}
 %	The integrality gap of CLP is $\Omega(\log n/\log\log n)$.
@@ -565,7 +565,7 @@ In this section we prove Theorem~\ref{thm:conf-ig}.
 	\begin{enumerate}
 		\item There is $1$ machine $M_0$ with $D(M_0) = 1$ and $f(M_0) = 1$.
 		\item There are $K$ machines $M_1,\ldots,M_K$ with $D(M_i) = K^{-i}$ and $f_i := f(M_i) = K^{2K + 1}\cdot K^{-2i}$.
-		\item There are $K$ {\bf classes} of machines $\M_1,\M _2,\ldots, \M _K$. Machines in the same class are equivalent. 
+		\item There are $K$ {\bf classes} of machines $\M_1,\M _2,\ldots, \M _K$. Machines in the same class are equivalent.
 		There are $f_i$ machines in $\M_i$ and they are numbered $N^{(i)}_1,\ldots,N^{(i)}_{f_i}$.
 		Each machine $N$  in class $i$ has $D(N) = \frac{1}{f_iK^i} = K^{-(2K+ 1)}\cdot K^i$ and $f(N) = 1$.
 	\end{enumerate}
@@ -575,7 +575,7 @@ In this section we prove Theorem~\ref{thm:conf-ig}.
 		\item There are $K$ other types of jobs of the same capacity. Job $J$ of type $i$ has capacity $c(J) = c_i :=  \frac{1}{f_iK^i} = K^{-(2K+1)}K^i$  and there are $n_i := f_i (1+1/K) = (K+1)K^{2K}K^{-2i}$ of them.
 		We divide these $n_i$ jobs into two sets $S_i \cup T_i$ where $|S_i| = f_i$ and $|T_i| = f_i/K$. We order the jobs in $S_i$ arbitrarily and call them $P^{(i)}_1,\cdots,P^{(i)}_{f_i}$.
 	\end{enumerate}
-	So, the total number of machines in $\calI_K$ are $1 + K + \sum_{i=1}^K f_i  \leq K^{2K}$ and the number of jobs is $K + (1+1/K)\sum_{i=1}^K f_i \approx K^{2K}$. 
+	So, the total number of machines in $\calI_K$ are $1 + K + \sum_{i=1}^K f_i  \leq K^{2K}$ and the number of jobs is $K + (1+1/K)\sum_{i=1}^K f_i \approx K^{2K}$.
 	
 	\begin{lemma}
 		The Configuration LP is feasible.
@@ -583,8 +583,8 @@ In this section we prove Theorem~\ref{thm:conf-ig}.
 	\begin{proof}
 		We describe a fractional solution.
 		\begin{enumerate}
-			\item For machine $M_0$ we satisfy as follows: set  $y(M_0,J_i) = 1/K$ for $i=1,\ldots,K$. Note $c(J_i) \geq D(M_0)$ and $|J_i| = 1 = f(M_0)$. 
-			\item For machine $M_i$ we satisfy as follows: set $y(M_i,J_i) = 1-1/K$ and $y(M_i,S_i) = 1/K$. Recall $S_i$ are the $f_i$ jobs of type $i$. 
+			\item For machine $M_0$ we satisfy as follows: set  $y(M_0,J_i) = 1/K$ for $i=1,\ldots,K$. Note $c(J_i) \geq D(M_0)$ and $|J_i| = 1 = f(M_0)$.
+			\item For machine $M_i$ we satisfy as follows: set $y(M_i,J_i) = 1-1/K$ and $y(M_i,S_i) = 1/K$. Recall $S_i$ are the $f_i$ jobs of type $i$.
 			\begin{itemize}
 				\item Note $c(J_i) = 1 \geq D(M_i) = K^{-i}$ and 	$|J_i| = 1 \leq f(M_i) = K^{2K+1}K^{-2i}$ since $i\leq K$.
 				\item Note $c(S_i) = |S_i|\cdot \frac{1}{f_iK^i} = \frac{1}{K^i} = D(M_i)$. Note $|S_i| = f_i = f(M_i)$.
@@ -605,8 +605,8 @@ In this section we prove Theorem~\ref{thm:conf-ig}.
 	\end{lemma}
 	\begin{proof}
 		Lets take machines in $\M_i$. Recall all machines here have demand of $\frac{1}{f_iK^i}$ and cardinality constraint of $1$.
-		Thus in the integral optimum, they {\bf must} get one job which is either big, or of type $i$ or larger. 
-		Now, the total number of jobs of type $j > i$ are 
+		Thus in the integral optimum, they {\bf must} get one job which is either big, or of type $i$ or larger.
+		Now, the total number of jobs of type $j > i$ are
 		\[
 		\sum_{j>i} f_j(1+1/K) = (K+1)K^{2K} \sum_{j > i} K^{-2j} \leq  (K+1)K^{2K}K^{-2i} \sum_{\ell=1}^\infty K^{-2\ell} = O\left(f_i/K\right)
 		\]
@@ -614,11 +614,11 @@ In this section we prove Theorem~\ref{thm:conf-ig}.
 		Therefore, the number of type $i$ jobs left after satisfying machines $(M_0,\ldots,M_K)$ are only $\Theta(f_i/K)$.
 		
 		
-		Now take a machine $M_i$. We have $f(M_i) = f_i$ and $D(M_i) = 1/K^i$. 
+		Now take a machine $M_i$. We have $f(M_i) = f_i$ and $D(M_i) = 1/K^i$.
 		First note that jobs of type $j < i$ are ``useless'' for $M_i$. Any $f_i$ of them (best to take them of type $(i-1)$)  gives capacity $f_i\cdot c_{i-1}  = \frac{f_i}{f_{i-1}K^{i-1}} = \frac{1}{K^{i+1}} =  \frac{1}{K}\cdot D(M_i)$. So any subset of these jobs that can fit in $M_i$ gives capacity $\leq D(M_i)/K$.
 		On the other hand, the total capacity of jobs remaining from type $j \geq i$ is  $\sum_{j\geq i} \Theta(f_j/K)\cdot \frac{1}{f_jK^j} = \Theta(1/K)\sum_{j\geq i} \frac{1}{K^j} = \Theta(D(M_i)/K)$.
 		
-		Therefore, any machine $M_i$ can't get more than $D(M_i)/K$ from the ``small'' jobs. But then they all can't get big jobs. 
+		Therefore, any machine $M_i$ can't get more than $D(M_i)/K$ from the ``small'' jobs. But then they all can't get big jobs.
 	\end{proof}
 	The above two lemmas prove the theorem after noting that $K = \Theta(\log n/\log\log n)$ where $n$ is either the number of machines of jobs.
 %\end{proof}

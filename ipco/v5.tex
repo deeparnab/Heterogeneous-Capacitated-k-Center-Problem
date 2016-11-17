@@ -40,6 +40,20 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 
 
+\newcommand{\initOneLiners}{%
+    \setlength{\itemsep}{0pt}
+    \setlength{\parsep }{0pt}
+    \setlength{\topsep }{0pt}
+%
+}
+\newenvironment{oneLiners}[1][\ensuremath{\bullet}]
+    {\begin{list}
+        {#1}
+        {\initOneLiners}}
+    {\end{list}}
+
+
+
 \begin{document}
 \title{\huge The Heterogeneous Capacitated $k$-Center Problem}
 \date{}
@@ -47,16 +61,33 @@
 \institute{}
 \maketitle
 \begin{abstract}
-	The abstract goes here.
+	In this paper we initiate the study of the {\em heterogeneous capacitated $k$-center problem}: given a metric space $X = (F \cup C, d)$, and a collection of facilities $1, 2, \ldots, k$, with facility $i$ having a capacity of $c_i$. The goal is to open each facility $i$ facility at a location ${\rm loc}(i) \in F$, and also to assign clients to facilities using a map $\phi: C \rightarrow [k]$ so that the number of clients assigned to facility $i$ is at most $c_i$, and the objective is to minimize the maximum distance between a client and the location of its assigned facility, i.e., $\max_{c \in C} d(c,{\rm loc}(\phi(c)))$. If all the capacities $c_i$'s are identical, the problem is identical to the well-studied {\em uniform capacitated $k$-center problem} for which constant-factor approximations are known~\cite{XYZ}.
+%However, the non-uniform generalization (called the {\em non-uniform capacitated $k$-center problem}) of this problem which has received much attention recently differs from our problem in the following sense: in the non-uniform problem, each facility location $f$ has a fixed capacity $c_f$, and the goal is to open $k$ centers and assign clients so that the capacity constraints are satisfied. On the other hand, in our {\em heterogeneous} problem, a set of $k$ different capacities is specified, and the goal is to suitably place them in facility locations.
+The additional choice of determining which capacity should be installed in which location makes our problem technically substantially different from this problem, as well as the {\em non-uniform capacitated $k$-center problem} which has received much attention recently. In fact, one of our contributions is in relating the heterogeneous problem to a special-case of the classical {\em santa-claus problem}. Using this connection, we get the following results for heterogeneous capacitated $k$-center problem.
+\begin{oneLiners}
+\item A quasi-polynomial time $O(\log n/\epsilon)$-approximation where every capacity is violated by a factor of $O(1+\epsilon)$.
+\item A polynomial time $O(1)$-approximation where every capacity is violated by an $O(\log n)$ factor.
+\end{oneLiners}
+We get improved results for the {\em soft-capacities} version where we can place multiple facilities in the same location, i.e., ${\rm loc}(\cdot)$ need not be injective.
 \end{abstract}
 %\thispagestyle{empty}
 %\newpage
 %\setcounter{page}{1}
 \input{section1}
 \input{preliminaries}
-\bibliographystyle{plain}
+\section{Conclusion}
+Blah Blah
+
+\bibliographystyle{abbrv}
 \bibliography{mckc}
+\newpage
 \appendix
+
+\section{Full Version: Roadmap}
+For completeness and a cleaner presentation, we present all the details completely in the full version, including all the definitions and theorems already stated in the main body of the paper. 
+\comment{rk: give roadmap.}
+%\input{}
+\input{full-preliminaries}
 \input{section2}
 \input{section3}
 \input{section5}
@@ -70,15 +101,15 @@
 
 \section{Integrality Gap for Non-Uniform Santa Claus Problem}\label{sec:app-bsig}
 We reproduce the integrality gap example for the configuration LP by Bansal and Sviridenko~\cite{BansalS06} for the general max-min allocation problem, and point out how their instance is in fact a $Q|restr|C_{min}$ instance.
-Fix integer $K$. There are $K$ machines with demand $D_i = K$; these are the large machines $L = \{M_1,M_2,\ldots,M_K\}$. There are $K-1$ large jobs with $c_j = K$ which can only be assigned to the machines in $L$. 
+Fix integer $K$. There are $K$ machines with demand $D_i = K$; these are the large machines $L = \{M_1,M_2,\ldots,M_K\}$. There are $K-1$ large jobs with $c_j = K$ which can only be assigned to the machines in $L$.
 Let $J_B$ be the set of large jobs. There are $K^2$ small machines each with $D_i = 1$; these machines are distributed in $K$ classes where the $i$th class $\cC_i$ contains $K$ small machines. We let $m^{(i)}_k$ denote the $k$th machine in $\cC_i$, for $1\leq k\leq K$.
-There are $K^2 + K$ small jobs with $c_j = 1$. These jobs are partitoned into $K$ classes with $i$th class $\cJ_i$ containing $K+1$ small jobs. Each class $\cJ_i$ has one ``public'' job $j^{(i)}_0$ which can be assigned to any machine $m^{(i)}_k \in \cC_i$ 
+There are $K^2 + K$ small jobs with $c_j = 1$. These jobs are partitoned into $K$ classes with $i$th class $\cJ_i$ containing $K+1$ small jobs. Each class $\cJ_i$ has one ``public'' job $j^{(i)}_0$ which can be assigned to any machine $m^{(i)}_k \in \cC_i$
  and $K$ ``private'' jobs $j^{(i)}_k$, $1\leq k\leq K$ where $j^{(i)}_k$ can be assigned to only $m^{(i)}_k \in \cC_i$. Furthermore all the private jobs $j^{(i)}_k\in \cJ_i$ can be assigned to the large machine $M_i \in L$. This completes the description of the instance.
 Note that the number of machines and jobs are $\Theta(K^2)$.
 
 The integral optimum solution must give one machine $i$ capacity $\leq D_i/K$. Indeed, at least one large machine $M_i$ will not receive a job in $J_B$.
 The only other jobs available to $M_i$ are the private jobs in $\calJ_i$. Suppose we allocate two such jobs to $M_i$; wlog these are $j^{(i)}_1$ and $j^{(i)}_2$. Now note
-that the machines $m^{(i)}_1$ and $m^{(i)}_2$ have only job $j^{(i)}_0$ which can be assigned to them; and so one of them would get capacity $0$. 
+that the machines $m^{(i)}_1$ and $m^{(i)}_2$ have only job $j^{(i)}_0$ which can be assigned to them; and so one of them would get capacity $0$.
 Therefore, the machine $M_i$ can receive only one job $j^{(i)}_k$ giving it total capacity $\leq D_i/K$.
 
 On the other hand the configuration LP is feasible. Every large machine $M_i$ gets $z(M_i, j) = 1/K$ for all large jobs $j\in J_B$ and $z(M_i,\{j^{(i)}_1,\ldots, j^{(i)}_K\}) = 1/K$ for the set of private jobs in $\cJ_i$.
