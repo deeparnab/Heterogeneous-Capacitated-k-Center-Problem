@@ -4,7 +4,7 @@
 
 \def\diam{\mathrm{diam}}
 \def\dist{\mathrm{dist}}
-\def\mckc{{{\sffamily Heterogeneous Cap-$k$-Center \xspace}}}
+\def\mckc{{\sffamily Heterogeneous Cap-$k$-Center}\xspace}
 %\def\cckp{{\sffamily Cardinality-Constrained Knapsack Cover}\xspace}
 \def\cckp{$Q|f_i|C_{min}$\xspace}
 \def\opt{\mathsf{OPT}}
@@ -38,8 +38,6 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 
 
-
-
 \newcommand{\initOneLiners}{%
     \setlength{\itemsep}{0pt}
     \setlength{\parsep }{0pt}
@@ -54,6 +52,7 @@
 
 
 
+
 \usepackage[colorinlistoftodos,textsize=tiny,textwidth=2cm,color=red!25!white]{todonotes}
 \newcommand{\aknote}[1]{\todo[color=green!25!white]{AK: #1}\xspace}
 \newcommand{\rknote}[1]{\todo[color=red!25!white]{RK: #1}\xspace}
@@ -62,25 +61,29 @@
 
 
 \begin{document}
-\title{\huge The Heterogeneous Capacitated $k$-Center Problem}
+\title{The Heterogeneous Capacitated $k$-Center Problem}
 \date{}
 \author{Deeparnab Chakrabarty \\ \small Microsoft Research India\\\small  deeparnab@gmail.com \and Ravishankar Krishnaswamy \\ \small Microsoft Research India\\\small  ravishankar.k@gmail.com \and Amit Kumar \\ \small  Comp. Sci. \& Engg., IIT Delhi \\ \small amitk@cse.iitd.ac.in}
 \maketitle
 \begin{abstract}
-	In this paper we initiate the study of the {\em heterogeneous capacitated $k$-center problem}: given a metric space $X = (F \cup C, d)$, and a collection of capacities. The goal is to open each capacity at a unique facility location in $F$, and also to assign clients to facilities so that the number of clients assigned to any facility is at most the capacity installed; the objective is then to minimize the maximum distance between a client and its assigned facility. If all the capacities $c_i$'s are identical, the problem is identical to the well-studied {\em uniform capacitated $k$-center problem} for which constant-factor approximations are known~\cite{Bar-IlanKP93,KhullerS00}.
+	In this paper we initiate the study of the {\em heterogeneous capacitated $k$-center problem}: given a metric space $X = (F \cup C, d)$, and a collection of capacities. The goal is to open each capacity at a unique facility location in $F$, and also to assign clients to facilities so that the number of clients assigned to any facility is at most the capacity installed; the objective is then to minimize the maximum distance between a client and its assigned facility. If all the capacities $c_i$'s are identical, the problem becomes the well-studied {\em uniform capacitated $k$-center problem} for which constant-factor approximations are known~\cite{Bar-IlanKP93,KhullerS00}.
 %However, the non-uniform generalization (called the {\em non-uniform capacitated $k$-center problem}) of this problem which has received much attention recently differs from our problem in the following sense: in the non-uniform problem, each facility location $f$ has a fixed capacity $c_f$, and the goal is to open $k$ centers and assign clients so that the capacity constraints are satisfied. On the other hand, in our {\em heterogeneous} problem, a set of $k$ different capacities is specified, and the goal is to suitably place them in facility locations.
 The additional choice of determining which capacity should be installed in which location makes our problem considerably different from this problem, as well the non-uniform generalizations studied thus far in literature. In fact, one of our contributions is in relating the heterogeneous problem to special-cases of the classical {\em santa-claus problem}. Using this connection, and by designing new algorithms for these special cases, we get the following results for \mckc.
 \begin{oneLiners}
-\item A quasi-polynomial time $O(\log n/\epsilon)$-approximation where every capacity is violated by a factor of $O(1+\epsilon)$.
+\item A quasi-polynomial time $O(\log n/\epsilon)$-approximation where every capacity is violated by $1+\epsilon$.
 \item A polynomial time $O(1)$-approximation where every capacity is violated by an $O(\log n)$ factor.
 \end{oneLiners}
 We get improved results for the {\em soft-capacities} version where we can place multiple facilities in the same location.
 \end{abstract}
-\thispagestyle{empty}
-\newpage
-\setcounter{page}{1}
-\input{section1}
-\input{preliminaries}
+%\thispagestyle{empty}
+%\newpage
+%\setcounter{page}{1}
+
+
+
+%\input{}
+\input{fsection1}
+\input{fpreliminaries}
 \input{section2}
 \input{section3}
 \input{section5}
@@ -89,18 +92,13 @@ We get improved results for the {\em soft-capacities} version where we can place
 \input{section7}
 \input{section8}
 
-\section{Conclusion}
-In this paper we introduced and studied the \mckc problem, and highlighted its connection to an interesting special case of the max-min allocation problems, namely \cckp. We showed a logarithmic approximation for \cckp (and also a QPTAS), which implied bicriteria algorithms with similar capacity violations for \mckc and $O(1)$-distance approximation. We believe designing polynomial-time constant-approximations for \cckp and \mckc are very interesting open problems.
 
-\bibliographystyle{abbrv}
-\bibliography{mckc}
-\newpage
+%\section{Conclusion}
 
-\appendix
+%\newpage
 
-
-\section{Integrality Gap for Non-Uniform Santa Claus Problem}
-We reproduce the integrality gap example for the configuration LP by Bansal and Sviridenko~\cite{BS} for the general max-min allocation problem, and point out how their instance is in fact a $Q|restr|C_{min}$ instance.
+\section{Integrality Gap for Non-Uniform Santa Claus Problem}\label{sec:app-bsig}
+We reproduce the integrality gap example for the configuration LP by Bansal and Sviridenko~\cite{BansalS06} for the general max-min allocation problem, and point out how their instance is in fact a $Q|restr|C_{min}$ instance.
 Fix integer $K$. There are $K$ machines with demand $D_i = K$; these are the large machines $L = \{M_1,M_2,\ldots,M_K\}$. There are $K-1$ large jobs with $c_j = K$ which can only be assigned to the machines in $L$.
 Let $J_B$ be the set of large jobs. There are $K^2$ small machines each with $D_i = 1$; these machines are distributed in $K$ classes where the $i$th class $\cC_i$ contains $K$ small machines. We let $m^{(i)}_k$ denote the $k$th machine in $\cC_i$, for $1\leq k\leq K$.
 There are $K^2 + K$ small jobs with $c_j = 1$. These jobs are partitoned into $K$ classes with $i$th class $\cJ_i$ containing $K+1$ small jobs. Each class $\cJ_i$ has one ``public'' job $j^{(i)}_0$ which can be assigned to any machine $m^{(i)}_k \in \cC_i$
@@ -115,9 +113,11 @@ Therefore, the machine $M_i$ can receive only one job $j^{(i)}_k$ giving it tota
 On the other hand the configuration LP is feasible. Every large machine $M_i$ gets $z(M_i, j) = 1/K$ for all large jobs $j\in J_B$ and $z(M_i,\{j^{(i)}_1,\ldots, j^{(i)}_K\}) = 1/K$ for the set of private jobs in $\cJ_i$.
 For all $1\leq i,k\leq K$, every machine $m^{(i)}_k$ receives $z(m^{(i)}_k,j^{(i)}_k) = 1-1/K$ and $z(m^{(i)}_k,j^{(i)}_0) = 1/K$. One can check all the jobs are fractionally assigned exactly.
 
+\section{Conclusion}
+In this paper we introduced and studied the \mckc problem, and highlighted its connection to an interesting special case of the max-min allocation problems, namely \cckp. In our main result, we showed, using a decomposition theorem and the notion of supply polyhedra, a logarithmic approximation for \cckp, using which we showed a bicriteria $(O(1),O(\log n))$-approximation for \mckc. We believe designing polynomial-time $O(1)$-approximations for \cckp and bicriteria $(O(1),O(1))$ algorithms for \mckc are very interesting open problems.
 
-\newpage%\newpage
-\listoftodos
+\bibliographystyle{abbrv}
+\bibliography{mckc}
 
 
 \end{document}

@@ -1,5 +1,5 @@
 \iffalse
-\section{Full Version: Introduction}
+\section{Introduction}
 The capacitated $k$-center problem is a classic optimization problem where a finite metric space $(X,d)$ needs to be partitioned into $k$ clusters so that  every  cluster has cardinality at most
 some specified value $L$, and the objective is to minimize the maximum intra-cluster distance. This problem was introduced by Bar-Ilan et al~\cite{Bar-IlanKP93} and has many applications~\cite{LuptonMY98,MorganL77,Murthy1983AnAA}, including %see khuller-sussmann paper for these refs.
 the {\em machine placement problem}: determine where to place a given collection of \emph{identical servers} to minimize the makespan (jobs are located in a metric space, and first need to reach the server they are assigned to before they can be processed)~\cite{PSW97}. %\mcomment{Add Venkat's References?}
@@ -298,7 +298,7 @@ In contrast, we do not wish to violate the number of capacities available at all
 
 
 
-\section{Full Version: Introduction}
+\section{Introduction}
 The capacitated $k$-center problem is a classic optimization problem where a finite metric space $(X,d)$ needs to be partitioned into $k$ clusters so that  every  cluster has cardinality at most
 some specified value $L$, and the objective is to minimize the maximum intra-cluster distance. This problem introduced by Bar-Ilan et al~\cite{Bar-IlanKP93} has many applications~\cite{LuptonMY98,MorganL77,Murthy1983AnAA}. %see khuller-sussmann paper for these refs.
 One application is deciding placement of machine locations (centers of clusters) in a network scheduling environment where jobs arise in a metric space and the objective function has a  job-communication (intra-cluster distance) and machine-load (cardinality)
@@ -507,14 +507,14 @@ Then, starting at an arbitrary client and using a simple region-growing techniqu
 
 \medskip \noindent {\bf LP-Based Strong Decompostion.}  It is not a-priori clear how to modify the above technique to obtain better factors for the cost. To get $O(1)$-approximations, we resort to linear programming relaxations. One can write the natural LP relaxation \eqref{feq:lp1}-\eqref{feq:lp6} described in Section~\ref{fsec:prelims} -- the relaxation has $y_{ip}$ variables which denote opening a
 facility with capacity $c_p$ at $i$.
-Armed with a feasible solution to the LP, we prove a \emph{stronger decomposition theorem} (Theorem~\ref{thm:decomp}): we show that we can delete a set of clients $\Cd$ which can be charged to the remaining ones, and then partition the remaining clients and facilities into {\em two} classes.
-One class $\calT$  is the so-called \emph{complete neighborhood sets} of the form $\{(J_i, T_i)\}$ with $\Gamma(J_i) \subseteq T_i$ as described above --- we define our \cckp instance using these sets. The other class $\calS$  is of, what we call, {\em roundable} sets (Definition~\ref{def:rnding-mkc}). Roundable sets have ``enough'' $y$-mass such that installing as many  capacities as prescribed by the LP (rounded down to the nearest integer) supports the total demand incident on the set (with a $(1+\epsilon)$-factor capacity violation). Moreover, the diameter of any of these sets constructed is $\tilde{O}(1/\epsilon)$.
+Armed with a feasible solution to the LP, we prove a \emph{stronger decomposition theorem} (Theorem~\ref{fthm:decomp}): we show that we can delete a set of clients $\Cd$ which can be charged to the remaining ones, and then partition the remaining clients and facilities into {\em two} classes.
+One class $\calT$  is the so-called \emph{complete neighborhood sets} of the form $\{(J_i, T_i)\}$ with $\Gamma(J_i) \subseteq T_i$ as described above --- we define our \cckp instance using these sets. The other class $\calS$  is of, what we call, {\em roundable} sets (Definition~\ref{fdef:rnding-mkc}). Roundable sets have ``enough'' $y$-mass such that installing as many  capacities as prescribed by the LP (rounded down to the nearest integer) supports the total demand incident on the set (with a $(1+\epsilon)$-factor capacity violation). Moreover, the diameter of any of these sets constructed is $\tilde{O}(1/\epsilon)$.
 
 \medskip \noindent {\bf Technical Roadblock.}
 It may seem that the above decomposition theorem implies a reduction to the \cckp problem -- for the class $\calT$ form the \cckp instance and use black-box algorithms, while the roundable sets in $\calS$ are taken care of almost by definition.
 The nub of the problem lies in the {\em supply} of capacities to each of these classes.  Sure, the \cckp instance formed from $\calT$ must have a solution if the \mckc problem is feasible, {\em but only if all the $k_p$ copies of capacity $c_p$ are available to it.} However, we have already used up some of these copies to take care of the $\calS$ sets, and what we actually have available for $\calT$ is what the {\em LP prescribes.} And this can be very off (compared to the case when the \cckp instance had all the $k_p$ copies to itself). In fact, this natural  LP relaxation has bad integrality gap (Remark~\ref{frem:ig}), that is, although the LP is feasible, any assignment will violate capacities to $\Omega(n)$ factors.% \smallskip
 
-\medskip \noindent {\bf The Supply Polyhedra.} 
+\medskip \noindent {\bf The Supply Polyhedra.}
 The above method would be fine if the supply  prescribed by the LP to the complete-neighborhood sets in $\calT$ would satisfy (or approximately satisfy) the demands of the machines in the corresponding \cckp instance. This motivates us  to define {\em supply polyhedra} for \cckp and other related problems. Informally, the supply polyhedron (Definition~\ref{fdef:supp-poly}) of a \cckp instance is supposed to capture all the vectors $(s_1,\ldots,s_n)$ such that $s_j$ copies of capacity $c_j$ can satisfy the demands of all the machines. Conversely, any vector in this polyhedron should also be a feasible (or approximately feasible) supply vector for this instance.
 
  If such an object $\calP$ existed, then we could strengthen our natural LP relaxation as follows. For {\em every} collection $\calT$ of complete-neighborhood sets, we add a constraint (described as \eqref{feq:lp7}) stating that the fractional capacity allocated to the facilities in $\calT$ should
@@ -626,7 +626,7 @@ In contrast, we do not wish to violate the number of capacities available at all
 
 
 \section{Roadmap}
-In ~\Cref{fsec:prelims}, we set up the notation and key definitions which we will subsequently use in the remaining sections. Then in~\Cref{fsec:regiongrowing}, we give our simpler weak-decomposition theorem which (upto a logarithmic factor in the distance objective) effectively reduces \mckc to \cckp. To overcome this logarithmic loss in the distance objective, we turn to an LP-based approach and a stronger decomposition theorem. But to help us along the way, we introduce and state our main results about the so-called \emph{supply polyhedra} for \cckp in~\Cref{fsec:supplypolyhedra}. In~\Cref{fsec:o1} we then state our strong decomposition theorem and show how it can be combined with good supply polyhedra to get~\Cref{thm:2,thm:2a}. In the next~\Cref{fsec:decomp-proof}, we prove the strong decomposition theorem. Subsequently, in~\Cref{fsec:asslp,fsec:conflp}, we prove the existence of good supply polyhedra for $Q || C_{min}$ and \cckp. Finally in~\Cref{fsec:qptas} we show that \cckp admits a QPTAS, thereby proving~\Cref{thm:q}.
+In ~\Cref{fsec:prelims}, we set up the notation and key definitions which we will subsequently use in the remaining sections. Then in~\Cref{fsec:regiongrowing}, we give our simpler weak-decomposition theorem which (upto a logarithmic factor in the distance objective) effectively reduces \mckc to \cckp. To overcome this logarithmic loss in the distance objective, we turn to an LP-based approach and a stronger decomposition theorem. But to help us along the way, we introduce and state our main results about the so-called \emph{supply polyhedra} for \cckp in~\Cref{fsec:supplypolyhedra}. In~\Cref{fsec:o1} we then state our strong decomposition theorem and show how it can be combined with good supply polyhedra to get~\Cref{fthm:2,fthm:2a}. In the next~\Cref{fsec:decomp-proof}, we prove the strong decomposition theorem. Subsequently, in~\Cref{fsec:asslp,fsec:conflp}, we prove the existence of good supply polyhedra for $Q || C_{min}$ and \cckp. Finally in~\Cref{fsec:qptas} we show that \cckp admits a QPTAS, thereby proving~\Cref{fthm:q}.
 
 
 

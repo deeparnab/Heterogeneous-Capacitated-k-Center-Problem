@@ -1,6 +1,6 @@
 %\newpage
 \section{Preliminaries}\label{sec:prelims}
-Given an \mckc instance, we start by guessing $\opt$. We either prove $\opt$ is infeasible, or find an $(a,b)$-approximate allocation of clients to facilities.
+Given a \mckc instance, we start by guessing $\opt$. We either prove $\opt$ is infeasible, or find an $(a,b)$-approximate allocation of clients to facilities.
 	We define the bipartite graph $G = (F\cup C,E)$ where $(i,j)\in E$ iff $d(i,j) \leq \opt$. If $\opt$ is feasible, then the following assignment LP\eqref{eq:lp1}-\eqref{eq:lp6}
 	must have a feasible solution.
 In this LP, we  have opening  variables $y_{ip}$ for every $i\in F,p\in [P]$ indicating whether we open a facility with capacity $c_p$ at location $i$. Recall that the capacities available to us are $c_1, c_2, \ldots, c_P$ -- a facility with
