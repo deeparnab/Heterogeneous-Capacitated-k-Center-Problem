@@ -27,9 +27,9 @@ capacity $c_p$ installed on it will be referred to as a {\em type $p$ facility.}
 \smallskip
 
 \noindent		
-We say a solution $(x,y)$ is $(a,b)$-feasible if it satisfies \eqref{eq:lp1}, \eqref{eq:lp3}-\eqref{eq:lp6}, and \eqref{eq:lp2} with the RHS replaced by $bc_py^\mathsf{int}_{ip}$, and $x_{ijp} > 0$ only if $d(i,j) \leq a\cdot \opt$,
-We desire to find an integral solution $(x^\mathsf{int},y^\mathsf{int})$ which is $(a,b)$-feasible.
-The following claim shows that it suffices just to round the $y$-variables.
+We say a solution $(x,y)$ is $(a,b)$-feasible if it satisfies \eqref{eq:lp1}, \eqref{eq:lp3}-\eqref{eq:lp6}, and \eqref{eq:lp2} with the RHS replaced by $bc_py^\mathsf{int}_{ip}$, and $x_{ijp} > 0$ only if $d(i,j) \leq a\cdot \opt$.
+%We desire to find an integral solution $(x^\mathsf{int},y^\mathsf{int})$ which is $(a,b)$-feasible.
+%The following claim shows that it suffices just to round the $y$-variables.
 \begin{claim}
 Given an $(a,b)$-feasible solution $(x,\y)$ where $\y_{ip}\in \{0,1\}$,
 we can get  an $(a,b)$-approximate solution to the \mckc problem.
@@ -43,7 +43,7 @@ and the number of nodes matched to $(i,p)$ is $\leq \ceil{bc_p}$. Therefore open
 \end{proof}
 \fi
 
-We remark that as is, the LP has an unbounded integrality gap for \mckc, and indeed, the gap instances also happen to be of the \cckp variety. So we strengthen it by adding some additional constraints which we explain later. However, since our strong decomposition theorem merely uses these $y_{ip}$ and $x_{ijp}$ values, we now present that first. %Henceforth, we focus on rounding the $y$-values. To this end, we make the following useful definition.
+We remark that as is, the LP has an unbounded integrality gap for \mckc, and indeed, the gap instances also happen to be of the \cckp variety. So we strengthen it by adding some additional constraints which we explain later. However, since our strong decomposition theorem merely uses these $y_{ip}$ and $x_{ijp}$ values, we present that first. %Henceforth, we focus on rounding the $y$-values. To this end, we make the following useful definition.
 \begin{definition}[Roundable Sets]\label{def:rnding-mkc}
 	A set of facilities $S\subseteq F$ is said to be $(a,b)$-roundable w.r.t $(x,y)$ if
 	\begin{itemize}[noitemsep]
@@ -87,7 +87,7 @@ So if we can partition the facilities into roundable sets with reasonable parame
 If we find a complete neighborhood $T$ of facilities with a set $J$ of clients responsible for it, then we know that the optimal solution \emph{must satisfy} all the demand in $J$ by suitably opening facilities of sufficient capacity in $T$.
 Thus, if we can partition the entire instance into a collection $\calT = (T_1,\ldots,T_m)$ of disjoint $\alpha$-complete neighborhood sets with $J_i$ responsible for $T_i$, we can define an instance $\calI$ of \cckp with $m$ machines with demands $D_i = |J_i|$ and cardinality constraint $f_i = |T_i|$, and there are $n_i$ jobs of capacities $c_i$ for $1 \leq i \leq P$.
 
-However, in general, our decomposition theorem only ensures that we can partition the instance into sets which are either roundable or are complete neighborhoods, and the crux of the rounding lies in combining the two cases without opening more facilities of any type. Our final definition to describe our decomposition is that of $(\tau,\rho)$-{\em deletable clients} that can be removed from the instance since they can be ``$\rho$-charged'' to the remaining clients that are at most $\tau$-away.
+However, in general, our decomposition theorem only ensures that we can partition the instance into sets which are either roundable or are complete neighborhoods, and the crux of the rounding lies in combining the two cases while meeting the $k_i$ bounds for all capacities. Our next definition is that of $(\tau,\rho)$-{\em deletable clients} that can be removed from the instance since they can be ``$\rho$-charged'' to the remaining clients that are at most $\tau$-away.
 \begin{definition}[Deletable Clients]\label{def:deletable}
 	A subset $\Cd\subseteq C$ of clients is $\rho$-deletable if there exists a mapping $\phi_{j,j'}\in [0,1]$ for $j\in \Cd$ and $j'\in C\setminus \Cd$ satisfying (a) $\sum_{j'\in C\setminus \Cd} \phi_{j,j'} = 1$ for all $j\in \Cd$, and(b) $\sum_{j\in \Cd} \phi_{j,j'} \leq \rho$ for all $j'\in C\setminus \Cd$. Furthermore, $\phi_{j,j'} > 0$ only if $d(j,j') \leq \tau\cdot\opt$.
 
@@ -120,12 +120,12 @@ $\textstyle \sum_{j\in \Cd}  x_{ijp} = \sum_{j\in \Cd} \sum_{j'\in C\setminus \C
 \fi
 
 
-Our final ingredient is that of supply polyhedra. Recall that an instance of  \cckp has $m$ machines $M$ with demands $D_1,\ldots,D_m$ and cardinality constraints $f_1,\ldots, f_m$, and $n$  types of jobs $J$ with capacities $c_1,\ldots,c_n$ respectively.
+Our final ingredient is that of supply polyhedra. Recall that an instance of  \cckp has $m$ machines $M$ with demands $D_1,\ldots,D_m$ and cardinality constraints $f_1,\ldots, f_m$, and $n$  jobs $J$ with capacities $c_1,\ldots,c_n$ respectively. Now, we generalize this in the following manner:
 %In $Q||c_{min}$, there are no $f_i$'s, or equivalently $f_i = \infty$.
 %In the version with cardinality constraints, that is $Q|f_i|C_{min}$ we are also given positive integers $f_1,\ldots, f_m$.
  A {\em supply vector} $(s_1,\ldots,s_n)$ where each $s_j$ is a non-negative integer
-is called {\em feasible} for this instance if the ensemble formed by $s_j$ copies of jobs of capacity $c_j$ can be allocated feasibly to satisfy all the demands.
-The {\em supply polyhedra} desires to capture these feasible supply vectors.
+is called {\em feasible} for this instance if the ensemble formed by $s_j$ copies of jobs of capacity $c_j$ can satisfy all the demands.
+The {\em supply polyhedra} then desires to capture these feasible supply vectors.
 
 \begin{definition}[Supply Polyhedron]\label{def:supp-poly}
 	Given an instance $\calI$ for a max-min allocation problem, a polyhedron $\calP(\calI)$ is called an $\alpha$-approximate supply polyhedron if
@@ -211,17 +211,16 @@ We now state our decomposition result using which we prove~\Cref{thm:reduction}.
 \end{theorem}
 
 
-\begin{proof}[{\bf Proof of Theorem~\ref{thm:reduction}}]
-
+\begin{proof}[{\bf Proof Sketch of Theorem~\ref{thm:reduction}}]
 Let us first describe an approach which fails. Let $(x,y)$ be a feasible solution to LP\eqref{eq:lp1}-\eqref{eq:lp6}, and apply~\Cref{thm:decomp}.
 Although the sets in $\calS$ by definition are roundable which takes care of the clients in $\Cb$, the issue arises in assigning clients of $\Cbb$.
 In particular, $\yy_p := \sum_{i\in \calT} y_{ip}$ for all $1\le p\le P$ which indicates the ``supply" of capacity $c_p$ available for the $\Cbb$ clients.
 %Since the LP doesn't know $\calT$ beforehand, this supply mayn't be enough.
 However, this may not be enough for serving all these clients (even with violation).
 That is, the vector $\yy$ may not lie in the (approximate) supply polyhedra of the \cckp instance
-defined by $\calT$.% as described in Remark~\ref{rem:red}.
+defined by $\calT$. % as described in Remark~\ref{rem:red}.
  That we fail is not surprising; after all, we have so far only used the natural LP which has a bad integrality gap. To resolve this issue, we strengthen the LP by {\em explicitly requiring $\yy$ to be in the supply polyhedra}. Since we do not know $\calT$ before solving the LP (after all our LP rounding generated it), we enforce this for {\em all} collections of complete-neighborhood sets.
-More precisely, for $\calT := (T_1,\ldots,T_L)$ of $L$ disjoint complete neighborhood sets, let $\calI_\calT$ denote the associated \cckp instance.
+More precisely, for $\calT := (T_1,\ldots,T_L)$ of $L$ disjoint complete neighborhood sets, let $\calI_\calT$ denote the associated \cckp demands.
 \begin{equation}\label{eq:lp7}
 \forall \calT := (T_1,\ldots,T_L) \textrm{ disjoint neighborhood subsets}, \quad \yy \in \calP(\calI_\calT) \tag{\small{L7}}
 \end{equation}

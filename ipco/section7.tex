@@ -620,5 +620,19 @@ In this section we prove Theorem~\ref{fthm:conf-ig}.
 		
 		Therefore, any machine $M_i$ can't get more than $D(M_i)/K$ from the ``small'' jobs. But then they all can't get big jobs.
 	\end{proof}
-	The above two lemmas prove the theorem after noting that $K = \Theta(\log n/\log\log n)$ where $n$ is either the number of machines of jobs.
+	The above two lemmas prove~\Cref{fthm:conf-ig} after noting that $K = \Theta(\log n/\log\log n) = \Theta(\log D/\log \log D)$ where $n$ is either the number of machines of jobs and $D$ is the ratio of $D_{\max}/D_{\min}$.
+
+\begin{theorem} \label{fthm:supply-bad-cckp}
+There cannot exist $\alpha$-approximate supply polyhedra (or convex sets) for $\alpha < \frac{\log D}{\log \log D}$ for \cckp instances.
+\end{theorem}
+
+\begin{proof}
+The proof follows from the instance constructed in the above~\Cref{fthm:conf-ig}. Indeed note that we can express the supply vector of the instance as $(1-p) \bf{s}_1 + p \bf{s}_2$. Here $\bf{s}_1$ denotes the following supply vector: there are $K+1$ big jobs with size $1$, and there are $f_i$ jobs of size $c_i$ for all $1 \leq i \leq K$. Similarly $\bf{s}_2$ denotes the following supply vector: there is $1$ big job with size $1$, and there are $2f_i$ jobs of size $c_i$ for all $1 \leq i \leq K$. Finally, the value $p$ is set to $1-1/K$. 
+
+Now, we will show that for both $\bf{s}_1$ and $\bf{s}_2$ are feasible supply vectors. Indeed, for $\bf{s}_1$, we will assign the large jobs to the large machines $M_0, M_1, \ldots, M_K$. Then we will use the $f_i$ jobs of size $c_i$ to satisfy the $f_i$ machines in class ${\cal M}_i$. 
+
+Likewise, for $\bf{s}_2$, we will assign the one large job to the large machine $M_0$. Then, for machine $M_i$, we will assign $f_i$ items of size $c_i$. Finally, we will assign the remaining $f_i$ jobs of size $c_i$ to satisfy the $f_i$ machines in class ${\cal M}_i$.
+
+But now, note that for the resulting average supply vector, we proved in~\Cref{fthm:conf-ig} that any assignment must violate some demand by a factor of $\Theta(\log D/\log \log D)$, thus proving the theorem.
+\end{proof}
 %\end{proof}

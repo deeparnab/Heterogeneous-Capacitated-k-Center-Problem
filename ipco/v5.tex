@@ -61,14 +61,14 @@
 \institute{}
 \maketitle
 \begin{abstract}
-	In this paper we initiate the study of the {\em heterogeneous capacitated $k$-center problem}: given a metric space $X = (F \cup C, d)$, and a collection of facilities $1, 2, \ldots, k$, with facility $i$ having a capacity of $c_i$. The goal is to open each facility $i$ facility at a location ${\rm loc}(i) \in F$, and also to assign clients to facilities using a map $\phi: C \rightarrow [k]$ so that the number of clients assigned to facility $i$ is at most $c_i$, and the objective is to minimize the maximum distance between a client and the location of its assigned facility, i.e., $\max_{c \in C} d(c,{\rm loc}(\phi(c)))$. If all the capacities $c_i$'s are identical, the problem is identical to the well-studied {\em uniform capacitated $k$-center problem} for which constant-factor approximations are known~\cite{XYZ}.
+	In this paper we initiate the study of the {\em heterogeneous capacitated $k$-center problem}: given a metric space $X = (F \cup C, d)$, and a collection of capacities. The goal is to open each capacity at a unique facility location in $F$, and also to assign clients to facilities so that the number of clients assigned to any facility is at most the capacity installed; the objective is then to minimize the maximum distance between a client and its assigned facility. If all the capacities $c_i$'s are identical, the problem is identical to the well-studied {\em uniform capacitated $k$-center problem} for which constant-factor approximations are known~\cite{Bar-IlanKP93,KhullerS00}.
 %However, the non-uniform generalization (called the {\em non-uniform capacitated $k$-center problem}) of this problem which has received much attention recently differs from our problem in the following sense: in the non-uniform problem, each facility location $f$ has a fixed capacity $c_f$, and the goal is to open $k$ centers and assign clients so that the capacity constraints are satisfied. On the other hand, in our {\em heterogeneous} problem, a set of $k$ different capacities is specified, and the goal is to suitably place them in facility locations.
-The additional choice of determining which capacity should be installed in which location makes our problem technically substantially different from this problem, as well as the {\em non-uniform capacitated $k$-center problem} which has received much attention recently. In fact, one of our contributions is in relating the heterogeneous problem to a special-case of the classical {\em santa-claus problem}. Using this connection, we get the following results for heterogeneous capacitated $k$-center problem.
+The additional choice of determining which capacity should be installed in which location makes our problem considerably different from this problem, as well the non-uniform generalizations studied thus far in literature. In fact, one of our contributions is in relating the heterogeneous problem to special-cases of the classical {\em santa-claus problem}. Using this connection, and by designing new algorithms for these special cases, we get the following results for \mckc.
 \begin{oneLiners}
 \item A quasi-polynomial time $O(\log n/\epsilon)$-approximation where every capacity is violated by a factor of $O(1+\epsilon)$.
 \item A polynomial time $O(1)$-approximation where every capacity is violated by an $O(\log n)$ factor.
 \end{oneLiners}
-We get improved results for the {\em soft-capacities} version where we can place multiple facilities in the same location, i.e., ${\rm loc}(\cdot)$ need not be injective.
+We get improved results for the {\em soft-capacities} version where we can place multiple facilities in the same location.
 \end{abstract}
 %\thispagestyle{empty}
 %\newpage
@@ -76,7 +76,7 @@ We get improved results for the {\em soft-capacities} version where we can place
 \input{section1}
 \input{preliminaries}
 \section{Conclusion}
-Blah Blah
+In this paper we introduced and studied the \mckc problem, and highlighted its connection to an interesting special case of the max-min allocation problems, namely \cckp. We showed a logarithmic approximation for \cckp (and also a QPTAS), which implied bicriteria algorithms with similar capacity violations for \mckc and $O(1)$-distance approximation. We believe designing polynomial-time constant-approximations for \cckp and \mckc are very interesting open problems.
 
 \bibliographystyle{abbrv}
 \bibliography{mckc}
@@ -84,8 +84,12 @@ Blah Blah
 \appendix
 
 \section{Full Version: Roadmap}
-For completeness and a cleaner presentation, we present all the details completely in the full version, including all the definitions and theorems already stated in the main body of the paper. 
-\comment{rk: give roadmap.}
+For completeness and a cleaner presentation, we present all the details completely in the full version, including all the definitions and theorems already stated in the main body of the paper.
+
+
+In ~\Cref{fsec:prelims}, we set up the notation and key definitions which we will subsequently use in the remaining sections. Then in~\Cref{fsec:regiongrowing}, we give our simpler weak-decomposition theorem which (upto a logarithmic factor in the distance objective) effectively reduces \mckc to \cckp. To overcome this logarithmic loss in the distance objective, we turn to an LP-based approach and a stronger decomposition theorem. But to help us along the way, we introduce and state our main results about the so-called \emph{supply polyhedra} for \cckp in~\Cref{fsec:supplypolyhedra}. In~\Cref{fsec:o1} we then state our strong decomposition theorem and show how it can be combined with good supply polyhedra to get~\Cref{thm:2,thm:2a}. In the next~\Cref{fsec:decomp-proof}, we prove the strong decomposition theorem. Subsequently, in~\Cref{fsec:asslp,fsec:conflp}, we prove the existence of good supply polyhedra for $Q || C_{min}$ and \cckp. Finally in~\Cref{sec:qptas} we show that \cckp admits a QPTAS, thereby proving~\Cref{thm:q}.
+
+
 %\input{}
 \input{full-preliminaries}
 \input{section2}

@@ -1,5 +1,5 @@
 %\newpage
-\section{Proof of Decomposition Theorem~\ref{fthm:decomp}}
+\section{Proof of Decomposition Theorem~\ref{fthm:decomp}} \label{fsec:decomp-proof}
 \def\F{F_\mathsf{tentative}}
 %In the previous section, we found non-expanding balls around active clients to build the decomposition. These balls were based on the underlying graph $G$. We now give a more
 %delicate region growing procedure which uses an LP fractional solution as a guide. Recall the LP relaxation mentioned in Section~\ref{fsec:introLP}.
@@ -255,7 +255,7 @@ $\Cd$ is a $(\tilde{O}(1/\delta),\delta)$-deletable set.
 %	So indeed we are justified in deleting the clients in $J_\mathsf{ext}$ and ``charging'' them to $J_\mathsf{int}$. More precisely, we augment the
 %mapping function $\phi:J_\mathsf{ext} \to J_\mathsf{int}$ such that for all $j\in J_\mathsf{int}, \sum_{k:\phi(k) = j} d_k \leq \eps d_j$. Again, this is possible since $|J_\mathsf{ext}| < \eps|J_\mathsf{int}|$. Also note for any $j\in J_\mathsf{ext}$ and $k\in J_\mathsf{int}$,
 %we have $d(j,k) \leq \tilde{O}(1/\epsilon)$.
-Furthermore, as in the proof of Claim~\ref{fcl:inv}, our algorithm makes sure that the client set $J_\mathsf{int}$ gets added to $\Cb$ or $\Cbb$ (in~\cref{falg:case2ac,alg:color2}).
+Furthermore, as in the proof of Claim~\ref{fcl:inv}, our algorithm makes sure that the client set $J_\mathsf{int}$ gets added to $\Cb$ or $\Cbb$ (in~\cref{falg:case2ac,falg:color2}).
 Therefore, these clients in $J_\mathsf{int}$ will never be images of $\phi$ again, thus completing the proof.
 \end{proof}
 

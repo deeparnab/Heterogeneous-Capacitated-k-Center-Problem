@@ -47,7 +47,7 @@ Then for any $\delta\in(0,1)$, there is an $\left(\tilde{O}(1/\delta),\gamma\bet
 %
 %\noindent
 The above theorem and results about supply polyhedra imply the bicriteria algorithms for the \mckc problem.
-Theorem~\ref{fthm:2} follows from the above theorem (instantialted with $\delta = 0.5$, say) and Theorem~\ref{fthm:conflp} after noting that $D_\mathrm{max}/D_\mathsf{min} \leq n$ in the reduction we describe below. Theorem~\ref{fthm:2a} follows
+Theorem~\ref{thm:2} follows from the above theorem (instantialted with $\delta = 0.5$, say) and Theorem~\ref{fthm:conflp} after noting that $D_\mathrm{max}/D_\mathsf{min} \leq n$ in the reduction we describe below. Theorem~\ref{thm:2a} follows
 from the above theorem and Theorem~\ref{fthm:asslp}.
 
 Before moving to the proof of Theorem~\ref{fthm:reduction}, we state our main technical result which is a decomposition theorem which essentially states that given an \mckc instance, we can partition the problem into roundable and complete neighborhood sets. The reader may want to recall the definitions of roundable sets (Definition~\ref{fdef:rnding-mkc}), complete neighborhood sets (Definition~\ref{fdef:comp-nbr}), deletable sets (Definition~\ref{fdef:deletable}), and the natural LP relaxation \eqref{feq:lp1}-\eqref{feq:lp6}.
@@ -99,8 +99,8 @@ Note that this is a feasible constraint to add to LP\eqref{feq:lp1}-\eqref{feq:l
 We don't know how (and don't expect) to check feasibility of  \eqref{feq:lp7} for all collections $\calT$. However, we can still run ellipsoid method using the ``round-and-cut'' framework of \cite{CarrFLP00,ChakrabartyCKK11,Li15,Li16}.
 To begin with, we start with the LP\eqref{feq:lp1}-\eqref{feq:lp6} and obtain feasible solution $(x,y)$. Subsequently, we apply the decomposition Theorem~\ref{fthm:decomp} to obtain the collection $\calT = (T_1,\ldots,T_L)$.
 We then check if $\yy \in \calP(\calI_\calT)$ or not. Since we have a $\gamma$-approximate separation oracle for $\calP(\calI_\calT)$, we  are either guaranteed that $\yy \in \calP(\calI'_\calT)$ where the $\ell^{th}$ demand is now  $D_\ell/\gamma$; or we get a hyperplane separating $\yy$ from $\calP(\calI_\calT)$ which also gives us a
-hyperplane separating $y$ from  LP\eqref{feq:lp1}-\eqref{feq:lp7}. This can be fed to the ellipsoid algorithm to obtain a new iterate $(x,y)$ and the above process is repeated. The analysis of the ellipsoid algorithm\comment{deepc: need to be careful and correct here}
-tells us that in polynomial time we either prove infeasibility of the system \eqref{feq:lp1}-\eqref{feq:lp7} (implying the $\opt$  guess for \mckc is infeasible), or we
+hyperplane separating $y$ from  LP\eqref{feq:lp1}-\eqref{feq:lp7}. This can be fed to the ellipsoid algorithm to obtain a new iterate $(x,y)$ and the above process is repeated. The analysis of the ellipsoid algorithm %\comment{deepc: need to be careful and correct here}
+ tells us that in polynomial time we either prove infeasibility of the system \eqref{feq:lp1}-\eqref{feq:lp7} (implying the $\opt$  guess for \mckc is infeasible), or we
 are have $(x,y)$ satisfying the premise of the following lemma.
 %obtain a solution $(x,y)$
 %which is feasible for LP\eqref{feq:lp1}-\eqref{feq:lp6}, such that for the $\calS, \calT$ obtained via Decomposition Theorem~\ref{fthm:decomp}

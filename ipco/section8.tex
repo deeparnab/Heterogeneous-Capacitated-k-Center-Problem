@@ -1,5 +1,5 @@
 %\newpage
-\section{QPTAS for \cckp: Proof of Theorem~\ref{thm:q}}
+\section{QPTAS for \cckp: Proof of Theorem~\ref{thm:q}} \label{sec:qptas}
 \def\pv{\mathbf{b}}
 \renewcommand{\dem}{\mathsf{cap}}
 Let the instance $\calI$ given to us have $m$ machines with demands $D_1,\ldots,D_m$ and cardinality constraints $f_1,\ldots,f_m$, and $n$ jobs with capacities
@@ -83,7 +83,7 @@ We are also guaranteed some guess is correct and we get a feasible solution to a
 Therefore, we apply Theorem~\ref{fthm:shmoystardos} to get an integral solution $\zz_{ip}$ satisfying \eqref{feq:assgnlp1},\eqref{feq:assgnlp3},
 and $\forall i\in [m], ~~ \sum_{p\sim i} c_p\zz_{ip}  \geq D'_i - \epsilon D_i$.
 Therefore in all every machine receives capacity $\geq D_i(1-\epsilon)$. The total running time is dominated by the enumeration step.
-This proves~\Cref{fthm:q}.
+This proves~\Cref{thm:q}.
 %For the correct guess, the above LP is feasible. If so, using the fact that $c_p \leq D_i$ for all $i\sim p$, we can get a feasible solution with a slight hit in the demand.
 %\begin{lemma}\label{flem:iter}
 %If \eqref{feq:asslp1}-\eqref{feq:asslp3} is feasible, then there is an integral assignment $\zz_{ip}$ which satisfies \eqref{feq:assgnlp1} and \eqref{feq:assgnlp3}, and

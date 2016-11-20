@@ -16,7 +16,7 @@ The {\em supply polyhedra} of these instances desires to capture these feasible 
 
 Ideally, we would like {\em exactly} supply polyhedra. One guess would be the convex hull of all the supply vectors; indeed this is the tightest polytope satisfying condition (a).
 Unfortunately, there are instances of $Q||C_{min}$ (and even for the uniform case $P||C_{min}$) where the convex hull of supply vectors contains infeasible integer points.
-This rules out exact or even $(1+\epsilon)$-approximate supply polyhedra.
+This rules out exact or even $(1+\epsilon)$-approximate supply polyhedra. In~\Cref{fthm:supply-bad-cckp} in~\Cref{fsec:conf-ig}, we show a stronger lower bound of $\Omega(\log D/\log \log D)$ on the best approximation-factor of any supply polyhedra for \cckp.
 %This instance is motivated by integrality gap examples for machine scheduling~\cite{bibid}.
 \begin{theorem}\label{fthm:no-supp}
 	There cannot exist $\alpha$-approximate supply polyhedra (or convex sets) for $\alpha < 1.001$ for all  $P||C_{min}$ instances.
