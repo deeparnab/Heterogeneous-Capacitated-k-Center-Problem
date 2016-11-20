@@ -1,0 +1,110 @@
+%\newpage
+\section{Technical Preliminaries}\label{fsec:prelims}
+Given an \mckc instance, we start by guessing $\opt$. We either prove $\opt$ is infeasible, or find an $(a,b)$-approximate allocation of clients to facilities.
+	We define the bipartite graph $G = (F\cup C,E)$ where $(i,j)\in E$ iff $d(i,j) \leq \opt$. If $\opt$ is feasible, then the following assignment LP\eqref{feq:lp1}-\eqref{feq:lp6}
+	must have a feasible solution.
+In this LP, we  have opening  variables $y_{ip}$ for every $i\in F,p\in [P]$ indicating whether we open a facility with capacity $c_p$ at location $i$. Recall that the capacities available to us are $c_1, c_2, \ldots, c_P$ -- a facility with
+capacity $c_p$ installed on it will be referred to as a {\em type $p$ facility.}
+	We have connection variables $x_{ijp}$ indicating the fraction to which client $j\in C$ connects to a facility at location $i$ where a type $p$ facility has been opened.
+	We force $x_{ijp} = 0$ for all pairs $i,j$ and type $p$ such that  $d(i,j) > \opt$.
+	
+		
+		\begin{minipage}{0.45\textwidth}
+			\begin{alignat}{4}
+				& \quad \forall j\in C,   &&\quad  \textstyle \sum_{i\in F} \sum_{p\in [P]}  x_{ijp} \geq 1 \label{feq:lp1} \tag{\small{L1}}  \\
+				& \quad \forall i\in F,p\in [P] ,  &&\quad  \textstyle \sum_{j\in C}  x_{ijp} \leq c_py_{ip} \label{feq:lp2} \tag{\small{L2}} \\
+				& \quad \forall p\in [P], && \quad \textstyle \sum_{i\in F} y_{iq}   \leq k_p \label{feq:lp3}  \tag{\small{L3}}
+			\end{alignat}
+		\end{minipage}
+		~\vline~
+		\begin{minipage}{0.45\textwidth}
+			\begin{alignat}{4}
+				& \quad \forall i\in F, j\in C,p\in [P],  && \quad x_{ijp} \leq y_{ip}\label{feq:lp4}   \tag{\small{L4}} \\
+				& \quad \forall i\in F, && \quad \textstyle\sum_{p\in [P]} y_{ip} \leq 1 \label{feq:lp5}  \tag{\small{L5}} \\
+				& \quad \forall i\in F,j\in C,p\in [P], && \quad x_{ijp},y_{ip} \geq 0\label{feq:lp6}\tag{\small{L6}}
+			\end{alignat}
+		\end{minipage}
+\smallskip
+
+\noindent		
+We say a solution $(x,y)$ is $(a,b)$-feasible if it satisfies \eqref{feq:lp1}, \eqref{feq:lp3}-\eqref{feq:lp6}, and \eqref{feq:lp2} with the RHS replaced by $bc_py^\mathsf{int}_{ip}$, and $x_{ijp} > 0$ only if $d(i,j) \leq a\cdot \opt$,
+We desire to find an integral solution $(x^\mathsf{int},y^\mathsf{int})$ which is $(a,b)$-feasible.
+The following lemma shows that it suffices just to round the $y$-variables.
+\begin{claim}
+Given an $(a,b)$-feasible solution $(x,\y)$ where $\y_{ip}\in \{0,1\}$,
+we can get  an $(a,b)$-approximate solution to the \mckc problem.
+\end{claim}
+\begin{proof}
+Consider a bipartite graph with client nodes $C$ on one side, and nodes of the form $(i,p)$ with $\y_{ip} = 1$ on the other. The node $(i,p)$ has capacity $bc_p$.
+Since $(x,\y)$ satisfies the conditions of the lemma, there is a fractional matching in this graph so that each client $j$  is fractionally matched to an $(i,p)$ so that $d(i,j)\leq a\cdot \opt$,
+and the total fractional load on $(i,p)$ is $\leq bc_p$. The theory of matching tells us that there is an {\em integral} assignment of clients $j$ to nodes $(i,p)$ such that $d(i,j)\leq a\cdot\opt$
+and the number of nodes matched to $(i,p)$ is $\leq \ceil{bc_p}$. Therefore opening a capacity $c_p$ facility at $i$ for all $(i,p)$ with $\y_{ip} = 1$ gives an $(a,b)$-approximate solution to \mckc.
+\end{proof}
+\noindent
+Henceforth, we focus on rounding the $y$-values. To this end, we make the following useful definition.
+\begin{definition}[Roundable Sets]\label{fdef:rnding-mkc}
+	A set of facilities $S\subseteq F$ is said to be $(a,b)$-roundable w.r.t $(x,y)$ if
+	\begin{itemize}[noitemsep]
+		\item[(a)] $\diam_G(S) \leq a$
+		\item[(b)] there exists a rounding $\y_{ip} \in \{0,1\}$ for all $i \in S, p\in [P]$ such that
+		\begin{enumerate}
+			\item $\sum_{q \geq p} \sum_{i\in S} \y_{iq} ~\leq~ \floor{\sum_{q \geq p}\sum_{i\in S} y_{iq}}$ for all $p$, and
+			\item $\sum_{j\in C} d_j \sum_{i\in S,p\in [P]} x_{ijp} \leq b\cdot \sum_{i\in S} \sum_{p\in [P]} c_p \y_{ip}$
+		\end{enumerate}
+	\end{itemize}
+\end{definition}
+\noindent
+If $(x,y)$ were feasible, then for any $(a,b)$-roundable set, we can integrally open facilities to satisfy all the demand that was fractionally assigned to it taking a hit of $a$ in the cost and a factor of $b$ in the capacities. Furthermore, the number of open facilities is at most what the LP prescribes. Therefore, if we would be able to decompose the instance into roundable sets, we would be done.
+Unfortunately, that is not possible, and in fact the above LP has a large integrality gap even when we allow arbitrary violation of capacities.
+
+\begin{remark}[Integrality Gap for \mckc] \label{frem:ig}
+Consider the following instance. The metric space $X$ is partitioned into $(F_1\cup C_1) \cup \cdots \cup (F_K\cup C_K)$, with $|F_k| = 2$ and $|C_k| = K$ for all $1\le k\le K$.
+The distance between any two points in $F_i\cup C_i$ is $1$ for all $i$, while all other distances are $\infty$. The capacities available are $k_1 = K$ facilities with capacity $c_1 = 1$ and
+$k_2= K-1$ facilities with capacity $c_2 = K$. It is easy to see that integrally any solution would violate capacities by a factor of $K/2$.
+%It is easy to see that the above instance is not feasible with $OPT=1$: indeed, there is at least one client location where the optimal solution does not place a facility of capacity $H$ in its neighborhood, and it is not possible to serve the demand of this client using only capacity $1$ facilities, as there are only two locations where we can place facilities in its neighborhood.
+On the other hand, there is a feasible solution for the above LP relaxation: for $F_k = \{a_k,b_k\}$, we set $y_{a_k2} = 1-1/K$ and $y_{b_k1} = 1$, and for all $j\in C_k$, we set $x_{a_kj2} = 1-1/K$ and $x_{b_kj1} = 1/K$.
+
+
+ For the version with soft capacities, we do not have the constraint \eqref{feq:lp5} and the above integrality gap doesn't hold since we can install capacity $K$ facilities on $K-1$ of the sets $F_k$'s, $1\leq k\leq K-1$, and $K$ copies of the capacity $1$ facilities at $F_K$. Note that although $|F_K| = 2$, we have opened $K$ capacities.
+\end{remark}
+
+In particular, note that for the $(x,y)$ solution in the integrality gap example above there are no roundable sets. This motivates the definition of the second kind of sets.
+
+\begin{definition}[Complete Neighborhood Sets] \label{fdef:comp-nbr}
+	A subset $T\subseteq F$ of facilities is called a {\em complete neighborhood} if there exists a client-set $J\subseteq C$ such that $\Gamma(J) \subseteq T$.
+	In this case the subset $J$ is said to be {\em responsible} for $T$. Additionally, a complete neighborhood $T$ is said to be an $\alpha$-complete neighborhood if $\diam(T) \leq \alpha$.
+\end{definition}
+\begin{remark}[Complete Neighborhood Sets to \cckp]\label{frem:red}
+	\emph{
+If we find a complete neighborhood $T$ of facilities with say a set $J$ of clients responsible for it, then we know that the optimal solution must satisfy all the demand in $J$ by suitably opening facilities of sufficient capacity in $S$. Given a collection $\calT = (T_1,\ldots,T_m)$ of disjoint $\alpha$-complete neighborhood sets with $J_i$ repsonsible for $T_i$, we can define an instance $\calI$ of the \cckp problem with $m$ machines with demands $D_i = |T_i|$ and cardinality constraint $f_i = |T_i|$, and $P$ jobs of capacities $c_1,\ldots,c_P$. The facilities opened by the $\opt $ solution corresponds to a valid solution for $\calI$; furthermore, any $\beta$-approximate solution for $\calI$ corresponds to a $(\alpha,\beta)$-approximate solution for the \mckc problem restricted to clients in $\cup_{\ell} J_\ell$. Finally note that for \mckc with soft-capacities, $\calI$ is an instance of the $Q||C_{min}$ problem.
+}
+
+\emph{
+Note that the above integrality gap  example is essentially a \cckp instance with $K$ machines of demand $K$ each having cardinality constraint $2$, and there are $K$ jobs of capacity $1$ and $K-1$ jobs with capacity $K$. This shows the assignment LP has bad integrality gap for the \cckp problem (but not for $Q||C_{min}$).}
+\end{remark}
+
+Our final definition is that of $(\tau,\rho)$-{\em deletable clients} who can be removed from the instance since they can be ``$\rho$-charged'' to the remaining clients no further than $\tau$-away.
+\begin{definition}[Deletable Clients]\label{fdef:deletable}
+	A subset $\Cd\subseteq C$ of clients is $\rho$-deletable if there exists a mapping $\phi_{j,j'}\in [0,1]$ for $j\in \Cd$ and $j'\in C\setminus \Cd$ satisfying (a) $\sum_{j'\in C\setminus \Cd} \phi_{j,j'} = 1$ for all $j\in \Cd$, and(b) $\sum_{j\in \Cd} \phi_{j,j'} \leq \rho$ for all $j'\in C\setminus \Cd$. Furthermore, $\phi_{j,j'} > 0$ only if $d(j,j') \leq \tau\cdot\opt$.
+\end{definition}
+ The following claim shows we can remove $\Cd$ from consideration.
+\begin{claim}\label{fclm:prelim3}
+	Let $\Cd$ be a $(\rho,\tau)$-deletable set.
+	Given an $(a,b)$-approximate feasible solution $(x',\y)$ where $x'_{ijp}$ is defined only for $j\in C\setminus \Cd$, we can extend $x'$ to a general $(x,\y)$ solution
+	which is $(a+\tau, b(1+\rho))$-approximate feasible.
+\end{claim}
+\begin{proof}
+For any $j\in \Cd$, define $x_{ijp} = \sum_{j'\in C\setminus \Cd} x_{ij'p}\phi_{j,j'}$.
+We get for all $j\in \Cd$,
+$\textstyle \sum_{i\in F} \sum_{p\in [P]} x_{ijp} = \sum_{i,p} \sum_{j'\in C\setminus \Cd} x_{ij'p}\phi_{j,j'} = \sum_{j'\in C\setminus \Cd} \phi_{j,j'} \left(\sum_{i,p} x_{ij'p}\right) \geq \sum_{j'\in C\setminus \Cd} \phi_{j,j'} = 1$,
+and for all $i\in F,p\in [P]$,
+$\textstyle \sum_{j\in \Cd}  x_{ijp} = \sum_{j\in \Cd} \sum_{j'\in C\setminus \Cd} x_{ij'p}\phi_{j,j'} = \sum_{j'\in C\setminus \Cd} x_{ij'p}\left( \sum_{j\in \Cd} \phi_{j,j'}\right)  \leq \rho \sum_{j'\in C\setminus \Cd} x_{ijp} \leq b\rho c_p$. Therefore, in all we have $\sum_{j\in C} x_{ijp} \leq bc_p(1+\rho)$.
+\end{proof}
+
+
+% described in Idea 1.
+
+
+
+
+
