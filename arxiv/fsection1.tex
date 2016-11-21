@@ -529,7 +529,9 @@ Nevertheless, for $Q||C_{min}$ we describe a $2$-approximate supply polyhedron (
 
 For $Q|f_i|C_{min}$ we describe a supply polyhedron based on the {\em configuration LP} and prove that is $O(\log D)$-approximate (Theorem~\ref{fthm:conflp}) where $D$ is the ratio of maximum and minimum demand. This also implies a {\em polynomial time} $O(\log D)$-approximation algorithm for the \cckp problem. As remarked in Remark~\ref{frem:cckp-prev}, this is considerably better than any polynomial time algorithm implied before. %Our algorithm (described in Section~\ref{fsec:conflp}) proceeds by massaging a given LP solution till it yields.
 %\comment{Do we want to add a line on how we get these results}
-We complement this by showing (Theorem~\ref{fthm:conf-ig}, \Cref{fsec:conf-ig}) that the integrality gap of the configuration LP is $\Omega(\log n/\log\log n)$.
+We complement this by showing (Theorem~\ref{fthm:conf-ig}, \Cref{fsec:conf-ig}) that the integrality gap of the configuration LP is $\Omega(\log D/\log\log D)$.
+Moreover, our example also shows (Theorem~\ref{fthm:supply-bad-cckp}) that any convex set containing all feasible supply vectors for instances of \cckp also contains an integer supply vector which cannot satisfy all demands even when the 
+capacitiy violation is allowed to be $\Theta(\log n/\log\log n)$. This settles the best algorithms we can obtain via our techniques.
 On the other hand, using fairly standard tricks of enumeration and rounding, we can provide a QPTAS for \cckp (Theorem~\ref{fthm:q}). We leave the complexity of \cckp as an interesting open question.
 
 %\paragraph{Supply Polyhedra.}
@@ -625,8 +627,9 @@ As in our work, even for that problem one needs to resort to bicriteria algorith
 In contrast, we do not wish to violate the number of capacities available at all (in fact, the problem is considerably easier if we are allowed to do so -- we do not expand on this any further).
 
 
-\section{Roadmap}
-In ~\Cref{fsec:prelims}, we set up the notation and key definitions which we will subsequently use in the remaining sections. Then in~\Cref{fsec:regiongrowing}, we give our simpler weak-decomposition theorem which (upto a logarithmic factor in the distance objective) effectively reduces \mckc to \cckp. To overcome this logarithmic loss in the distance objective, we turn to an LP-based approach and a stronger decomposition theorem. But to help us along the way, we introduce and state our main results about the so-called \emph{supply polyhedra} for \cckp in~\Cref{fsec:supplypolyhedra}. In~\Cref{fsec:o1} we then state our strong decomposition theorem and show how it can be combined with good supply polyhedra to get~\Cref{fthm:2,fthm:2a}. In the next~\Cref{fsec:decomp-proof}, we prove the strong decomposition theorem. Subsequently, in~\Cref{fsec:asslp,fsec:conflp}, we prove the existence of good supply polyhedra for $Q || C_{min}$ and \cckp. Finally in~\Cref{fsec:qptas} we show that \cckp admits a QPTAS, thereby proving~\Cref{fthm:q}.
+\subsection{Roadmap}
+In ~\Cref{fsec:prelims}, we set up the notation and key definitions which we will subsequently use in the remaining sections. Then in~\Cref{fsec:regiongrowing}, we give our simpler weak-decomposition theorem which (upto a logarithmic factor in the distance objective) effectively reduces \mckc to \cckp. To overcome this logarithmic loss in the distance objective, we turn to an LP-based approach and a stronger decomposition theorem. But to help us along the way, we introduce and state our main results about the so-called \emph{supply polyhedra} for \cckp in~\Cref{fsec:supplypolyhedra}. In~\Cref{fsec:o1} we then state our strong decomposition theorem and show how it can be combined with good supply polyhedra to get~\Cref{fthm:2,fthm:2a}. In the next~\Cref{fsec:decomp-proof}, we prove the strong decomposition theorem. Subsequently, in~\Cref{fsec:asslp,fsec:conflp}, we prove the existence of good supply polyhedra for $Q || C_{min}$ and \cckp. In Section~\ref{fsec:conf-ig} we provide integrality gap examples.
+Finally in~\Cref{fsec:qptas} we show that \cckp admits a QPTAS, thereby proving~\Cref{fthm:q}.
 
 
 

@@ -34,11 +34,11 @@ Consider the six supply vectors $s^{(t)}$ for $1\leq t\leq 6$,  which contains $
 These are feasible supply vectors; indeed assign each of the $3k$ machines one jobs $p_{ij}$ for $(i,j) \in M_t$. Now any convex set (in particular polyhedra) containing these six supply vectors
 must contain any convex combination. However the vector $\frac{1}{6}\sum_{t=1}^6 s^{(t)}$ is an integer vector with $k$ copies of each $(i,j)$ for all edges of the Petersen Graph.
 This uses the fact that every edge is in exactly two perfect matchings. Since the edges of the  Petersen graph can't be partitioned into $3$ perfect matchings, any allocation of this supply vector
-must give one machine demand $\leq 1022$. Therefore, there can't be any $\alpha$-approximate supply polyhedra for $P||C_{max}$.
+must give one machine demand $\leq 1022$. Therefore, there can't be any $\alpha$-approximate supply polyhedra for $P||C_{min}$.
 \end{proof}
 \begin{remark}\emph{
 At this point, we should underscore the difference between supply polyhedra and say LP relaxations for solving  these allocation problems.
-Given an instance of say $Q||C_{max}$ {\em along with} the supply vector (which is one standard way the problems are stated), there does exist a polytope capturing all the feasible allocations. It is the integer hull.
+Given an instance of say $Q||C_{min}$ {\em along with} the supply vector (which is one standard way the problems are stated), there does exist a polytope capturing all the feasible allocations. It is the integer hull.
 However, in general, the description of this integer hull uses the supply vector in describing these constraints and therefore are non-linear when the supplies are variables. Nevertheless, as we discuss below, many LP relaxations
 studied in the literature imply supply polyhedra, and their integrality gaps imply the approximation factor for the polyhedra as well.
 }
