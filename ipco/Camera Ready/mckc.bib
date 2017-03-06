@@ -1,0 +1,726 @@
+@STRING{aap = {Adv.\ in Appl.\ Probab.}}
+@STRING{ac = {Acta Cybernet.}}
+@STRING{ACM = {The OX Association for Computing Machinery}}
+@STRING{acm-cs = {ACM Comput.\ Surv.}}
+@STRING{acm-pls = {ACM Trans.\ Programming Languages and Systems}}
+@STRING{acm-tms = {ACM Trans.\ Math.\ Software}}
+@STRING{adm = {Annals of Discrete Mathematics}}
+@STRING{ai = {Acta Informatica}}
+@STRING{algo = {Algorithmica}}
+@STRING{aml = {Appl.\ Math.\ Lett.}}
+@STRING{amm = {Amer.\ Math.\ Monthly}}
+@STRING{ams = {Ann.\ Math.\ Statist.}}
+@STRING{aor = {Ann.\ Oper.\ Res.}}
+@STRING{ap = {Ann.\ Probab.}}
+@STRING{approx = {Proceedings, International Workshop on Approximation Algorithms for
+	Combinatorial Optimization Problems}}
+@STRING{as = {Ann.\ Statist.}}
+@STRING{cg = {Comput.\ Geom.}}
+@STRING{cjm = {Canad.\ J.\ Math.}}
+@STRING{cmp = {Comm.\ Math.\ Phys.}}
+@STRING{cocoon = {Proceedings, International Computing and Combinatorics Conference}}
+@STRING{comb = {Combinatorica}}
+@STRING{commacm = {Comm.\ ACM}}
+@STRING{comp = {Computing}}
+@STRING{cor = {Comput.\ Oper.\ Res.}}
+@STRING{cpc = {Combin.\ Probab.\ Comput.}}
+@STRING{cstm = {Comm.\ Statist.\ Theory Methods}}
+@STRING{dcg = {Discrete Comput.\ Geom.}}
+@STRING{discapplmath = {Discrete Appl.\ Math.}}
+@STRING{discmath = {Discrete Math.}}
+@STRING{ejc = {Electron.\ J.\ Combin.}}
+@STRING{esa = {Proceedings, European Symposium on Algorithms}}
+@STRING{focs = {Proceedings, IEEE Symposium on Foundations of Computer Science (FOCS)}}
+@STRING{fsttcs = {Proceedings, Foundations of Software Technology and Theoretical Computer
+	Science. (FSTTCS)}}
+@STRING{gc = {Graphs Combin.}}
+@STRING{icalp = {Proceedings, International Colloquium on Automata, Languages and
+	Processing}}
+@STRING{ieee-trans-comm = {IEEE Trans.\ Comm.}}
+@STRING{infcomp = {Inform.\ and Comput.}}
+@STRING{infcont = {Inform.\ and Control}}
+@STRING{infocom = {Proceedings, IEEE INFOCOM}}
+@STRING{invmath = {Invent.\ Math.}}
+@STRING{ipco = {Proceedings, MPS Conference on Integer Programming and Combinatorial
+	Optimization (IPCO)}}
+@STRING{IPL = {Inform. Process. Lett.}}
+@STRING{ipl = {Inform.\ Process.\ Lett.}}
+@STRING{istcs = {Proceedings, Israel Symposium on Theory and Computing Systems}}
+@STRING{jacm = {J.\ ACM}}
+@STRING{jalgo = {J.\ Algorithms}}
+@STRING{jap = {J.\ Appl.\ Probab.}}
+@STRING{jasa = {J.\ Amer.\ Statist.\ Assoc.}}
+@STRING{jcombopt = {J.\ Combinatorial Optimization}}
+@STRING{jcss = {J.\ Comput.\ System Sci.}}
+@STRING{jcta = {J.\ Combin.\ Theory Ser.\ A}}
+@STRING{jctb = {J.\ Combin.\ Theory Ser.\ B}}
+@STRING{jda = {J.\ Discrete Algorithms}}
+@STRING{jgt = {J.\ Graph Theory}}
+@STRING{jma = {J.\ Multivariate Anal.}}
+@STRING{jssms = {J.\ Systems Sci.\ Math.\ Sci}}
+@STRING{jsymcomp = {J.\ Symbolic Comput.}}
+@STRING{kdd = {ACM SIGKDD International Conference on Knowledge Discovery and Data
+	Mining}}
+@STRING{laappl = {Linear Algebra Appl.}}
+@STRING{latin = {Proceedings, Latin American Theoretical Informatics Symposium}}
+@STRING{lncs = {Lecture Notes in Computer Science}}
+@STRING{mansci = {Management Sci.}}
+@STRING{mathprog = {Math.\ Programming}}
+@STRING{mathprogs = {Math.\ Programming Study}}
+@STRING{mi = {Machine Intelligence}}
+@STRING{mn = {Math.\ Nachr.}}
+@STRING{mor = {Math.\ Oper.\ Res.}}
+@STRING{mpcps = {Math.\ Proc.\ Cambridge Philos.\ Soc.}}
+@STRING{mst = {Math.\ Systems Theory}}
+@STRING{net = {Networks}}
+@STRING{nips = {Advances in Neur. Inf. Proc. Sys. (NIPS)}}
+@STRING{nm = {Numer.\ Math.}}
+@STRING{oms = {Optimization Methods and Software}}
+@STRING{opres = {Oper.\ Res.}}
+@STRING{orl = {Operations Research Letters}}
+@STRING{pcps = {Proc.\ Cambridge Philos.\ Soc.}}
+@STRING{podc = {Proceedings, ACM Symposium on Principles of Distributed Computing}}
+@STRING{pods = {Proceedings, ACM Symposium on Principles of Database Systems}}
+@STRING{prdc = {Proceedings, ACM Symposium on Principles of Distributed Computing}}
+@STRING{rsa = {Random Structures Algorithms}}
+@STRING{sam = {Stud.\ Appl.\ Math.}}
+@STRING{siam-adm = {SIAM J.\ Algebraic Discrete Methods}}
+@STRING{siam-am = {SIAM J.\ Appl.\ Math.}}
+@STRING{siam-comp = {SIAM J.\ Comput.}}
+@STRING{siam-dm = {SIAM J.\ Discrete Math.}}
+@STRING{siam-j = {J.\ Soc.\ Indust.\ Appl.\ Math.}}
+@STRING{siam-opt = {SIAM J.\ Optimization}}
+@STRING{sicomp = {SIAM J.\ Comput.}}
+@STRING{sigcomm = {Proceedings of SIGCOMM}}
+@STRING{sigmod = {Proceedings of SIGMOD}}
+@STRING{soda = {Proceedings, ACM-SIAM Symposium on Discrete Algorithms (SODA)}}
+@STRING{spaa = {Proceedings, ACM Symposium on Parallelism in Algorithms and Architectures}}
+@STRING{stoc = {ACM Symp. on Theory of Computing (STOC)}}
+@STRING{swat = {Proceedings, Scandinavian Workshop on Algorithm Theory}}
+@STRING{tamc = {Theory and Applications of Models of Computation (TAMC)}}
+@STRING{tams = {Trans.\ Amer.\ Math.\ Soc.}}
+@STRING{tcc = {Theory of Cryptography Conference (TCC)}}
+@STRING{tcs = {Theoret.\ Comput.\ Sci.}}
+@STRING{ton = {IEEE/ACM Trans. Netw.}}
+@STRING{wads = {Proceedings, Workshop on Algorithms and Data Structures}}
+
+@article{SKRN15,
+	title = {Exact approaches for static data segment allocation problem in an information network},
+author = {Goutam Sen and Mohan Krishnamoorthy and Narayan Rangaraj and Vishnu Narayanan},
+	journal = {Computers  and Operations Research},
+	volume = {62},
+	pages = {282 -- 295},
+	year = {2015}
+}
+
+@article{ShmoysT93,
+  author    = {David B. Shmoys and
+               {\'{E}}va Tardos},
+  title     = {An approximation algorithm for the generalized assignment problem},
+  journal   = {Math. Program.},
+  volume    = {62},
+  pages     = {461--474},
+  year      = {1993},
+  url       = {http://dx.doi.org/10.1007/BF01585178},
+  doi       = {10.1007/BF01585178},
+  timestamp = {Fri, 27 May 2011 15:38:51 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/mp/ShmoysT93},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{BansalGG12,
+  author    = {Manisha Bansal and
+               Naveen Garg and
+               Neelima Gupta},
+  title     = {A 5-Approximation for Capacitated Facility Location},
+  booktitle = {Algorithms - {ESA} 2012},
+  pages     = {133--144},
+  year      = {2012},
+  crossref  = {DBLP:conf/esa/2012},
+  url       = {http://dx.doi.org/10.1007/978-3-642-33090-2_13},
+  doi       = {10.1007/978-3-642-33090-2_13},
+  timestamp = {Thu, 30 Aug 2012 10:29:02 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/esa/BansalGG12},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{SahaS10,
+  author    = {Barna Saha and
+               Aravind Srinivasan},
+  title     = {A New Approximation Technique for Resource-Allocation Problems},
+  booktitle = {Innovations in Computer Science ICS'10},
+  pages     = {342--357},
+  year      = {2010},
+  crossref  = {DBLP:conf/innovations/2010},
+  url       = {http://conference.itcs.tsinghua.edu.cn/ICS2010/content/papers/27.html},
+  timestamp = {Mon, 27 Sep 2010 13:02:34 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/innovations/SahaS10},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@article{KellererK11,
+  author    = {Hans Kellerer and
+               Vladimir Kotov},
+  title     = {A 3/2-approximation algorithm for 3/2-partitioning},
+  journal   = {Oper. Res. Lett.},
+  volume    = {39},
+  number    = {5},
+  pages     = {359--362},
+  year      = {2011},
+  url       = {http://dx.doi.org/10.1016/j.orl.2011.06.005},
+  doi       = {10.1016/j.orl.2011.06.005},
+  timestamp = {Mon, 17 Oct 2011 15:50:38 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/orl/KellererK11},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{BabelKK98,
+  author    = {Luitpold Babel and
+               Hans Kellerer and
+               Vladimir Kotov},
+  title     = {The\emph{k}-partitioning problem},
+  journal   = {Math. Meth. of {OR}},
+  volume    = {47},
+  number    = {1},
+  pages     = {59--82},
+  year      = {1998},
+  url       = {http://dx.doi.org/10.1007/BF01193837},
+  doi       = {10.1007/BF01193837},
+  timestamp = {Mon, 09 Jul 2012 14:12:55 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/mmor/BabelKK98},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{MorganL77,
+  author    = {Howard L. Morgan and
+               K. Dan Levin},
+  title     = {Optimal Program and Data Locations in Computer Networks},
+  journal   = {Commun. {ACM}},
+  volume    = {20},
+  number    = {5},
+  pages     = {315--322},
+  year      = {1977},
+  url       = {http://doi.acm.org/10.1145/359581.359591},
+  doi       = {10.1145/359581.359591},
+  timestamp = {Tue, 07 Jun 2011 16:51:07 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/cacm/MorganL77},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{ChakrabartyCK09,
+  author    = {Deeparnab Chakrabarty and
+               Julia Chuzhoy and
+               Sanjeev Khanna},
+  title     = {On Allocating Goods to Maximize Fairness},
+  booktitle = {50th Annual {IEEE} {FOCS}
+               2009, October 25-27, 2009, Atlanta, Georgia, {USA}},
+  pages     = {107--116},
+  year      = {2009},
+  crossref  = {DBLP:conf/focs/2009},
+  url       = {http://dx.doi.org/10.1109/FOCS.2009.51},
+  doi       = {10.1109/FOCS.2009.51},
+  timestamp = {Tue, 16 Dec 2014 09:57:23 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/focs/ChakrabartyCK09},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{GortzMN016,
+  author    = {Inge Li G{\o}rtz and
+               Marco Molinaro and
+               Viswanath Nagarajan and
+               R. Ravi},
+  title     = {Capacitated Vehicle Routing with Nonuniform Speeds},
+  journal   = {Math. Oper. Res.},
+  volume    = {41},
+  number    = {1},
+  pages     = {318--331},
+  year      = {2016},
+  url       = {http://dx.doi.org/10.1287/moor.2015.0729},
+  doi       = {10.1287/moor.2015.0729},
+  timestamp = {Thu, 07 Apr 2016 14:32:05 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/mor/GortzMN016},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{CarrFLP00,
+  author    = {Robert D. Carr and
+               Lisa Fleischer and
+               Vitus J. Leung and
+               Cynthia A. Phillips},
+  title     = {Strengthening integrality gaps for capacitated network design and
+               covering problems},
+  booktitle = {Proceedings of the Eleventh Annual {ACM-SIAM} SODA, January 9-11, 2000, San Francisco, CA, {USA.}},
+  pages     = {106--115},
+  year      = {2000},
+  crossref  = {DBLP:conf/soda/2000},
+  url       = {http://dl.acm.org/citation.cfm?id=338219.338241},
+  timestamp = {Fri, 07 Dec 2012 17:02:08 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/soda/CarrFLP00},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{ChakrabartyCKK11,
+  author    = {Deeparnab Chakrabarty and
+               Chandra Chekuri and
+               Sanjeev Khanna and
+               Nitish Korula},
+  title     = {Approximability of Capacitated Network Design},
+  booktitle = {{IPCO} 2011},
+  pages     = {78--91},
+  year      = {2011},
+  crossref  = {DBLP:conf/ipco/2011},
+  url       = {http://dx.doi.org/10.1007/978-3-642-20807-2_7},
+  doi       = {10.1007/978-3-642-20807-2_7},
+  timestamp = {Tue, 23 Aug 2011 14:05:43 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/ipco/ChakrabartyCKK11},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{ChakrabartyGK16,
+  author    = {Deeparnab Chakrabarty and
+               Prachi Goyal and
+               Ravishankar Krishnaswamy},
+  title     = {The Non-Uniform k-Center Problem},
+  booktitle = {43rd
+               {ICALP} 2016},
+  pages     = {67:1--67:15},
+  year      = {2016},
+  crossref  = {DBLP:conf/icalp/2016},
+  url       = {http://dx.doi.org/10.4230/LIPIcs.ICALP.2016.67},
+  doi       = {10.4230/LIPIcs.ICALP.2016.67},
+  timestamp = {Tue, 30 Aug 2016 15:33:07 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/icalp/ChakrabartyGK16},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{PolacekS16,
+  author    = {Luk{\'{a}}s Pol{\'{a}}cek and
+               Ola Svensson},
+  title     = {Quasi-Polynomial Local Search for Restricted Max-Min Fair Allocation},
+  journal   = {{ACM} Trans. Algorithms},
+  volume    = {12},
+  number    = {2},
+  pages     = {13},
+  year      = {2016},
+  url       = {http://doi.acm.org/10.1145/2818695},
+  doi       = {10.1145/2818695},
+  timestamp = {Wed, 09 Mar 2016 14:17:53 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/talg/PolacekS16},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{LeightonR99,
+  author    = {Frank Thomson Leighton and
+               Satish Rao},
+  title     = {Multicommodity max-flow min-cut theorems and their use in designing
+               approximation algorithms},
+  journal   = {J. {ACM}},
+  volume    = {46},
+  number    = {6},
+  pages     = {787--832},
+  year      = {1999},
+  url       = {http://doi.acm.org/10.1145/331524.331526},
+  doi       = {10.1145/331524.331526},
+  timestamp = {Thu, 20 Nov 2003 12:28:14 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/jacm/LeightonR99},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@article{GargVY96,
+  author    = {Naveen Garg and
+               Vijay V. Vazirani and
+               Mihalis Yannakakis},
+  title     = {Approximate Max-Flow Min-(Multi)Cut Theorems and Their Applications},
+  journal   = {{SIAM} J. Comput.},
+  volume    = {25},
+  number    = {2},
+  pages     = {235--251},
+  year      = {1996},
+  url       = {http://dx.doi.org/10.1137/S0097539793243016},
+  doi       = {10.1137/S0097539793243016},
+  timestamp = {Mon, 12 Sep 2011 16:10:07 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/siamcomp/GargVY96},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@inproceedings{Feige08,
+  author    = {Uriel Feige},
+  title     = {On allocations that maximize fairness},
+  booktitle = {Proceedings of the Nineteenth Annual {ACM-SIAM} {SODA} 2008},
+  pages     = {287--293},
+  year      = {2008},
+  crossref  = {DBLP:conf/soda/2008},
+  url       = {http://dl.acm.org/citation.cfm?id=1347082.1347114},
+  timestamp = {Fri, 07 Dec 2012 17:02:08 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/soda/Feige08},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{AsadpourFS12,
+  author    = {Arash Asadpour and
+               Uriel Feige and
+               Amin Saberi},
+  title     = {Santa claus meets hypergraph matchings},
+  journal   = {{ACM} Trans. Algorithms},
+  volume    = {8},
+  number    = {3},
+  pages     = {24},
+  year      = {2012},
+  url       = {http://doi.acm.org/10.1145/2229163.2229168},
+  doi       = {10.1145/2229163.2229168},
+  timestamp = {Wed, 09 Mar 2016 14:17:53 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/talg/AsadpourFS12},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+
+@inproceedings{AzarE98,
+  author    = {Yossi Azar and
+               Leah Epstein},
+  title     = {Approximation Schemes for Covering and Scheduling on Related Machines},
+  booktitle = {APPROX'98},
+  pages     = {39--47},
+  year      = {1998},
+  crossref  = {DBLP:conf/approx/1998},
+  url       = {http://dx.doi.org/10.1007/BFb0053962},
+  doi       = {10.1007/BFb0053962},
+  timestamp = {Thu, 16 Jun 2011 15:52:46 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/approx/AzarE98},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{BansalS06,
+  author    = {Nikhil Bansal and
+               Maxim Sviridenko},
+  title     = {The Santa Claus problem},
+  booktitle = {Proceedings of the 38th Annual {ACM} STOC 2006},
+  pages     = {31--40},
+  year      = {2006},
+  crossref  = {DBLP:conf/stoc/2006},
+  url       = {http://doi.acm.org/10.1145/1132516.1132522},
+  doi       = {10.1145/1132516.1132522},
+  timestamp = {Thu, 28 Sep 2006 09:38:26 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/stoc/BansalS06},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{Li15,
+  author    = {Shi Li},
+  title     = {On Uniform Capacitated \emph{k}-Median Beyond the Natural {LP} Relaxation},
+  booktitle = {Proceedings of the Twenty-Sixth Annual {ACM-SIAM} SODA 2015},
+  pages     = {696--707},
+  year      = {2015},
+  crossref  = {DBLP:conf/soda/2015},
+  url       = {http://dx.doi.org/10.1137/1.9781611973730.47},
+  doi       = {10.1137/1.9781611973730.47},
+  timestamp = {Wed, 28 Jan 2015 11:43:18 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/soda/Li15},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{Li16,
+  author    = {Shi Li},
+  title     = {Approximating capacitated \emph{k}-median with {(1} + {$\epsilon$})\emph{k}
+               open facilities},
+  booktitle = {Proceedings of the Twenty-Seventh Annual {ACM-SIAM} Symposium on Discrete
+               Algorithms, {SODA} 2016, Arlington, VA, USA, January 10-12, 2016},
+  pages     = {786--796},
+  year      = {2016},
+  crossref  = {DBLP:conf/soda/2016},
+  url       = {http://dx.doi.org/10.1137/1.9781611974331.ch56},
+  doi       = {10.1137/1.9781611974331.ch56},
+  timestamp = {Thu, 07 Apr 2016 12:20:54 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/soda/Li16},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{DemirciL16,
+  author    = {H. G{\"{o}}kalp Demirci and
+               Shi Li},
+  title     = {Constant Approximation for Capacitated k-Median with (1+epsilon)-Capacity
+               Violation},
+  booktitle = {43rd
+               {ICALP} 2016},
+  pages     = {73:1--73:14},
+  year      = {2016},
+  crossref  = {DBLP:conf/icalp/2016},
+  url       = {http://dx.doi.org/10.4230/LIPIcs.ICALP.2016.73},
+  doi       = {10.4230/LIPIcs.ICALP.2016.73},
+  timestamp = {Tue, 30 Aug 2016 15:33:07 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/icalp/DemirciL16},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{AnSS14,
+  author    = {Hyung{-}Chan An and
+               Mohit Singh and
+               Ola Svensson},
+  title     = {LP-Based Algorithms for Capacitated Facility Location},
+  booktitle = {55th {IEEE} {FOCS}
+               2014, Philadelphia, PA, USA, October 18-21, 2014},
+  pages     = {256--265},
+  year      = {2014},
+  crossref  = {DBLP:conf/focs/2014},
+  url       = {http://dx.doi.org/10.1109/FOCS.2014.35},
+  doi       = {10.1109/FOCS.2014.35},
+  timestamp = {Thu, 23 Jun 2016 15:53:28 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/focs/AnSS14},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{AnBCGMS14,
+  author    = {Hyung{-}Chan An and
+               Aditya Bhaskara and
+               Chandra Chekuri and
+               Shalmoli Gupta and
+               Vivek Madan and
+               Ola Svensson},
+  title     = {Centrality of Trees for Capacitated k-Center},
+  booktitle = {{IPCO} 2014, Bonn, Germany, June 23-25, 2014. Proceedings},
+  pages     = {52--63},
+  year      = {2014},
+  crossref  = {DBLP:conf/ipco/2014},
+  url       = {http://dx.doi.org/10.1007/978-3-319-07557-0_5},
+  doi       = {10.1007/978-3-319-07557-0_5},
+  timestamp = {Mon, 26 May 2014 19:34:17 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/ipco/AnBCGMS14},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{CyganHK12,
+  author    = {Marek Cygan and
+               MohammadTaghi Hajiaghayi and
+               Samir Khuller},
+  title     = {{LP} Rounding for k-Centers with Non-uniform Hard Capacities},
+  booktitle = {53rd Annual {IEEE} Symposium on Foundations of Computer Science, {FOCS}
+               2012, New Brunswick, NJ, USA, October 20-23, 2012},
+  pages     = {273--282},
+  year      = {2012},
+  crossref  = {DBLP:conf/focs/2012},
+  url       = {http://dx.doi.org/10.1109/FOCS.2012.63},
+  doi       = {10.1109/FOCS.2012.63},
+  timestamp = {Tue, 16 Dec 2014 09:57:24 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/focs/CyganHK12},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{HochbaumS85,
+  author    = {Dorit S. Hochbaum and
+               David B. Shmoys},
+  title     = {A Best Possible Heuristic for the \emph{k}-Center Problem},
+  journal   = {Math. Oper. Res.},
+  volume    = {10},
+  number    = {2},
+  pages     = {180--184},
+  year      = {1985},
+  url       = {http://dx.doi.org/10.1287/moor.10.2.180},
+  doi       = {10.1287/moor.10.2.180},
+  timestamp = {Fri, 08 Apr 2016 09:30:16 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/mor/HochbaumS85},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@article{KhullerS00,
+  author    = {Samir Khuller and
+               Yoram J. Sussmann},
+  title     = {The Capacitated \emph{K}-Center Problem},
+  journal   = {{SIAM} J. Discrete Math.},
+  volume    = {13},
+  number    = {3},
+  pages     = {403--418},
+  year      = {2000},
+  url       = {http://dx.doi.org/10.1137/S0895480197329776},
+  doi       = {10.1137/S0895480197329776},
+  timestamp = {Tue, 01 Feb 2011 14:02:02 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/siamdm/KhullerS00},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@misc{full,
+  author    = {Deeparnab Chakrabarty and Ravishankar Krishnaswamy and Amit Kumar},
+  title     = {The Heterogeneous Capacitated k-Center Problem.},
+  howpublished  = {http://www.cs.cmu.edu/\~{}ravishan/full.pdf},
+   note = {(The tilde in the given link needs to be entered correctly in the browser)},
+}
+
+@article{ChakrabartyK016,
+  author    = {Deeparnab Chakrabarty and
+               Ravishankar Krishnaswamy and
+               Amit Kumar},
+  title     = {The Heterogeneous Capacitated {$k$}-Center Problem},
+  journal   = {CoRR},
+  volume    = {abs/1611.07414},
+  year      = {2016},
+  url       = {http://arxiv.org/abs/1611.07414},
+  timestamp = {Thu, 01 Dec 2016 19:32:08 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/corr/ChakrabartyK016},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{GuhaRS01,
+  author    = {Sudipto Guha and
+               Rajeev Rastogi and
+               Kyuseok Shim},
+  title     = {Cure: An Efficient Clustering Algorithm for Large Databases},
+  journal   = {Inf. Syst.},
+  volume    = {26},
+  number    = {1},
+  pages     = {35--58},
+  year      = {2001},
+  url       = {http://dx.doi.org/10.1016/S0306-4379(01)00008-4},
+  doi       = {10.1016/S0306-4379(01)00008-4},
+  timestamp = {Thu, 27 Nov 2003 13:03:29 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/is/GuhaRS01},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{QiuSZ15,
+  author    = {Zhen Qiu and
+               Cliff Stein and
+               Yuan Zhong},
+  title     = {Minimizing the Total Weighted Completion Time of Coflows in Datacenter
+               Networks},
+  booktitle = {Proceedings of the 27th {ACM}  {SPAA} 2015},
+  pages     = {294--303},
+  year      = {2015},
+  crossref  = {DBLP:conf/spaa/2015},
+  url       = {http://doi.acm.org/10.1145/2755573.2755592},
+  doi       = {10.1145/2755573.2755592},
+  timestamp = {Mon, 15 Jun 2015 15:25:32 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/spaa/QiuSZ15},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{ImM15a,
+  author    = {Sungjin Im and
+               Benjamin Moseley},
+  title     = {Scheduling in Bandwidth Constrained Tree Networks},
+  booktitle = {Proceedings of the 27th {ACM} on Symposium on Parallelism in Algorithms
+               and Architectures, {SPAA} 2015, Portland, OR, USA, June 13-15, 2015},
+  pages     = {171--180},
+  year      = {2015},
+  crossref  = {DBLP:conf/spaa/2015},
+  url       = {http://doi.acm.org/10.1145/2755573.2755576},
+  doi       = {10.1145/2755573.2755576},
+  timestamp = {Mon, 15 Jun 2015 15:25:32 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/spaa/ImM15a},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{Murthy1983AnAA,
+  title={An Approximation Algorithm to the File Allocation Problem in Computer Networks},
+  author={Kowtha Murthy and John B. Kam and M. S. Krishnamoorthy},
+  booktitle={PODS},
+  year={1983}
+}
+
+
+
+
+
+@article{LuptonMY98,
+  author    = {Robert Lupton and
+               F. Miller Maley and
+               Neal E. Young},
+  title     = {Data Collection for the Sloan Digital Sky Survey - {A} Network-Flow
+               Heuristic},
+  journal   = {J. Algorithms},
+  volume    = {27},
+  number    = {2},
+  pages     = {339--356},
+  year      = {1998},
+  url       = {http://dx.doi.org/10.1006/jagm.1997.0922},
+  doi       = {10.1006/jagm.1997.0922},
+  timestamp = {Fri, 01 Jul 2011 13:43:06 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/jal/LuptonMY98},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@article{Bar-IlanKP93,
+  author    = {Judit Bar{-}Ilan and
+               Guy Kortsarz and
+               David Peleg},
+  title     = {How to Allocate Network Centers},
+  journal   = {J. Algorithms},
+  volume    = {15},
+  number    = {3},
+  pages     = {385--415},
+  year      = {1993},
+  url       = {http://dx.doi.org/10.1006/jagm.1993.1047},
+  doi       = {10.1006/jagm.1993.1047},
+  timestamp = {Fri, 01 Jul 2011 13:42:55 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/jal/Bar-IlanKP93},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+@article{PSW97,
+	author    = {Cynthia A. Phillips and
+	Clifford Stein and
+	Joel Wein},
+	title     = {Task Scheduling in Networks},
+	journal   = {{SIAM} J. Discrete Math.},
+	volume    = {10},
+	number    = {4},
+	pages     = {573--598},
+	year      = {1997},
+	url       = {http://dx.doi.org/10.1137/S0895480194279057},
+	doi       = {10.1137/S0895480194279057},
+	timestamp = {Tue, 01 Feb 2011 14:01:57 +0100},
+	biburl    = {http://dblp.uni-trier.de/rec/bib/journals/siamdm/PhillipsSW97},
+	bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{Woe05,
+	author = {Gerhard J. Woeginger},
+	title = {A comment on scheduling two parallel machines with
+	capacity constraints},
+	year = {2005},
+	journal = discopt,
+	volume = {2},
+	pages = {269 -- 272}
+}
+
+@inproceedings{KurpiszMMMVW16,
+	author    = {Adam Kurpisz and
+	Monaldo Mastrolilli and
+	Claire Mathieu and
+	Tobias M{\"{o}}mke and
+	Victor Verdugo and
+	Andreas Wiese},
+	title     = {Semidefinite and Linear Programming Integrality Gaps for Scheduling
+	Identical Machines},
+	booktitle = {{IPCO} 2016},
+	pages     = {152--163},
+	year      = {2016},
+	crossref  = {DBLP:conf/ipco/2016},
+	url       = {http://dx.doi.org/10.1007/978-3-319-33461-5_13},
+	doi       = {10.1007/978-3-319-33461-5_13},
+	timestamp = {Wed, 25 May 2016 12:36:16 +0200},
+	biburl    = {http://dblp.uni-trier.de/rec/bib/conf/ipco/KurpiszMMMVW16},
+	bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@article{CapraraKPP00,
+	author    = {Alberto Caprara and
+	Hans Kellerer and
+	Ulrich Pferschy and
+	David Pisinger},
+	title     = {Approximation algorithms for knapsack problems with cardinality constraints},
+	journal   = {European Journal of Operational Research},
+	volume    = {123},
+	number    = {2},
+	pages     = {333--345},
+	year      = {2000},
+	url       = {http://dx.doi.org/10.1016/S0377-2217(99)00261-1},
+	doi       = {10.1016/S0377-2217(99)00261-1},
+	timestamp = {Mon, 15 Nov 2010 07:34:33 +0100},
+	biburl    = {http://dblp.uni-trier.de/rec/bib/journals/eor/CapraraKPP00},
+	bibsource = {dblp computer science bibliography, http://dblp.org}
+}

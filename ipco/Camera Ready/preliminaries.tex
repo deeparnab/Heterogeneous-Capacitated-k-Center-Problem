@@ -1,0 +1,373 @@
+%\newpage
+\section{Preliminaries}\label{sec:prelims}
+Given a \mckc instance, we start by guessing $\opt$. We either prove $\opt$ is infeasible, or find an $(a,b)$-bicriteria approximate allocation of clients to facilities.
+	We define the bipartite graph $G = (F\cup C,E)$ where $(i,j)\in E$ iff $d(i,j) \leq \opt$. If $\opt$ is feasible, then the following assignment LP\eqref{eq:lp1}-\eqref{eq:lp6}
+	must have a feasible solution.
+In this LP, we  have opening  variables $y_{ip}$ for every $i\in F,p\in [P]$ indicating whether we open a facility with capacity $c_p$ at location $i$. Recall that the capacities available to us are $c_1, c_2, \ldots, c_P$ -- a facility with
+capacity $c_p$ installed on it will be referred to as a {\em type $p$ facility.}
+	We have connection variables $x_{ijp}$ indicating the fraction to which client $j\in C$ connects to a facility at location $i$ where a type $p$ facility has been opened.
+	We force $x_{ijp} = 0$ for all pairs $i,j$ and type $p$ such that  $d(i,j) > \opt$.
+	
+		
+		\begin{minipage}{0.49\textwidth}
+			\begin{alignat*}{2}
+				 \forall j\in C,   &\textstyle \sum_{i\in F} \sum_{p\in [P]}  x_{ijp} \geq 1 \label{eq:lp1} \tag{\small{L1}}  \\
+				 \forall i\in F,p\in [P] ,  &\textstyle \sum_{j\in C}  x_{ijp} \leq c_py_{ip} \label{eq:lp2} \tag{\small{L2}} \\
+				 \forall p\in [P], & \textstyle \sum_{i\in F} y_{ip}   \leq k_p \label{eq:lp3}  \tag{\small{L3}}
+			\end{alignat*}
+		\end{minipage}
+		~\vline~
+		\begin{minipage}{0.49\textwidth}
+			\begin{alignat*}{3}
+				&\forall i\in F, j\in C,p\in [P],  & x_{ijp} \leq y_{ip}\label{eq:lp4}   \tag{\small{L4}} \\
+				& \forall i\in F, & \textstyle\sum_{p\in [P]} y_{ip} \leq 1 \label{eq:lp5}  \tag{\small{L5}} \\
+				& \forall i\in F,j\in C,p\in [P], & x_{ijp},y_{ip} \geq 0\label{eq:lp6}\tag{\small{L6}}
+			\end{alignat*}
+		\end{minipage}
+\smallskip
+
+\noindent		
+We say a solution $(x,y)$ is $(a,b)$-feasible if it satisfies \eqref{eq:lp1}, \eqref{eq:lp3}-\eqref{eq:lp6}, and \eqref{eq:lp2} with the RHS replaced by $bc_py^\mathsf{int}_{ip}$, and $x_{ijp} > 0$ only if $d(i,j) \leq a\cdot \opt$.
+%We desire to find an integral solution $(x^\mathsf{int},y^\mathsf{int})$ which is $(a,b)$-feasible.
+%The following claim shows that it suffices just to round the $y$-variables.
+\begin{claim}
+Given an $(a,b)$-feasible solution $(x,\y)$ where $\y_{ip}\in \{0,1\}$,
+we can get  an $(a,b)$-approximate solution to the \mckc problem.
+\end{claim}
+\iffalse
+\begin{proof}
+Consider a bipartite graph with client nodes $C$ on one side, and nodes of the form $(i,p)$ with $\y_{ip} = 1$ on the other. The node $(i,p)$ has capacity $bc_p$.
+Since $(x,\y)$ satisfies the conditions of the lemma, there is a fractional matching in this graph so that each client $j$  is fractionally matched to an $(i,p)$ so that $d(i,j)\leq a\cdot \opt$,
+and the total fractional load on $(i,p)$ is $\leq bc_p$. The theory of matching tells us that there is an {\em integral} assignment of clients $j$ to nodes $(i,p)$ such that $d(i,j)\leq a\cdot\opt$
+and the number of nodes matched to $(i,p)$ is $\leq \ceil{bc_p}$. Therefore opening a capacity $c_p$ facility at $i$ for all $(i,p)$ with $\y_{ip} = 1$ gives an $(a,b)$-approximate solution to \mckc.
+\end{proof}
+\fi
+
+We remark that as it is, the LP has an unbounded integrality gap for \mckc, and indeed, the gap instances also happen to be of the \cckp variety. So we strengthen it by adding some additional constraints which we explain later. However, since our strong decomposition theorem merely uses these $y_{ip}$ and $x_{ijp}$ values, we present that first. %Henceforth, we focus on rounding the $y$-values. To this end, we make the following useful definition.
+\begin{definition}[Roundable Sets]\label{def:rnding-mkc}
+	A set of facilities $S\subseteq F$ is said to be $(a,b)$-roundable w.r.t $(x,y)$ if
+	\begin{itemize}[noitemsep]
+		\item[(a)] $\diam_G(S) \leq a$
+		\item[(b)] there exists a rounding $\y_{ip} \in \{0,1\}$ for all $i \in S, p\in [P]$ such that
+		\begin{enumerate}
+			\item $\sum_{q \geq p} \sum_{i\in S} \y_{iq} ~\leq~ \floor{\sum_{q \geq p}\sum_{i\in S} y_{iq}}$ for all $p$, and
+			\item $\sum_{j\in C}  \sum_{i\in S,p\in [P]} x_{ijp} \leq b\cdot \sum_{i\in S} \sum_{p\in [P]} c_p \y_{ip}$
+		\end{enumerate}
+	\end{itemize}
+\end{definition}
+\noindent
+
+\iffalse
+If $(x,y)$ were feasible, then for any $(a,b)$-roundable set, we can integrally open facilities to satisfy all the demand that was fractionally assigned to it taking a hit of $a$ in the cost and a factor of $b$ in the capacities. Furthermore, the number of open facilities is at most what the LP prescribes. Therefore, if we would be able to decompose the instance into roundable sets, we would be done.
+Unfortunately, that is not possible, and in fact the above LP has a large integrality gap even when we allow arbitrary violation of capacities.
+
+\begin{remark}[Integrality Gap for \mckc] \label{rem:ig}
+Consider the following instance. The metric space $X$ is partitioned into $(F_1\cup C_1) \cup \cdots \cup (F_K\cup C_K)$, with $|F_k| = 2$ and $|C_k| = K$ for all $1\le k\le K$.
+The distance between any two points in $F_i\cup C_i$ is $1$ for all $i$, while all other distances are $\infty$. The capacities available are $k_1 = K$ facilities with capacity $c_1 = 1$ and
+$k_2= K-1$ facilities with capacity $c_2 = K$. It is easy to see that integrally any solution would violate capacities by a factor of $K/2$.
+%It is easy to see that the above instance is not feasible with $OPT=1$: indeed, there is at least one client location where the optimal solution does not place a facility of capacity $H$ in its neighborhood, and it is not possible to serve the demand of this client using only capacity $1$ facilities, as there are only two locations where we can place facilities in its neighborhood.
+On the other hand, there is a feasible solution for the above LP relaxation: for $F_k = \{a_k,b_k\}$, we set $y_{a_k2} = 1-1/K$ and $y_{b_k1} = 1$, and for all $j\in C_k$, we set $x_{a_kj2} = 1-1/K$ and $x_{b_kj1} = 1/K$.
+
+
+ For the version with soft capacities, we do not have the constraint \eqref{eq:lp5} and the above integrality gap doesn't hold since we can install capacity $K$ facilities on $K-1$ of the sets $F_k$'s, $1\leq k\leq K-1$, and $K$ copies of the capacity $1$ facilities at $F_K$. Note that although $|F_K| = 2$, we have opened $K$ capacities.
+\end{remark}
+
+In particular, note that for the $(x,y)$ solution in the integrality gap example above there are no roundable sets. This motivates the definition of the second kind of sets.
+\fi
+
+So if we can partition the facilities into roundable sets with reasonable parameters, we would be done.   It turns out that sets which are not roundable have a \emph{non-expanding structure}, and indeed we define our \cckp instance over such sets. The following definition comes handy in this case.
+
+\begin{definition}[Complete Neighborhood Sets] \label{def:comp-nbr}
+	A subset $T\subseteq F$ of facilities is called a {\em complete neighborhood} if there exist clients $J\subseteq C$ such that $\Gamma(J) \subseteq T$.
+	In this case $J$ is said to be {\em responsible} for $T$. Additionally, a complete neighborhood $T$ is said to be an $\alpha$-complete neighborhood if $\diam(T) \leq \alpha$.
+\end{definition}
+
+%\begin{remark}[Complete Neighborhood Sets to \cckp]\label{rem:red}
+%	\emph{
+If we find a complete neighborhood $T$ of facilities with a set $J$ of clients responsible for it, then we know that the optimal solution \emph{must satisfy} all the demand in $J$ by suitably opening facilities of sufficient capacity in $T$.
+Thus, if we can partition the entire instance into a collection $\calT = (T_1,\ldots,T_m)$ of disjoint $\alpha$-complete neighborhood sets with $J_i$ responsible for $T_i$, we can define an instance $\calI$ of \cckp with $m$ machines with demands $D_i = |J_i|$ and cardinality constraint $f_i = |T_i|$, and there are $n_i$ jobs of capacities $c_i$ for $1 \leq i \leq P$.
+
+%%%However, in general, our decomposition theorem only ensures that we can partition the instance into sets which are either roundable or are complete neighborhoods, and the crux of the rounding lies in combining the two cases while meeting the $k_i$ bounds for all capacities. 
+Our next definition is that of $(\tau,\rho)$-{\em deletable clients} that can be removed from the instance since they can be ``$\rho$-charged'' to the remaining clients that are at most $\tau$-away. In other words, such clients (with constant values of $\tau$ and $\rho$) can be safely removed at the expense of violating capacities and increasing objective value by 
+small factors. 
+\begin{definition}[Deletable Clients]\label{def:deletable}
+	A subset $\Cd\subseteq C$ of clients is $(\tau,\rho)$-deletable if there exists a mapping $\phi_{j,j'}\in [0,1]$ for $j\in \Cd$ and $j'\in C\setminus \Cd$ satisfying (a) $\sum_{j'\in C\setminus \Cd} \phi_{j,j'} = 1$ for all $j\in \Cd$, and(b) $\sum_{j\in \Cd} \phi_{j,j'} \leq \rho$ for all $j'\in C\setminus \Cd$. Furthermore, $\phi_{j,j'} > 0$ only if $d(j,j') \leq \tau\cdot\opt$.
+\end{definition}
+
+\noindent
+ We now state our decomposition result. 
+\begin{theorem}[{\bf Decomposition Theorem}]\label{thm:decomp}
+	Given a feasible solution $(x,y)$ to LP\eqref{eq:lp1}-\eqref{eq:lp6}, and $\delta > 0$, there is a polynomial time algorithm which finds a solution $\x$ satisfying \eqref{eq:lp2} and\eqref{eq:lp4}, and a
+	decomposition as follows.
+	\begin{enumerate}%[noitemsep]
+		\item The facility set $F$ is partitioned into two families $\calS = (S_1, S_2, \ldots, S_K)$ and $\calT = (T_1, T_2, \ldots, T_L)$ of mutually disjoint subsets.
+		The client set $C$ is partitioned into three disjoint subsets $C = \Cd \cup \Cbb \cup \Cb$ where $\Cd$ is a $(\tilde{O}(1/\delta),\delta)$-deletable subset.
+		
+			\item Each $S_k \in \calS$ is $(\tilde{O}(1/\delta),(1+\delta))$-roundable with respect to $(\x,y)$, and moreover, each client in $\Cb$ satisfies $\sum_{i \in \calS, p} \x_{ijp} \geq 1 - \frac{\delta}{100}$.
+%\comment{deepc: maybe we should make 100 less arbitrary}
+		\item Each $T_\ell$ is a $\tilde{O}(1/\delta)$-complete neighborhood with a corresponding set $J_\ell$ of clients responsible for it, and $\Cbb = \cup_{\ell = 1}^L J_\ell$.	
+%		
+%		
+%		\item For the deleted clients $\Cd$, there is a mapping $\phi:\Cd \to \Cbb \cup \Cb$ such that
+%		(a) $d(j,\phi(j)) \leq \tilde{O}(1/\delta)$ for all $j\in \Cd$, and
+%		(b)	for all $j\in \Cbb \cup \Cb$, we have $\sum_{j' \in \Cd: \phi(j') = j} d_{j'} \leq (1+\delta)\cdot d_j$, i.e., the total demand mapped to $j$ is small.
+%		
+	\end{enumerate}
+\end{theorem}
+
+\noindent
+In general, our decomposition theorem only ensures that we can partition the instance into sets which are either roundable or are complete neighborhoods (after removing the 
+deletable clients), and the crux of the rounding algorithm lies in combining the two cases while meeting the $k_i$ bounds for all capacities. 
+
+%The facilities opened by the $\opt $ solution corresponds to a valid solution for $\calI$; furthermore, any $\beta$-approximate solution for $\calI$ corresponds to a $(\alpha,\beta)$-approximate solution for the \mckc problem restricted to clients in $\cup_{\ell} J_\ell$. Finally note that for \mckc with soft-capacities, $\calI$ is an instance of the $Q||C_{min}$ problem.
+%}
+
+%\emph{
+%Note that the above integrality gap  example is essentially a \cckp instance with $K$ machines of demand $K$ each having cardinality constraint $2$, and there are $K$ jobs of capacity $1$ and $K-1$ jobs with capacity $K$. This shows the assignment LP has bad integrality gap for the \cckp problem (but not for $Q||C_{min}$).}
+%\end{remark}
+
+
+
+
+\iffalse
+ The following claim shows we can remove $\Cd$ from consideration.
+\begin{claim}\label{clm:prelim3}
+	Let $\Cd$ be a $(\rho,\tau)$-deletable set.
+	Given an $(a,b)$-approximate feasible solution $(x',\y)$ where $x'_{ijp}$ is defined only for $j\in C\setminus \Cd$, we can extend $x'$ to a general $(x,\y)$ solution
+	which is $(a+\tau, b(1+\rho))$-approximate feasible.
+\end{claim}
+\begin{proof}
+For any $j\in \Cd$, define $x_{ijp} = \sum_{j'\in C\setminus \Cd} x_{ij'p}\phi_{j,j'}$.
+We get for all $j\in \Cd$,
+$\textstyle \sum_{i\in F} \sum_{p\in [P]} x_{ijp} = \sum_{i,p} \sum_{j'\in C\setminus \Cd} x_{ij'p}\phi_{j,j'} = \sum_{j'\in C\setminus \Cd} \phi_{j,j'} \left(\sum_{i,p} x_{ij'p}\right) \geq \sum_{j'\in C\setminus \Cd} \phi_{j,j'} = 1$,
+and for all $i\in F,p\in [P]$,
+$\textstyle \sum_{j\in \Cd}  x_{ijp} = \sum_{j\in \Cd} \sum_{j'\in C\setminus \Cd} x_{ij'p}\phi_{j,j'} = \sum_{j'\in C\setminus \Cd} x_{ij'p}\left( \sum_{j\in \Cd} \phi_{j,j'}\right)  \leq \rho \sum_{j'\in C\setminus \Cd} x_{ijp} \leq b\rho c_p$. Therefore, in all we have $\sum_{j\in C} x_{ijp} \leq bc_p(1+\rho)$.
+\end{proof}
+\fi
+
+
+Our final ingredient is that of supply polyhedra. Recall that an instance of  \cckp has $m$ machines $M$ with demands $D_1,\ldots,D_m$ and cardinality constraints $f_1,\ldots, f_m$, and $n$  jobs $J$ with capacities $c_1,\ldots,c_n$ respectively. Now, we generalize this in the following manner:
+%In $Q||c_{min}$, there are no $f_i$'s, or equivalently $f_i = \infty$.
+%In the version with cardinality constraints, that is $Q|f_i|C_{min}$ we are also given positive integers $f_1,\ldots, f_m$.
+ A {\em supply vector} $(s_1,\ldots,s_n)$ where each $s_j$ is a non-negative integer
+is called {\em feasible} for this instance if the ensemble formed by $s_j$ copies of jobs of capacity $c_j$ can satisfy all the demands.
+The {\em supply polyhedra} then desires to capture these feasible supply vectors.
+
+\begin{definition}[Supply Polyhedron]\label{def:supp-poly}
+	Given an instance $\calI$ for a max-min allocation problem, a polyhedron $\calP(\calI)$ is called an $\alpha$-approximate supply polyhedron if
+	(a) all feasible supply vectors lie in $\calP(\calI)$, and (b) given any non-negative integer vector $(s_1,\ldots,s_n)\in \calP(\calI)$ there exists an assignment
+	of the $s_j$ jobs of capacity $c_j$ to the machines such that machine $i$ receives capacity $\geq D_i/\alpha$.
+\end{definition}
+
+Ideally, we would like {\em exact} supply polyhedra, and one choice would be the convex hull of all the feasible supply vectors; indeed this is the tightest polytope satisfying condition (a).
+Unfortunately, there are instances of \cckp where the convex hull contains infeasible integer points for which $\alpha = \Theta(\log n/\log \log n)$.
+
+
+\section{\mckc via Supply Polyhedra}\label{sec:o1}
+\def\yy{y^\calT}
+In this section, we prove the following theorem. %One of the main engines will be our strong decomposition theorem (\Cref{thm:decomp}) which we will state here but will prove in the next section.
+\begin{theorem}\label{thm:reduction}
+Suppose there exists $\beta$-approximate supply polyhedra  for all instances of $Q|f_i|C_{min}$ (resp., $Q||C_{min}$) which have $\gamma$-approximate separation oracles.
+Then for any $\delta\in(0,1)$, there is an $\left(\tilde{O}(1/\delta),\gamma\beta(1+5\delta)\right)$-bicriteria approximation algorithm for  \mckc (resp., with soft capacities).
+\end{theorem}
+\noindent
+	
+\noindent
+\noindent
+%
+%As discussed in the Introduction, for the \mckc problem, the above LP has unbounded integrality gap (although, as we will see later, with soft capacities this is not the case).
+%To obtain non-trivial algorithms we would need to strengthen the LP. Nevertheless, a feasible solution $(x,y)$ to LP~\eqref{eq:lp1}-\eqref{eq:lp6} gives us a way to decompose the problem
+%into ``easily roundable parts'' and ``\cckp parts". To formalize this, we make two definitions.
+%
+%\begin{definition}\label{def:rnding-mkc}
+%	A set of facilities $S\subseteq F$ is said to be $(a,b)$-roundable w.r.t feasible solution $(x,y)$ if
+%	\begin{itemize}[noitemsep]
+%		\item[(a)] $\diam_G(S) \leq a$
+%		\item[(b)] there exists a rounding $Y_{ip} \in \{0,1\}$ for all $i \in S, p\in [P]$ such that
+%		\begin{enumerate}
+%			\item $\sum_{q \geq p} \sum_{i\in S} Y_{iq} ~\leq~ \floor{\frac{1}{2} \cdot \sum_{q \geq p}\sum_{i\in S} y_{iq}}$ for all $p$, and
+%			\item $\sum_{j\in C} d_j \sum_{i\in S,p\in [P]} x_{ijp} \leq b\cdot \sum_{i\in S} \sum_{p\in [P]} c_p Y_{ip}$
+%		\end{enumerate}
+%	\end{itemize}
+%\end{definition}
+%\noindent
+%For any $(a,b)$-roundable set, we can integrally open facilities to satisfy all the demand that was fractionally assigned to it taking a hit of $a$ in the cost and a factor of $b$ in the capacities.
+%Furthermore, the number of open facilities is at most what the LP prescribes.
+%%The idea behind the above definition should be clear.
+%%Suppose $S$ is a set of facilities and consider a subset of demands $J$ which are being assigned (fractionally) by
+%%the solution $(x,y)$ to $S$. If $S$ is $(a,b)$-roundable wrt $(x,y)$, then we can open facilities in $S$ integrally and reassign the demands in $J$ to these integral
+%%facilities. By doing so, we shall increase the connection cost of demands in $J$ by an additive factor of $a$, and then we may violate the capacities of the integrally open
+%%facilities by at most a factor $b$.
+%\begin{definition} \label{def:comp-nbr}
+%	A subset $S\subseteq F$ of facilities is called a {\em complete neighborhood} if there exists a client-set $J\subseteq C$ such that $\Gamma(J) \subseteq S$.
+%	In this case the subset $J$ is said to be {\em responsible} for $S$. Additionally, a complete neighborhood $S$ is said to be an $a$-complete neighborhood if $\diam(S) \leq a$.
+%\end{definition}
+%\noindent
+%%In a complete neighborhood set $S$ with $J$ responsible for it, we must open a total capacity of at least $|J|$ units among facilities in $S$.
+%%A collection of disjoint complete neighborhood sets therefore correspond to a \cckp instance. If the diameter of each set is $\leq \alpha$, then $\beta$-approximate solutions to the
+%%\cckp instance correspond to $(\alpha,\beta)$-bicriteria approximation.
+%If we find a complete neighborhood $S$ of facilities with say a set $J$ of clients responsible for it, then we know that the optimal solution must satisfy all the demand in $J$ by suitably opening facilities of sufficient capacity in $S$. A disjoint collection of such complete neighborhoods leads to a \cckp problem instance. % described in Idea 1.
+%\smallskip
+%
+%\noindent
+Our results for \mckc follow from \Cref{thm:reduction} and results about supply polyhedra.
+For example, Theorem~\ref{thm:2} follows from~\Cref{thm:reduction} (using $\delta=0.5$, say) and Theorem~\ref{thm:conflp}, and also noting that $D_\mathrm{max}/D_\mathsf{min} \leq n$ in our reduction. The proof of ~\Cref{thm:reduction} is based on the decomposition theorem. 
+
+%Theorem~\ref{thm:2a} follows
+%from~\Cref{thm:reduction,thm:asslp}.
+%%%We now state our decomposition result using which we prove~\Cref{thm:reduction}. %which essentially states that given an \mckc instance, we can partition the problem into roundable and complete neighborhood sets. The reader may want to recall the definitions of roundable sets (Definition~\ref{def:rnding-mkc}), complete neighborhood sets (Definition~\ref{def:comp-nbr}), deletable sets (Definition~\ref{def:deletable}), and the natural LP relaxation \eqref{eq:lp1}-\eqref{eq:lp6}.
+%Our main techincal theorem is the following
+%It is perhaps instructive to compare the below theorem with Theorem~\ref{thm:weakdecomp}.
+%The proof of this theorem is rather technical, and we defer it to the next section.
+%%%\begin{theorem}[{\bf Decomposition Theorem}]\label{thm:decomp}
+%%%	Given a feasible solution $(x,y)$ to LP\eqref{eq:lp1}-\eqref{eq:lp6}, and $\delta > 0$, there is a polynomial time algorithm which finds a solution $\x$ satisfying \eqref{eq:lp2} and\eqref{eq:lp4}, and a
+%%%	decomposition as follows.
+%%%	\begin{enumerate}%[noitemsep]
+%%%		\item The facility set $F$ is partitioned into two families $\calS = (S_1, S_2, \ldots, S_K)$ and $\calT = (T_1, T_2, \ldots, T_L)$ of mutually disjoint subsets.
+%%%		The client set $C$ is partitioned into three disjoint subsets $C = \Cd \cup \Cbb \cup \Cb$ where $\Cd$ is a $(\tilde{O}(1/\delta),\delta)$-deletable subset.
+%%%		
+%%%			\item Each $S_k \in \calS$ is $(\tilde{O}(1/\delta),(1+\delta))$-roundable with respect to $(\x,y)$, and moreover, each client in $\Cb$ satisfies $\sum_{i \in \calS, p} \x_{ijp} \geq 1 - \frac{\delta}{100}$.
+%%%%\comment{deepc: maybe we should make 100 less arbitrary}
+%%%		\item Each $T_\ell$ is a $\tilde{O}(1/\delta)$-complete neighborhood with a corresponding set $J_\ell$ of clients responsible for it, and $\Cbb = \cup_{\ell = 1}^L J_\ell$.	
+%%%%		
+%%%%		
+%%%%		\item For the deleted clients $\Cd$, there is a mapping $\phi:\Cd \to \Cbb \cup \Cb$ such that
+%%%%		(a) $d(j,\phi(j)) \leq \tilde{O}(1/\delta)$ for all $j\in \Cd$, and
+%%%%		(b)	for all $j\in \Cbb \cup \Cb$, we have $\sum_{j' \in \Cd: \phi(j') = j} d_{j'} \leq (1+\delta)\cdot d_j$, i.e., the total demand mapped to $j$ is small.
+%%%%		
+%%%	\end{enumerate}
+%%%\end{theorem}
+
+
+\begin{proof}[{\bf Proof Sketch of Theorem~\ref{thm:reduction}}]
+Let us first describe an approach which fails. Let $(x,y)$ be a feasible solution to LP\eqref{eq:lp1}-\eqref{eq:lp6}, and apply~\Cref{thm:decomp}.
+Although the sets in $\calS$ by definition are roundable which takes care of the clients in $\Cb$, the issue arises in assigning clients of $\Cbb$.
+In particular, $\yy_p := \sum_{i\in \calT} y_{ip}$ for all $1\le p\le P$ which indicates the ``supply" of capacity $c_p$ available for the $\Cbb$ clients.
+%Since the LP doesn't know $\calT$ beforehand, this supply mayn't be enough.
+However, this may not be enough for serving all these clients (even with violation).
+That is, the vector $\yy$ may not lie in the (approximate) supply polyhedra of the \cckp instance
+defined by $\calT$. % as described in Remark~\ref{rem:red}.
+ That we fail is not surprising; after all, we have so far only used the natural LP which has a bad integrality gap. To resolve this issue, we strengthen the LP by {\em explicitly requiring $\yy$ to be in the supply polyhedra}. Since we do not know $\calT$ before solving the LP (after all our LP rounding generated it), we enforce this for {\em all} collections of complete-neighborhood sets.
+More precisely, for $\calT := (T_1,\ldots,T_L)$ of $L$ disjoint complete neighborhood sets, let $\calI_\calT$ denote the associated \cckp demands.
+\begin{equation}\label{eq:lp7}
+\forall \calT := (T_1,\ldots,T_L) \textrm{ disjoint neighborhood subsets}, \quad \yy \in \calP(\calI_\calT) \tag{\small{L7}}
+\end{equation}
+Note that this is a feasible constraint to add to LP\eqref{eq:lp1}-\eqref{eq:lp6}. In the $\opt$ solution, for any $\calT$ there must be enough supply dedicated for the clients responsible for these complete neighborhood sets.  We don't know how (and don't expect) to check feasibility of  \eqref{eq:lp7} for all collections $\calT$. However, we can still run ellipsoid method using the ``round-and-cut'' framework of \cite{CarrFLP00,ChakrabartyCKK11,Li15,Li16}.
+To begin with, we start with the LP\eqref{eq:lp1}-\eqref{eq:lp6} and obtain feasible solution $(x,y)$. Subsequently, we apply the decomposition Theorem~\ref{thm:decomp} to obtain the collection $\calT = (T_1,\ldots,T_L)$.
+We then check if $\yy \in \calP(\calI_\calT)$ or not. Since we have a $\gamma$-approximate separation oracle for $\calP(\calI_\calT)$, we  are either guaranteed that $\yy \in \calP(\calI'_\calT)$ where the $\ell^{th}$ demand is now  $D_\ell/\gamma$; or we get a hyperplane separating $\yy$ from $\calP(\calI_\calT)$ which also gives us a
+hyperplane separating $y$ from  LP\eqref{eq:lp1}-\eqref{eq:lp7}. This can be fed to the ellipsoid algorithm to obtain a new  $(x,y)$ and the above process is repeated.
+
+When this process stops, we will have a solution $(x,y)$ such that the supply $\{y_p^{\calT}\}$ lies in the supply polyhedra $\calP(\calI_\calT)$. So our overall algorithm is to simply round the roundable sets (by rounding down), and solve the instance $\calI_\calT$ with the supply vector $\{y_p^\calT\}$ using a suitable \cckp algorithm.
+\end{proof}
+
+We end the main body by noting that the configuration LP relaxation is in fact nearly the best possible supply polyhedra for \cckp.
+
+\begin{theorem}\label{thm:conflp}
+	For any instance $\calI$ of \cckp, the natural configuration LP for $\calI$ is an $O(\log D)$-approximate supply polyhedron with $(1+\epsilon)$-approximate separation oracle for any $\eps > 0$,
+	where $D := D_{\mathrm{max}}/D_\mathrm{min}$. Moreover, there exists no supply polyhedra with approximation $o(\log D/\log \log D)$.
+%	Given $(s_1,\ldots,s_n) \in \calP_\mathsf{conf}$ for an instance $\calI$ of $Q|f_i|C_{min}$, there is an of assignment of the $s_j$ jobs of capacity $c_j$  to the machines such that for all $i\in M$
+%	receives a total capapcity $\geq D_i/\alpha$ for $\alpha = O(\log D)$ where $D = D_{max}/D_{min}$.
+\end{theorem}
+
+
+\iffalse
+The analysis of the ellipsoid algorithm\comment{deepc: need to be careful and correct here}
+tells us that in polynomial time we either prove infeasibility of the system \eqref{eq:lp1}-\eqref{eq:lp7} (implying the $\opt$  guess for \mckc is infeasible), or we
+are have $(x,y)$ satisfying the premise of the following lemma.
+%obtain a solution $(x,y)$
+%which is feasible for LP\eqref{eq:lp1}-\eqref{eq:lp6}, such that for the $\calS, \calT$ obtained via Decomposition Theorem~\ref{thm:decomp}
+%and the instance $\calI_\calT$ so obtained, the solution  $\yy \in \calP(\calI'_\calT)$ for the $\gamma$-shaded instance.
+
+\begin{lemma}
+	Given $(x,y)$ feasible for  LP\eqref{eq:lp1}-\eqref{eq:lp6}, let us apply the Decomposition Theorem~\ref{thm:decomp} to obtain the instance $\calS,\calT$.
+	Suppose the solution $\yy_p := \sum_{i\in\calT} y_{ip}$ lies in $\calP(\calI'_\calT)$ for the \cckp (respectively, $Q||C_{min}$) instance $\calI'_\calT$ with $L$ machines with $D_\ell := |J_\ell|/\gamma$
+	and $f_\ell := |T_\ell|$ (respectively, no cardinality constraints). Then we can obtain an $(\tilde{O}(1/\delta), \beta\gamma(1+\delta))$-approximate solution to the \mckc problem (respectively, with soft-capacities).
+\end{lemma}
+\begin{proof}
+%Suppose the latter occurs. From this we can obtain the bicriteria solution to the \mckc problem as follows.
+%Recall the notation in the Decomposition Theorem~\ref{thm:decomp}.
+Since every set $S_k, 1\leq k\leq K,$ is $(\tilde{O}(1/\delta),(1+\delta))$-roundable, there exists a rounding $\y_{ip}$ for $i\in S_k$  such that
+\begin{equation}\label{eq:repeat}
+\textstyle \forall p, ~~~ \sum_{q\geq p} \sum_{i\in S_k} \y_{iq} \leq \floor{\sum_{q\geq p} \sum_{i\in S_k} y_{iq}}
+\end{equation}
+\def\s{\tilde{s}}
+Ideally, we would like to open a facility of capacity $c_p$ at location $i$ whenever $\y_{ip} = 1$. Unfortunately, the decomposition theorem doesn't have capacity constraints for individual $p$'s but only their suffix sums. Instead we do the following. Define $y^{\calS}_p := \sum_{i\in \calS} y_{ip}$; LP\eqref{eq:lp3} implies that for all $p$, $y^\calS_p + y^\calT_p \leq k_p$.
+For $1\leq p\leq P$, define $s_p := \sum_{i\in \calS} \y_{ip}$; \eqref{eq:repeat} implies for all $p$, $\sum_{q\geq p} s_q \leq \floor{\sum_{q\geq p} y^\calS_q}$ (since $\floor{a} + \floor{b} \leq \floor{a+b}$.)
+\begin{claim}\label{clm:massmovement}
+	Given $(s_1,\ldots,s_P)$ satisfying $\sum_{q\geq p} s_q \leq \floor{\sum_{q\geq p} y^\calS_q}$, there exists $(\s_1,\ldots,\s_P)$ satisfying
+	for all $p$, (a) $\sum_{q\geq p} s_q \leq \sum_{q\geq p} \s_q \leq \sum_{q\leq p} y^\calS_q$, and (b) $\s_p \leq k_p$.
+\end{claim}
+\begin{proof}
+Simply define $\s_p := \floor{\sum_{q\geq p} y^\calS_q} - \floor{\sum_{q> p} y^\calS_q}$. Therefore, $\sum_{q\geq p} \s_q = \floor{\sum_{q\geq p} y^\calS_q}$ implying (a).
+To see (b), note $\s_p \leq \ceil{y^\calS_p} \leq k_p$, where we use the fact $\floor{a+b} \leq \floor{a} + \ceil{b}$ for any non-negative $a,b$.
+\end{proof}
+
+The first inequality in (a) implies that at every location with $\y_{ip} = 1$, we can open a facility of capacity $c_q \geq c_p$. This, along with condition (b) of roundable sets (Definition~\ref{def:rnding-mkc}),
+implies we can find a fractional solution $x_{ijp}$ for $j\in \Cb$ and $(i,p)$ with $\y_{ip} = 1$
+such that (a) $\sum_{i\in \calS, p\in [P]} x_{ijp} \geq 1$, (b) $x_{ijp} > 0$ only if $d(i,j) \leq \diam(S_k) \leq \tilde{O}(1/\delta)$, and (c) the capacity violation is $\leq (1+\delta)(1 - \delta/100)^{-1} \leq (1+2\delta)$. Note the second term arises since
+from the decomposition theorem we have $\sum_{i\in \calS, p\in [P]} \x_{ijp} \geq 1-\delta/100$.
+Thus we have fractionally assigned all $\Cb$ clients to open facilities in $\calS$.
+%For all $j\in \Cb$, we assign it fractionally using $\frac{\x}{1-\delta/100}$ to
+
+
+Define, for $p\in [P]$,  $t_p := k_p - \s_p$, the number of facilities of capacity $c_p$ we can open in $\calT$. Note, by Claim~\ref{clm:massmovement}, $t_p$'s are non-negative.
+%
+%
+\begin{claim}
+	$(t_1,\ldots,t_P) \in \calP(\calI'_\calT)$
+\end{claim}
+%	We now use the upward-feasibility property of $\calP$ to prove that the integral vector $(k^{(T)}_1,\ldots, k^{(T)}_P)$ also lies in $\calP(\calI'_\calT)$.
+\begin{proof}
+	By the Lemma premise, we have $\yy \in \calP(\calI'_\calT)$. %Using the upward-feasibility property of $\calP$, we get the following.
+	%Recall that $\calI'_\calT$ has $L$ machines with demands $D_\ell := |J_\ell|/\beta$ and $f_\ell := |T_\ell|$.
+	Now note that for all $p$,
+	\[
+\textstyle 	\sum_{q\geq p} t_q = \sum_{q\ge p} (k_q - \s_q) \ge \sum_{q\ge p} k_q - \sum_{q\geq p} y^\calS_q \geq  \sum_{q\geq p} y^\calT_q
+	\]
+	Since $\calP(\calI'_\calT)$ is upward-feasible, and $\yy\in \calP$, we get the claim.
+\end{proof}
+Since $\calP(\calI'_\calT)$ is $\beta$-approximate, we can find an allocation of the $t_p$ copies of jobs of capacity $c_p$ to the $L$ machines of $\calI'_\calT$ such that machine $\ell$ gets at most $f_\ell$ jobs and total capacity $\geq D_\ell/\beta = |J_\ell|/\beta\gamma$. We install these capacities on the facilities of $T_\ell$. Since the diameter of each $T_\ell$ is $\tilde{O}(1/\delta)$, we can find an $x_{ijp}$ assignment of $\Cbb$-clients  to these such that $\sum_{i\in \calT,p\in [P]} x_{ijp} \geq 1$ and $x_{ijp} > 0$ iff $d(i,j) = \tilde{O}(1/\delta)$, such that the capacity violation is at most $\alpha\beta$. This takes care of the clients in $\Cbb$. Finally, Claim~\ref{clm:prelim3} takes care of all the deleted clients $\Cd$ with an extra hit of $(1+\delta)$ on the capacity and additive $\tilde{O}(1/\delta)$ on the distance.
+\end{proof}
+\noindent
+This completes the proof of Theorem~\ref{thm:reduction} for the general \mckc problem. For the problem with soft capacities, the proof is exactly the same, except in the end, the instance $\calI_\calT$ is a $Q||C_{min}$ instance rather than a \cckp one.
+\end{proof}
+
+
+We end this section by noting that for the \mckc problem with soft-capacities, if we use the assignment supply polyhedra described in Section~\ref{sec:supplypolyhedra}, then we do not need to run the ellipsoid algorithm.
+In particular, the inequality \eqref{eq:lp7} is implied \eqref{eq:lp1}-\eqref{eq:lp6} for $\calP_\mathsf{ass}$ defined in \eqref{eq:asslp1}-\eqref{eq:asslp3}.
+\begin{lemma}\label{lem:implied}
+Given any $(x,y)$ feasible for LP\eqref{eq:lp1}-\eqref{eq:lp6} and any $\calT = (T_1,\ldots,T_m)$, we have $\yy \in \calP_\mathsf{ass}(\calI_\calT)$.
+\end{lemma}
+\begin{proof}
+	Fix $\calT = (T_1,\ldots,T_m)$ to be a collection of complete neighborhood sets. In the instance $\calI_\calT$ of $Q||C_{min}$, we have $m$ machines with demands
+	$D_\ell = |J_\ell|$, where $J_\ell$ is the client set responsible for $T_\ell$. Recall, $y^\calT_p := \sum_{i \in \calT} y_{ip}$, and we need to find $z_{\ell,p}$ which satisfy the constraints
+	\eqref{eq:asslp1}-\eqref{eq:asslp3} where $s_p := y^\calT_p$.
+	
+	The definition is natural: $z_{\ell,p} := \sum_{i\in T_\ell} y_{ip}$. Clearly it satisfies \eqref{eq:asslp1} (indeed with equality). We now show it satisfies \eqref{eq:asslp2}.
+	To this end, define for any $j\in J_\ell$, $x_{jp} := \sum_{i\in T_\ell} x_{ijp}$. Since $\Gamma(J_\ell) \subseteq T_\ell$, we get from \eqref{eq:lp1} that $\sum_p x_{jp} \geq 1$.
+	In particular,
+	\begin{equation}
+\textstyle 	\label{eq:hohum1}\sum_p \sum_{j\in J_\ell}x_{jp} \geq D_\ell
+	\end{equation}
+	
+	From \eqref{eq:lp4}, we know $x_{ijp} \leq y_{ip}$ and summing over all $i\in T_\ell$, we get for all $j\in T_\ell$, $x_{jp} \leq \sum_{i\in T_\ell} y_{ip} = z_{\ell,p}$.
+	In particular, $\sum_{j\in J_\ell} x_{jp} \leq z_{\ell,p} D_\ell$. From \eqref{eq:lp2} we know for all $i\in T_\ell, p\in [P]$, $\sum_{j\in J_\ell} x_{ijp} \leq c_p y_{ip}$.
+	Summing over all $i\in T_\ell$, gives $\sum_{j\in J_\ell} x_{jp} \leq c_p z_{\ell,p}$. Putting together, we get
+	\begin{equation}
+	\textstyle 	\label{eq:hohum2}\sum_{j\in J_\ell}x_{jp} \leq z_{\ell,p} \min(D_\ell,c_p)
+	\end{equation}
+	\eqref{eq:hohum1} and \eqref{eq:hohum2} imply that $z$ satisfies \eqref{eq:asslp2}.
+\end{proof}
+Therefore, one can use the natural LP relaxation to obtain for any $\delta > 0$, a $\left(\tilde{O}(1/\delta),(2+\delta)\right)$-bicriteria approximation for the \mckc problem with soft capacities.
+As it should be clear, this is a much more efficient algorithm.
+
+\fi
+
+
+
+% described in Idea 1.
+
+
+
+
+
